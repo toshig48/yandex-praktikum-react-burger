@@ -1,4 +1,23 @@
-[
+import PropTypes from 'prop-types';
+export const bun= {key:'bun', name:'Булки'};
+export const sauce = {key:'sauce', name:'Соусы'};
+export const main= {key:'main', name:'Начинки'};
+
+export const burgerPropTypes = PropTypes.shape({
+   _id: PropTypes.string.isRequired,
+   name: PropTypes.string.isRequired,
+   type: PropTypes.string.isRequired,
+   proteins: PropTypes.number.isRequired,
+   fat: PropTypes.number.isRequired,
+   carbohydrates: PropTypes.number.isRequired,
+   calories: PropTypes.number.isRequired,
+   price: PropTypes.number.isRequired,
+   image: PropTypes.string.isRequired,
+   image_mobile: PropTypes.string.isRequired,
+   image_large: PropTypes.string.isRequired,
+ });
+
+export const myData = [
     {
        "_id":"60666c42cc7b410027a1a9b1",
        "name":"Краторная булка N-200i",
@@ -209,4 +228,4 @@
        "image_large":"https://code.s3.yandex.net/react/code/bun-01-large.png",
        "__v":0
     }
- ]
+ ];

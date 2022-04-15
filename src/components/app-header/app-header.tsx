@@ -1,23 +1,24 @@
-import React from 'react';
 import styles from './app-header.module.css';
-import { Logo, BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-function App() {
+function AppHeader() {
 
   return (
-    <header>
-      <nav>
-      <ul>
-        <li>
-          <a href="#"><BurgerIcon type='primary'/>Конструктор</a>
-          <a href="#"><span><ListIcon type='primary'/>Лента заказов</span></a> 
-        </li>    
-        <li><Logo /></li>
-        <li><a href="#"><span><ProfileIcon type='primary'/>Личный кабинет</span></a></li>
-      </ul>        
-      </nav>              
+    <header className={styles.header}>
+      <nav className={styles.menu}>
+        <div className={styles.menu_item}>
+          <a className={styles.menu_item_a} href="#"><BurgerIcon type='primary'/> <span className='text text_type_main-default ml-2'>Конструктор</span></a>
+          <a className={`${styles.menu_item_a} p-4 mt-4 mb-4`} href="#"><ListIcon type='secondary'/><span className={`${styles.secondary} text text_type_main-default ml-2`}>Лента заказов</span></a>           
+        </div>    
+        <div className={styles.menu_item}>
+          <Logo />
+        </div>
+        <div className={styles.menu_item}>
+          <a className={styles.menu_item_a} href="#"><ProfileIcon type='secondary'/><span className={`${styles.secondary} text text_type_main-default ml-2`}>Личный кабинет</span></a>
+        </div>
+      </nav>   
     </header>
   );
 }
 
-export default App;
+export default AppHeader;
