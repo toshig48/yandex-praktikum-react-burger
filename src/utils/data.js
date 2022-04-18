@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 export const bun= {key:'bun', name:'Булки'};
 export const sauce = {key:'sauce', name:'Соусы'};
 export const main= {key:'main', name:'Начинки'};
+export const urlApi = "https://norma.nomoreparties.space/api/ingredients";
 
 export const burgerPropTypes = PropTypes.shape({
    _id: PropTypes.string.isRequired,
@@ -16,7 +17,7 @@ export const burgerPropTypes = PropTypes.shape({
    image_mobile: PropTypes.string.isRequired,
    image_large: PropTypes.string.isRequired,
  });
-
+/*
 export const myData = [
     {
        "_id":"60666c42cc7b410027a1a9b1",
@@ -229,3 +230,4 @@ export const myData = [
        "__v":0
     }
  ];
+ */

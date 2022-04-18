@@ -16,3 +16,9 @@
     composes: flex_item;
     margin-top: 100px;
 }
+
+.message {
+    margin: 0 calc(var(--offset-base-size)  * 5);
+    margin-top: calc(100vh - 100vh/2);
+    text-align: center;
+}

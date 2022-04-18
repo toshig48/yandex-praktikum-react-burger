@@ -19,8 +19,7 @@ const BurgerConstructor = (props) =>  {
     <>
       {firstElement &&
       <div className="pl-8 ml-4 mr-4">
-        <ConstructorElement               
-              key={firstElement._id} 
+        <ConstructorElement          
               price={firstElement.price} 
               text={firstElement.name + ' (верх)'} 
               thumbnail={firstElement.image} 
@@ -31,12 +30,11 @@ const BurgerConstructor = (props) =>  {
       } 
       <ul className={`${styles.list} ml-4 mt-4 mb-4 custom_scroll`} >
         {
-        props.data.filter(x => x.type !== bun.key).map(item => (
-          <li className={`${styles.item} mb-4 mr-2`}  key={item._id}>
+        props.data.filter(x => x.type !== bun.key).map((item, index) => (
+          <li className={`${styles.item} mb-4 mr-2`} key={index}>
             <DragIcon/>
             <i className='ml-2'/>
             <ConstructorElement 
-              key={item._id} 
               price={item.price} 
               text={item.name} 
               thumbnail={item.image} 
@@ -49,7 +47,6 @@ const BurgerConstructor = (props) =>  {
       {lastElement &&
       <div className="pl-8 ml-4 mr-4">
         <ConstructorElement 
-              key={lastElement._id} 
               price={lastElement.price} 
               text={lastElement.name + ' (низ)'} 
               thumbnail={lastElement.image} 
