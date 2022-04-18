@@ -1,0 +1,36 @@
+.tabs {
+    display: flex;
+    justify-content: space-between;
+}
+.groupList{
+    height: calc(100vh - 310px);
+    overflow-y: scroll;
+}
+
+.list{
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0;
+        justify-content: space-between;
+    }
+.item 
+    {
+        list-style-type: none;
+        flex-basis: calc(50% - calc(var(--offset-base-size)  * 3));
+        text-align: center;
+        position: relative;
+    }
+
+    .item svg {
+        width: calc(var(--offset-base-size)  * 4);
+        height: calc(var(--offset-base-size)  * 4);
+    }
+.image {
+    width: 100%;
+}
+
+.counter {
+    position: absolute;
+    top:0;
+    right: 0;
+}
