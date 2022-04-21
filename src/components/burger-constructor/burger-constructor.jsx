@@ -4,7 +4,7 @@ import styles from './burger-constructor.module.css';
 import { ConstructorElement, Button, DragIcon, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import {bun, burgerPropTypes} from '../../utils/config.js';
 import OrderDetails from '../order-details/order-details';
-import {useModal} from '../modal/modal';
+import {useModal} from '../../hooks/use-modal';
 
 const BurgerConstructor = (props) =>  {  
   const [isShowModal, toggleShowModal] = useModal();

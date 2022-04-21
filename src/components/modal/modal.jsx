@@ -7,15 +7,6 @@ import {CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 const modalRoot = document.getElementById("react-modals");
 
-export const useModal = () => {
-  const [isShowModal, setIsShowModal] = useState(false);
-
-  const toggleShowModal = () => {
-      setIsShowModal(!isShowModal);
-  }
-  return [isShowModal, toggleShowModal];
-};
-
 const Modal = (props) =>
 {
   const { header, isShowModal, toggleShowModal, children } = props;

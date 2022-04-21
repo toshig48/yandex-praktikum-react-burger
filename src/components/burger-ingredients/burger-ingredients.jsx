@@ -4,7 +4,7 @@ import styles from './burger-ingredients.module.css';
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import {bun, sauce, main, burgerPropTypes} from '../../utils/config.js';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import {useModal} from '../modal/modal';
+import {useModal} from '../../hooks/use-modal';
 
 const BurgerIngredientGroups = (props) =>
  {
