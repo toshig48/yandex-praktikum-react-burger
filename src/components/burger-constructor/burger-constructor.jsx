@@ -1,18 +1,26 @@
+import {useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './burger-constructor.module.css';
 import { ConstructorElement, Button, DragIcon, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import {bun, burgerPropTypes} from '../../utils/data.js';
+import {bun, burgerPropTypes} from '../../utils/config.js';
+import OrderDetails from '../order-details/order-details';
+import {useModal} from '../modal/modal';
 
 const BurgerConstructor = (props) =>  {  
+  const [isShowModal, toggleShowModal] = useModal();
+  const [orderNumber, setOrderNumber] = useState("");
+  
+  const handleOpenModal = () => {
+    setOrderNumber("034536");
+    toggleShowModal();
+  }
+  
   let bunElements = props.data.filter(x => x.type === bun.key);
   let firstElement = undefined, lastElement = undefined;
   if(bunElements.length === 2)
   {
     firstElement = bunElements[0];
     lastElement = bunElements[1];
-  }
-
-  const handleClose = () => {
   }
 
   return (
@@ -23,7 +31,6 @@ const BurgerConstructor = (props) =>  {
               price={firstElement.price} 
               text={firstElement.name + ' (верх)'} 
               thumbnail={firstElement.image} 
-              handleClose={handleClose} 
               isLocked={true} 
               type='top'/>
       </div>
@@ -38,7 +45,6 @@ const BurgerConstructor = (props) =>  {
               price={item.price} 
               text={item.name} 
               thumbnail={item.image} 
-              handleClose={handleClose} 
               isLocked={false}/>
           </li>
           ))
@@ -50,7 +56,6 @@ const BurgerConstructor = (props) =>  {
               price={lastElement.price} 
               text={lastElement.name + ' (низ)'} 
               thumbnail={lastElement.image} 
-              handleClose={handleClose} 
               isLocked={true} 
               type='bottom'/>
       </div>
@@ -63,8 +68,11 @@ const BurgerConstructor = (props) =>  {
           <CurrencyIcon/>
         </span>
         
-        <Button type="primary" size="medium">Оформить заказ</Button>
+        <Button type="primary" size="medium" onClick={handleOpenModal}>Оформить заказ</Button>
       </div>
+      {isShowModal && 
+          <OrderDetails orderNumber={orderNumber} isShowModal={isShowModal} toggleShowModal={toggleShowModal}/>
+      }
     </>
   );
 }

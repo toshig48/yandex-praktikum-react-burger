@@ -3,9 +3,9 @@ import AppHeader from '../app-header/app-header';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import styles from './app.module.css';
-import {urlApi} from '../../utils/data.js';
+import {urlApi} from '../../utils/config.js';
 
-function App() {
+const App = () => { 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,49 +14,55 @@ function App() {
     const getData = async () => {
       setLoading(true);
       setData([]);
-          await fetch(urlApi).
-        then((response) => {
-          if (!response.ok) {
-            throw new Error("API вернула status = " + response.status);
-          } else {
-          return response.json();
-          }
-        })
-        .then((data) => {
-            console.log(data);
+        await fetch(urlApi)
+          .then((response) => {
+            if (!response.ok) 
+            {
+              throw new Error("Запрос вернул status = " + response.status);
+            } 
+            else 
+            {
+              return response.json();
+            }
+          })
+          .then((data) => {
             if(data.success)
-            {
-              setData(data.data);
-              setError(null);
+             {
+               setData(data.data);
+               setError(null);
+             }
+             else
+             {
+               throw new Error("Json API вернул success != true");
+             }
+          })
+          .finally( () => {             
+              setLoading(false);
             }
-            else
-            {
-              throw new Error("Json API вернул success != true");
-            }
-        })
-        .catch( (error) =>
-        {
-          console.error(error);
-          setError(error);
-        })
-        .finally( () => {             
-            setLoading(false);
-          }
-        );
+          )
+          .catch( (ex) =>
+          {
+            setError(ex.message);
+            console.error(ex);
+          });
       }
-
-    getData();
+      getData();
   }, [])
-
   
   if(loading)
   {
-    return (<h1 className={styles.message}>Загрузка данных...</h1>);
+    return (
+      <p className={`${styles.message} text text_type_main-medium`}>Загрузка данных...</p> 
+    );
   }
+
   if(error)
   {
-    return (<h1 className={styles.message}>Ошибка при загрузки данных. Подробности в логах</h1>);
+    return (
+      <p className={`${styles.message} red text text_type_main-medium`}>Ошибка при загрузки данных: {error}</p> 
+    );
   }
+  
   return (
     <>
     { data.length == 0 ?
