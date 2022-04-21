@@ -8,7 +8,7 @@ const IngredientComposition = (props) =>
   return (
     <div className='mr-5 secondary'> 
       <p className="text text_type_main-default">{props.title} </p>
-      <p className="text text_type_main-default">{props.text} </p>
+      <p className="text text_type_digits-default mt-3">{props.text} </p>
     </div>
   );
 }
