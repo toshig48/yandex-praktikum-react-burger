@@ -1,4 +1,4 @@
-import {useEffect, useState } from 'react';
+import {useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import ModalOverlay from '../modal-overlay/modal-overlay';
@@ -9,7 +9,7 @@ const modalRoot = document.getElementById("react-modals");
 
 const Modal = (props) =>
 {
-  const { header, isShowModal, toggleShowModal, children } = props;
+  const { header, toggleShowModal, children } = props;
   useEffect(() => {
     const close = (e) => {
       if(e.key === "Escape" || e.key === "Esc"){
@@ -29,10 +29,7 @@ const Modal = (props) =>
   } 
 
   return ReactDOM.createPortal(
-    <>
-    {
-      isShowModal &&
-      <ModalOverlay handleCloseModal={handleCloseModal}>
+    <ModalOverlay handleCloseModal={handleCloseModal}>
       <div className={`${styles.modal} pt-10 pr-10 pb-15 pl-10`} onClick={handleDivClick}>
         <div className={styles.header}>
           <p className="text text_type_main-large">{header}</p>
@@ -41,8 +38,6 @@ const Modal = (props) =>
         {children}
       </div>
     </ModalOverlay>
-    }
-    </>
     , modalRoot
   );
 }
@@ -51,7 +46,6 @@ export default Modal;
 
 Modal.propTypes = {
   header: PropTypes.string,
-  isShowModal: PropTypes.bool.isRequired,
   toggleShowModal: PropTypes.func.isRequired,
 };
 

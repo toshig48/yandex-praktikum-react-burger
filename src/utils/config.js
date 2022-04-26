@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-export const bun= {key:'bun', name:'Булки'};
-export const sauce = {key:'sauce', name:'Соусы'};
-export const main= {key:'main', name:'Начинки'};
-export const urlApi = "https://norma.nomoreparties.space/api/ingredients";
+export const INGREDIENT_BUN= {key:'bun', name:'Булки'};
+export const INGREDIENT_SAUCE = {key:'sauce', name:'Соусы'};
+export const INGREDIENT_MAIN= {key:'main', name:'Начинки'};
+export const URL_API = "https://norma.nomoreparties.space/api";
 
 export const burgerPropTypes = PropTypes.shape({
    _id: PropTypes.string.isRequired,

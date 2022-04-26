@@ -1,20 +1,47 @@
-import {useState, useEffect } from 'react';
+import {useState, useEffect, useReducer } from 'react';
 import AppHeader from '../app-header/app-header';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import styles from './app.module.css';
-import {urlApi} from '../../utils/config.js';
+import {URL_API} from '../../utils/config.js';
+import {useModal} from '../../hooks/use-modal';
+import Modal from '../modal/modal';
+import {BurgerConstructorContext, TotalPriceContext, OrderNumbereContext} from '../../services/burger-constructor-context';
+
+const totalPriceInitialState = { totalPrice: null }; 
+
+function totalPriceReducer(state, action) {
+  switch (action.type) {
+    case "set":
+      return { totalPrice: action.payload };
+    case "reset":
+      return { totalPrice: totalPriceInitialState };
+    default:
+      throw new Error(`Wrong type of action: ${action.type}`);
+  }
+}
 
 const App = () => { 
   const [data, setData] = useState([]);
+  const [burgerConstructorData, setBurgerConstructorData] = useState([]);
+  const [orderNumber, setOrderNumber] = useState(0);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [isShowModal, toggleShowModal] = useModal();  
+  const [paramModal, setParamModal] = useState({
+      title: '',
+      content: null
+    });  
+
+  const [totalPriceState, totalPriceDispatcher] = useReducer(totalPriceReducer, totalPriceInitialState, undefined);
 
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
       setData([]);
-        await fetch(urlApi)
+        await fetch(URL_API + "/ingredients")
           .then((response) => {
             if (!response.ok) 
             {
@@ -29,6 +56,7 @@ const App = () => {
             if(data.success)
              {
                setData(data.data);
+               setBurgerConstructorData(data.data);
                setError(null);
              }
              else
@@ -45,8 +73,8 @@ const App = () => {
             setError(ex.message);
             console.error(ex);
           });
-      }
-      getData();
+    }
+    getData();
   }, [])
   
   if(loading)
@@ -72,14 +100,26 @@ const App = () => {
           <AppHeader />      
           <div className={styles.flex}>
             <div className={`${styles.flex_item} pr-5`}>
-              <BurgerIngredients data={data} />
+              <BurgerIngredients data={data} setParamModal={setParamModal} toggleShowModal={toggleShowModal}/>
             </div>
             <div className={`${styles.flex_item__burger_constructor} pl-5`}>
-              <BurgerConstructor data={data} />
+              <BurgerConstructorContext.Provider value={{burgerConstructorData}}>
+                <TotalPriceContext.Provider value={{ totalPriceState, totalPriceDispatcher }}>
+                  <OrderNumbereContext.Provider value={{orderNumber, setOrderNumber}}>
+                    <BurgerConstructor setParamModal={setParamModal} toggleShowModal={toggleShowModal}/>
+                  </OrderNumbereContext.Provider>
+                </TotalPriceContext.Provider>
+              </BurgerConstructorContext.Provider>
             </div>
           </div>
         </div>
     }
+      {
+        isShowModal && 
+          <Modal header={paramModal.title} toggleShowModal={toggleShowModal}> 
+            {paramModal.content}
+          </Modal>
+      }
     </>
   );
 }
