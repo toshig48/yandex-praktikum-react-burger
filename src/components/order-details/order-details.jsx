@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import styles from './order-details.module.css';
 import { CheckMarkIcon  } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -23,7 +24,7 @@ const OrderDetails = (props) =>
   );
 }
 
-export default OrderDetails;
+export default memo(OrderDetails);
 
 OrderDetails.propTypes = {
   orderNumber: PropTypes.number.isRequired

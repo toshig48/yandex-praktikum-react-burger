@@ -1,12 +1,13 @@
-import { useState, useEffect, useContext, useMemo } from "react";
+import { useState, useEffect, useContext, useMemo, memo } from "react";
 import PropTypes from "prop-types";
 import styles from "./burger-constructor.module.css";
 import { ConstructorElement, Button, DragIcon, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { URL_API, INGREDIENT_BUN } from "../../utils/config.js";
+import { INGREDIENT_BUN } from "../../utils/config.js";
 import OrderDetails from "../order-details/order-details";
-import { BurgerConstructorContext, TotalPriceContext, OrderNumbereContext } from "../../services/burger-constructor-context";
+import { BurgerConstructorContext, TotalPriceContext, OrderNumberContext } from "../../services/burger-constructor-context";
+import { createOrder } from '../../utils/burger-api'
 
-const BunElement = (props) => {
+const FilledBunElement = (props) => {
   let text = "";
   let classDiv = "";
   if (props.position === "top") {
@@ -39,58 +40,45 @@ const EmptyBunElement = (props) => {
   );
 }
 
+const BunElement = ({ data, position }) => {
+  return (
+    <>
+      {
+        data ?
+          <FilledBunElement price={data.price} name={data.name} image={data.image} position={position} />
+          :
+          <EmptyBunElement position={position} />
+      }
+    </>
+  );
+}
+
 const BurgerConstructor = (props) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const { burgerConstructorData } = useContext(BurgerConstructorContext);
   const { totalPriceState, totalPriceDispatcher } = useContext(TotalPriceContext);
-  const { orderNumber, setOrderNumber } = useContext(OrderNumbereContext);
+  const { orderNumber, setOrderNumber } = useContext(OrderNumberContext);
 
-  const bunElement = useMemo(
+  const bunIngredient = useMemo(
     () => burgerConstructorData.filter(x => x.type === INGREDIENT_BUN.key)[0],
     [burgerConstructorData]
   );
 
-  const noBunElements = useMemo(
+  const noBunIngredients = useMemo(
     () => burgerConstructorData.filter(x => x.type !== INGREDIENT_BUN.key),
     [burgerConstructorData]
   );
-  
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const CreateOrderApi = async (data) => {
     setLoading(true);
     setError(null);
-    await fetch(URL_API + "/orders", {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        "ingredients": data
-      })
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Запрос вернул status = " + response.status);
-        }
-        else {
-          return response.json();
-        }
-      })
-      .then((data) => {
-        if (data.success) {
-          setOrderNumber(data.order.number)
-          setError(null);
-        }
-        else {
-          throw new Error("Json API вернул success != true");
-        }
-      })
+    await createOrder(data)
+      .then(setOrderNumber)
       .finally(() => {
         setLoading(false);
-      }
-      )
+      })
       .catch((ex) => {
         setError(ex.message);
         console.error(ex);
@@ -129,25 +117,22 @@ const BurgerConstructor = (props) => {
 
   useEffect(
     () => {
-      totalPriceDispatcher({
-        type: 'set',
-        payload: burgerConstructorData.filter(x => x.type !== INGREDIENT_BUN.key).reduce((partialSum, a) => partialSum + a.price, 0) + bunElement.price * 2
-      });
+      if (burgerConstructorData.length > 0) {
+        totalPriceDispatcher({
+          type: 'set',
+          payload: burgerConstructorData.filter(x => x.type !== INGREDIENT_BUN.key).reduce((partialSum, a) => partialSum + a.price, 0) + bunIngredient.price * 2
+        });
+      }
     },
     [burgerConstructorData]
   );
 
   return (
     <>
-      {
-        bunElement ?
-          <BunElement price={bunElement.price} name={bunElement.name} image={bunElement.image} position="top" />
-          :
-          <EmptyBunElement position="top" />
-      }
+      <BunElement data={bunIngredient} position="top" />
       <ul className={`${styles.list} ml-4 mt-4 mb-4 custom_scroll`} >
         {
-          noBunElements.map((item, index) => (
+          noBunIngredients.map((item, index) => (
             <li className={`${styles.item} mb-4 mr-2`} key={index}>
               <DragIcon />
               <i className="ml-2" />
@@ -160,12 +145,7 @@ const BurgerConstructor = (props) => {
           ))
         }
       </ul>
-      {
-        bunElement ?
-          <BunElement price={bunElement.price} name={bunElement.name} image={bunElement.image} position="bottom" />
-          :
-          <EmptyBunElement position="bottom" />
-      }
+      <BunElement data={bunIngredient} position="bottom" />
       <div className={`${styles.bottom} mt-10 mb-2 mr-6`}>
         <span className="mr-5">
           <span className="text text_type_digits-medium mr-1">
@@ -173,13 +153,15 @@ const BurgerConstructor = (props) => {
           </span>
           <CurrencyIcon />
         </span>
-        <Button type="primary" size="medium" onClick={handleOpenModal} disabled={loading ? true : false}>{loading ? "Ожидание..." : "Оформить заказ"}</Button>
+        <Button type="primary" size="medium" onClick={handleOpenModal} disabled={(burgerConstructorData.length === 0 || loading) ? true : false}>
+          {loading ? "Ожидание..." : "Оформить заказ"}
+        </Button>
       </div>
     </>
   );
 }
 
-export default BurgerConstructor;
+export default memo(BurgerConstructor);
 
 BurgerConstructor.propTypes = {
   setParamModal: PropTypes.func.isRequired,

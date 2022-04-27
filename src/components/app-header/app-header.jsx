@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import styles from './app-header.module.css';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -20,4 +21,4 @@ const AppHeader = () => {
   );
 }
 
-export default AppHeader;
+export default memo(AppHeader);

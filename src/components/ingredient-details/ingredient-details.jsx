@@ -1,5 +1,6 @@
+import { memo } from 'react';
 import styles from './ingredient-details.module.css';
-import {burgerPropTypes} from '../../utils/config.js';
+import { burgerPropTypes } from '../../utils/prop-types.js';
 
 const IngredientComposition = (props) =>
 {  
@@ -27,7 +28,7 @@ const IngredientDetails = (props) =>
   );
 }
 
-export default IngredientDetails;
+export default memo(IngredientDetails);
 
 IngredientDetails.propTypes = {
   data: burgerPropTypes.isRequired
