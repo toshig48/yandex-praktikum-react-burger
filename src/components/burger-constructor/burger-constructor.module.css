@@ -18,3 +18,20 @@
 {
     text-align: right;
 }
+
+.bottom Button
+{
+    width: 215px;
+}
+
+.empty_bun_element {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dotted grey;
+    padding: calc(var(--offset-base-size)  * 3) 0;
+}
+
+.rotate_180 img{
+    transform: rotate(180deg);
+}

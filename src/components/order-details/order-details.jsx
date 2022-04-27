@@ -1,5 +1,5 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
-import Modal from '../modal/modal';
 import styles from './order-details.module.css';
 import { CheckMarkIcon  } from '@ya.praktikum/react-developer-burger-ui-components';
 import image1 from '../../images/order/vector-1.svg'
@@ -9,7 +9,7 @@ import image3 from '../../images/order/vector-3.svg'
 const OrderDetails = (props) =>
 {  
   return (
-    <Modal isShowModal={props.isShowModal} toggleShowModal={props.toggleShowModal}> 
+    <> 
       <p className={`${styles.order_number} text text_type_digits-large mt-20`}>{props.orderNumber} </p>
       <p className="text text_type_main-medium mt-8 mb-15">Идентификатор заказа</p>
       <div className={styles.wrapper_check_mark_icon}>
@@ -20,14 +20,12 @@ const OrderDetails = (props) =>
       </div>
       <p className="text text_type_main-default mt-15">Ваш заказ начали готовить</p>
       <p className="text text_type_main-default secondary mt-2 mb-20">Дождитесь готовности на орбитальной станции</p>
-    </Modal>
+    </>
   );
 }
 
-export default OrderDetails;
+export default memo(OrderDetails);
 
 OrderDetails.propTypes = {
-  orderNumber: PropTypes.string.isRequired,
-  isShowModal: PropTypes.bool.isRequired,
-  toggleShowModal: PropTypes.func.isRequired,
+  orderNumber: PropTypes.number.isRequired
 };
