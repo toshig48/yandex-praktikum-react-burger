@@ -1,10 +1,12 @@
 .img {
     width: 480px;
 }
+
 .compositions {
     display: flex;
     justify-content: center;
 }
-.compositions div:last-child{
+
+.compositions div:last-child {
     margin-right: 0;
 }

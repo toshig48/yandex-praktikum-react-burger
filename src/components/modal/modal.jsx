@@ -1,51 +1,49 @@
-import {useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { useEffect, memo } from 'react';
 import ReactDOM from 'react-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import styles from './modal.module.css';
-import {CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { unSetCurentIngredient, closeModal } from '../../services/slices';
 
 const modalRoot = document.getElementById("react-modals");
 
-const Modal = (props) =>
-{
-  const { header, toggleShowModal, children } = props;
+const Modal = () => {
+  const dispatch = useDispatch();
+
+  const { titleModal, contentModal } = useSelector(state => state.modal);
+
   useEffect(() => {
     const close = (e) => {
-      if(e.key === "Escape" || e.key === "Esc"){
-        toggleShowModal();
+      if (e.key === "Escape" || e.key === "Esc") {
+        handleCloseModal();
       }
     }
     window.addEventListener('keydown', close)
     return () => window.removeEventListener('keydown', close)
-  },[])
+  }, [])
 
   const handleCloseModal = () => {
-    toggleShowModal();
-  } 
+    dispatch(closeModal());
+    dispatch(unSetCurentIngredient());
+  }
 
   const handleDivClick = (e) => {
     e.stopPropagation();
-  } 
+  }
 
   return ReactDOM.createPortal(
     <ModalOverlay handleCloseModal={handleCloseModal}>
       <div className={`${styles.modal} pt-10 pr-10 pb-15 pl-10`} onClick={handleDivClick}>
         <div className={styles.header}>
-          <p className="text text_type_main-large">{header}</p>
-          <CloseIcon onClick={handleCloseModal} type="primary" /> 
+          <p className="text text_type_main-large">{titleModal}</p>
+          <CloseIcon onClick={handleCloseModal} type="primary" />
         </div>
-        {children}
+        {contentModal}
       </div>
     </ModalOverlay>
     , modalRoot
   );
 }
 
-export default Modal;
-
-Modal.propTypes = {
-  header: PropTypes.string,
-  toggleShowModal: PropTypes.func.isRequired,
-};
-
+export default memo(Modal);

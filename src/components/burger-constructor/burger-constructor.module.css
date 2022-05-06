@@ -3,24 +3,12 @@
     height: calc(100vh - 500px);
     overflow-y: scroll;
 }
-.item 
-    {
-        list-style-type: none;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .item:last-child {
-        margin-bottom: 0;
-    }
 
-.bottom
-{
+.bottom {
     text-align: right;
 }
 
-.bottom Button
-{
+.bottom Button {
     width: 215px;
 }
 
@@ -29,9 +17,14 @@
     justify-content: center;
     align-items: center;
     border: 2px dotted grey;
-    padding: calc(var(--offset-base-size)  * 3) 0;
+    padding: calc(var(--offset-base-size) * 3) 0;
 }
 
-.rotate_180 img{
+.rotate_180 img {
     transform: rotate(180deg);
+}
+
+.onHover {
+    border: 2px dotted #4C4CFF;
+    border-radius: calc(var(--offset-base-size) * 3);
 }

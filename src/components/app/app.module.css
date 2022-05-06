@@ -1,6 +1,7 @@
-.app {    
+.app {
     margin: 0 auto;
 }
+
 .flex {
     width: 1240px;
     margin: 0 auto;
@@ -9,16 +10,16 @@
 }
 
 .flex_item {
-    flex-basis: calc(50% - calc(var(--offset-base-size)  * 5));
- }
+    flex-basis: calc(50% - calc(var(--offset-base-size) * 5));
+}
 
-.flex_item__burger_constructor{
+.flex_item__burger_constructor {
     composes: flex_item;
     margin-top: 100px;
 }
 
 .message {
-    margin: 0 calc(var(--offset-base-size)  * 5);
+    margin: 0 calc(var(--offset-base-size) * 5);
     margin-top: calc(100vh - 100vh/2);
     text-align: center;
 }

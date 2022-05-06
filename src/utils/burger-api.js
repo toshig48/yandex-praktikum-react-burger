@@ -41,6 +41,6 @@ export const createOrder = async (data) => {
         .then(checkResponce)
         .then(checkSuccess)
         .then((data) => {
-            return data.order.number;
+            return data.order;
         })
 }
