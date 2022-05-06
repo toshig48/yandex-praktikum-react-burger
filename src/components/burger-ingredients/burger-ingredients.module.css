@@ -1,4 +1,4 @@
-section ul{
+section ul {
     display: flex;
     flex-wrap: wrap;
     margin: 0;
@@ -9,30 +9,8 @@ section ul{
     display: flex;
     justify-content: space-between;
 }
-.group_list{
+
+.group_list {
     height: calc(100vh - 310px);
     overflow-y: scroll;
-}
-
-.item 
-    {
-        cursor: pointer;
-        list-style-type: none;
-        flex-basis: calc(50% - calc(var(--offset-base-size)  * 3));
-        text-align: center;
-        position: relative;
-    }
-
-    .item svg {
-        width: calc(var(--offset-base-size)  * 4);
-        height: calc(var(--offset-base-size)  * 4);
-    }
-.image {
-    width: 100%;
-}
-
-.counter {
-    position: absolute;
-    top:0;
-    right: var(--offset-base-size);
 }

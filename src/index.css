@@ -11,7 +11,7 @@ body {
 }
 
 .custom_scroll::-webkit-scrollbar {
-  width: calc(var(--offset-base-size)  * 2);
+  width: calc(var(--offset-base-size) * 2);
   height: 5px;
 }
 
@@ -23,14 +23,14 @@ body {
   background: var(--text-inactive-color)
 }
 
-  .custom_scroll::-webkit-scrollbar-thumb:hover {
-      background: #5a5a78;
-  }
+.custom_scroll::-webkit-scrollbar-thumb:hover {
+  background: #5a5a78;
+}
 
 .red {
   color: red;
 }
 
 .secondary {
-  color:#8585AD;
+  color: #8585AD;
 }

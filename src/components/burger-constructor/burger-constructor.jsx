@@ -1,11 +1,15 @@
-import { useState, useEffect, useContext, useMemo, memo } from "react";
-import PropTypes from "prop-types";
+import { useEffect, useMemo, memo } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { useDrop } from 'react-dnd';
+
 import styles from "./burger-constructor.module.css";
-import { ConstructorElement, Button, DragIcon, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { ConstructorElement, Button, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { INGREDIENT_BUN } from "../../utils/config.js";
 import OrderDetails from "../order-details/order-details";
-import { BurgerConstructorContext, TotalPriceContext, OrderNumberContext } from "../../services/burger-constructor-context";
-import { createOrder } from '../../utils/burger-api'
+import NoBunElement from "../no-bun-element/no-bun-element";
+
+import { addIngredient, setTotalPrice, showModal } from '../../services/slices';
+import { fetchCreateOrder } from '../../services/thunks';
 
 const FilledBunElement = (props) => {
   let text = "";
@@ -17,6 +21,7 @@ const FilledBunElement = (props) => {
     text = "(низ)";
     classDiv = styles.rotate_180;
   }
+
   return (
     <div className={`pl-8 ml-4 mr-4 ${classDiv}`}>
       <ConstructorElement
@@ -53,13 +58,25 @@ const BunElement = ({ data, position }) => {
   );
 }
 
-const BurgerConstructor = (props) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+const BurgerConstructor = () => {
+  const dispatch = useDispatch();
+  const moveItem = (item) => {
+    dispatch(addIngredient(item));
+  };
 
-  const { burgerConstructorData } = useContext(BurgerConstructorContext);
-  const { totalPriceState, totalPriceDispatcher } = useContext(TotalPriceContext);
-  const { orderNumber, setOrderNumber } = useContext(OrderNumberContext);
+  const [{ isHover }, dropTarget] = useDrop({
+    accept: 'ingredient',
+    drop(item) {
+      moveItem(item)
+    },
+    collect: monitor => ({
+      isHover: monitor.isOver()
+    })
+  });
+
+  const burgerConstructorData = useSelector(state => state.selectedIngredients.items);
+  const { loading, order, error } = useSelector(state => state.order);
+  const totalPrice = useSelector(state => state.totalPrice);
 
   const bunIngredient = useMemo(
     () => burgerConstructorData.filter(x => x.type === INGREDIENT_BUN.key)[0],
@@ -71,32 +88,17 @@ const BurgerConstructor = (props) => {
     [burgerConstructorData]
   );
 
-  const CreateOrderApi = async (data) => {
-    setLoading(true);
-    setError(null);
-    await createOrder(data)
-      .then(setOrderNumber)
-      .finally(() => {
-        setLoading(false);
-      })
-      .catch((ex) => {
-        setError(ex.message);
-        console.error(ex);
-      });
-  }
-
   const handleOpenModal = async () => {
-    await CreateOrderApi(burgerConstructorData.map(item => item._id));
+    dispatch(fetchCreateOrder(burgerConstructorData.map(item => item._id)));
   }
 
   useEffect(
     () => {
       if (error) {
-        props.setParamModal({
+        dispatch(showModal({
           title: "",
           content: `Ошибка при создании заказа: ${error}`
-        });
-        props.toggleShowModal();
+        }));
       }
     },
     [error]
@@ -104,52 +106,40 @@ const BurgerConstructor = (props) => {
 
   useEffect(
     () => {
-      if (orderNumber > 0) {
-        props.setParamModal({
+      if (order.number > 0) {
+        dispatch(showModal({
           title: "",
-          content: <OrderDetails orderNumber={orderNumber} />
-        });
-        props.toggleShowModal();
+          content: <OrderDetails orderNumber={order.number} />
+        }));
       }
     },
-    [orderNumber]
+    [order]
   );
 
   useEffect(
     () => {
-      if (burgerConstructorData.length > 0) {
-        totalPriceDispatcher({
-          type: 'set',
-          payload: burgerConstructorData.filter(x => x.type !== INGREDIENT_BUN.key).reduce((partialSum, a) => partialSum + a.price, 0) + bunIngredient.price * 2
-        });
-      }
+      dispatch(setTotalPrice(burgerConstructorData.reduce((partialSum, a) => partialSum + a.price, 0)));
     },
     [burgerConstructorData]
   );
 
   return (
     <>
-      <BunElement data={bunIngredient} position="top" />
-      <ul className={`${styles.list} ml-4 mt-4 mb-4 custom_scroll`} >
-        {
-          noBunIngredients.map((item, index) => (
-            <li className={`${styles.item} mb-4 mr-2`} key={index}>
-              <DragIcon />
-              <i className="ml-2" />
-              <ConstructorElement
-                price={item.price}
-                text={item.name}
-                thumbnail={item.image}
-                isLocked={false} />
-            </li>
-          ))
-        }
-      </ul>
-      <BunElement data={bunIngredient} position="bottom" />
+      <div ref={dropTarget} className={isHover ? styles.onHover : ''}>
+        <BunElement data={bunIngredient} position="top" />
+        <ul className={`${styles.list} ml-4 mt-4 mb-4 custom_scroll`} >
+          {
+            noBunIngredients.map((item, index) => (
+              <NoBunElement key={index} item={item} index={index} />
+            ))
+          }
+        </ul>
+        <BunElement data={bunIngredient} position="bottom" />
+      </div>
       <div className={`${styles.bottom} mt-10 mb-2 mr-6`}>
         <span className="mr-5">
           <span className="text text_type_digits-medium mr-1">
-            {totalPriceState.totalPrice}
+            {totalPrice}
           </span>
           <CurrencyIcon />
         </span>
@@ -162,9 +152,3 @@ const BurgerConstructor = (props) => {
 }
 
 export default memo(BurgerConstructor);
-
-BurgerConstructor.propTypes = {
-  setParamModal: PropTypes.func.isRequired,
-  toggleShowModal: PropTypes.func.isRequired,
-};
-

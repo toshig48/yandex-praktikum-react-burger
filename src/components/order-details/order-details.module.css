@@ -3,12 +3,14 @@
     justify-content: center;
     align-items: center;
 }
+
 .wrapper_check_mark_icon svg {
-    width: calc(var(--offset-base-size)  * 10);
-    height: calc(var(--offset-base-size)  * 10);
+    width: calc(var(--offset-base-size) * 10);
+    height: calc(var(--offset-base-size) * 10);
 }
+
 .wrapper_check_mark_icon img {
-    position: absolute;    
+    position: absolute;
 }
 
 .order_number {
