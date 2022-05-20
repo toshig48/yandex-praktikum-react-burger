@@ -1,0 +1,8 @@
+.left_menu {
+    width: 320px;
+}
+.item_a {
+    display: flex;
+    align-items: center;
+    color: inherit;
+}

@@ -1,26 +1,5 @@
-import { getIngredientsData, createOrder } from '../../utils/burger-api';
-import { allIngredientsLoading, allIngredientsReceived, allIngredientsError, orderLoading, orderReceived, orderError } from '../slices';
+import {fetchAllIngredients} from './ingredients';
+import {fetchCreateOrder} from './order';
+import {fetchRegisterUser} from './user';
 
-export const fetchAllIngredients = () => async (dispatch) => {
-  dispatch(allIngredientsLoading());
-  await getIngredientsData()
-    .then((data) => {
-      dispatch(allIngredientsReceived(data));
-    })
-    .catch((ex) => {
-      dispatch(allIngredientsError(ex.message));
-      console.error(ex);
-    });
-}
-
-export const fetchCreateOrder = (ingredients) => async (dispatch) => {
-  dispatch(orderLoading());
-  await createOrder(ingredients)
-    .then((data) => {
-      dispatch(orderReceived(data));
-    })
-    .catch((ex) => {
-      dispatch(orderError(ex.message));
-      console.error(ex);
-    });
-}
+export {fetchAllIngredients, fetchCreateOrder, fetchRegisterUser}

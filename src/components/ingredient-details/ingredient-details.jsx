@@ -12,7 +12,7 @@ const IngredientComposition = (props) => {
 }
 
 const IngredientDetails = () => {
-  const data = useSelector(state => state.curentIngredient.item);
+  const data = useSelector(state => state.curentIngredient);
   return (
     <>
       <img className={styles.img} src={data.image} alt={data.name}></img>

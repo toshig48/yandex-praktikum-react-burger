@@ -1,6 +1,7 @@
 import { useEffect, useMemo, memo } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from 'react-dnd';
+import { v4 as uuidv4 } from 'uuid';
 
 import styles from "./burger-constructor.module.css";
 import { ConstructorElement, Button, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -8,7 +9,7 @@ import { INGREDIENT_BUN } from "../../utils/config.js";
 import OrderDetails from "../order-details/order-details";
 import NoBunElement from "../no-bun-element/no-bun-element";
 
-import { addIngredient, setTotalPrice, showModal } from '../../services/slices';
+import { addIngredient, showModal } from '../../services/slices';
 import { fetchCreateOrder } from '../../services/thunks';
 
 const FilledBunElement = (props) => {
@@ -61,7 +62,8 @@ const BunElement = ({ data, position }) => {
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
   const moveItem = (item) => {
-    dispatch(addIngredient(item));
+
+    dispatch(addIngredient({...item, key : uuidv4()}));
   };
 
   const [{ isHover }, dropTarget] = useDrop({
@@ -76,7 +78,6 @@ const BurgerConstructor = () => {
 
   const burgerConstructorData = useSelector(state => state.selectedIngredients.items);
   const { loading, order, error } = useSelector(state => state.order);
-  const totalPrice = useSelector(state => state.totalPrice);
 
   const bunIngredient = useMemo(
     () => burgerConstructorData.filter(x => x.type === INGREDIENT_BUN.key)[0],
@@ -85,6 +86,11 @@ const BurgerConstructor = () => {
 
   const noBunIngredients = useMemo(
     () => burgerConstructorData.filter(x => x.type !== INGREDIENT_BUN.key),
+    [burgerConstructorData]
+  );
+
+  const totalPrice = useMemo(
+    () => burgerConstructorData.reduce((partialSum, a) => partialSum + a.price, 0),
     [burgerConstructorData]
   );
 
@@ -101,7 +107,7 @@ const BurgerConstructor = () => {
         }));
       }
     },
-    [error]
+    [error, dispatch]
   );
 
   useEffect(
@@ -113,14 +119,7 @@ const BurgerConstructor = () => {
         }));
       }
     },
-    [order]
-  );
-
-  useEffect(
-    () => {
-      dispatch(setTotalPrice(burgerConstructorData.reduce((partialSum, a) => partialSum + a.price, 0)));
-    },
-    [burgerConstructorData]
+    [order, dispatch]
   );
 
   return (
@@ -130,7 +129,7 @@ const BurgerConstructor = () => {
         <ul className={`${styles.list} ml-4 mt-4 mb-4 custom_scroll`} >
           {
             noBunIngredients.map((item, index) => (
-              <NoBunElement key={index} item={item} index={index} />
+              <NoBunElement key={item.key} item={item} index={index} />
             ))
           }
         </ul>

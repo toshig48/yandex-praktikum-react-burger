@@ -44,3 +44,23 @@ export const createOrder = async (data) => {
             return data.order;
         })
 }
+
+export const registerUser = async (name, email, password) => {
+    return await fetch(URL_API + "/auth/register", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({            
+            "name": name,
+            "email": email, 
+            "password": password
+        })
+    })
+        .then(checkResponce)
+        .then(checkSuccess)
+        .then((data) => {
+            return data;
+        })
+}

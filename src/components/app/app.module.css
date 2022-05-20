@@ -2,20 +2,11 @@
     margin: 0 auto;
 }
 
-.flex {
+.main {
     width: 1240px;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
-}
-
-.flex_item {
-    flex-basis: calc(50% - calc(var(--offset-base-size) * 5));
-}
-
-.flex_item__burger_constructor {
-    composes: flex_item;
-    margin-top: 100px;
 }
 
 .message {

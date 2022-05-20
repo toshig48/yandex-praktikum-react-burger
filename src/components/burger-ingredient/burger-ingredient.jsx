@@ -1,9 +1,10 @@
 import { memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useDrag } from 'react-dnd';
+import PropTypes from 'prop-types';
 
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-
+import { burgerPropTypes } from '../../utils/prop-types.js';
 import styles from './burger-ingredient.module.css';
 
 
@@ -16,7 +17,7 @@ const BurgerIngredient = (props) => {
   const { item, count } = props;
 
   const handleOpenModal = () => {
-    dispatch(setCurentIngredient(item));
+    dispatch(setCurentIngredient(item));    
     dispatch(showModal({
       title: "Детали ингредиента",
       content: <IngredientDetails />
@@ -32,15 +33,17 @@ const BurgerIngredient = (props) => {
   });
 
   return (
-    <li ref={ref} className={`${styles.item} mb-8`} data-id={item._id} onClick={handleOpenModal} style={{ opacity }}>
-      <img src={item.image} className='ml-4 mr-4' alt={item.name}></img>
-      <p className="text text_type_digits-default mb-1 mt-1">
-        <span className="mr-2">
-          {item.price}
-        </span>
-        <CurrencyIcon />
-      </p>
-      <p className="text text_type_main-default">{item.name} </p>
+    <li  className={`${styles.item} mb-8`} data-id={item._id} onClick={handleOpenModal} style={{ opacity }}>
+      <div ref={ref}>
+        <img src={item.image} className='ml-4 mr-4' alt={item.name}></img>
+        <p className="text text_type_digits-default mb-1 mt-1">
+          <span className="mr-2">
+            {item.price}
+          </span>
+          <CurrencyIcon />
+        </p>
+        <p className="text text_type_main-default">{item.name} </p>
+      </div>
       {
         count > 0 &&
         <div className={styles.counter}>
@@ -52,3 +55,8 @@ const BurgerIngredient = (props) => {
 }
 
 export default memo(BurgerIngredient);
+
+BurgerIngredient.propTypes = {
+  item : burgerPropTypes.isRequired,  
+  count : PropTypes.number.isRequired
+};

@@ -10,6 +10,10 @@ body {
   font-family: 'JetBrainsMono-Bold';
 }
 
+a {
+  text-decoration: none;
+}
+
 .custom_scroll::-webkit-scrollbar {
   width: calc(var(--offset-base-size) * 2);
   height: 5px;
@@ -33,4 +37,12 @@ body {
 
 .secondary {
   color: #8585AD;
+}
+
+.text_center {
+  text-align: center;
+}
+
+.custom_input .input_size_default{
+  width: 500px !important;
 }

@@ -1,5 +1,5 @@
-import { useRef, useState, useMemo, useEffect, memo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useRef, useState, useMemo, memo } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
@@ -7,8 +7,6 @@ import styles from './burger-ingredients.module.css';
 import { INGREDIENT_BUN, INGREDIENT_SAUCE, INGREDIENT_MAIN } from '../../utils/config.js';
 
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
-import { fetchAllIngredients } from '../../services/thunks';
-import { showModal } from '../../services/slices';
 
 const BurgerIngredientGroups = (props) => {
   return (
@@ -23,28 +21,8 @@ const BurgerIngredientGroups = (props) => {
 }
 
 const BurgerIngredients = () => {
-  const dispatch = useDispatch();
   const data = useSelector(state => state.allIngredients.items);
   const burgerConstructorData = useSelector(state => state.selectedIngredients.items);
-  const { loading, error } = useSelector(state => state.allIngredients);
-
-  useEffect(() => {
-    if (!loading && data.length === 0) {
-      dispatch(fetchAllIngredients());
-    }
-  }, [])
-
-  useEffect(
-    () => {
-      if (error) {
-        dispatch(showModal({
-          title: "",
-          content: `Ошибка при получении данных от API: ${error}`
-        }));
-      }
-    },
-    [error]
-  );
 
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
@@ -92,12 +70,6 @@ const BurgerIngredients = () => {
     const sauceY = mainRef.current.getBoundingClientRect().y;
     const mainY = sauceRef.current.getBoundingClientRect().y;
     sauceY < y ? setCurrentTab(INGREDIENT_MAIN.key) : mainY < y ? setCurrentTab(INGREDIENT_SAUCE.key) : setCurrentTab(INGREDIENT_BUN.key);
-  }
-
-  if (loading) {
-    return (
-      <p className={`${styles.message} text text_type_main-medium mt-10`}>Загрузка данных...</p>
-    );
   }
 
   return (
