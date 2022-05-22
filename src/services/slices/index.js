@@ -8,13 +8,21 @@ import {curentIngredientReducer, setCurentIngredient, unSetCurentIngredient} fro
 import {orderReducer, orderLoading, orderReceived, orderError} from './order';
 // Объект модального окна:
 import {modalReducer, showModal, closeModal} from './modal';
-// Объект модального окна:
-import {userReducer, userLoading, userReceived, userError} from './user';
+// Объект пользователя:
+import {userReducer, userLoginLoading, userLoginReceived, userLoginByToken, userLogoutLoading,  
+        userLogoutReceived, userInfoLoading, userInfoReceived, userError, userClearError} from './user';
+// Объект восстановаления/сброса пароля:
+import {passwordReducer, passwordLoading, forgotPasswordReceived, resetPasswordReceived, passwordError, passwordClearError} from './password';
+// Объект токена:
+import {tokenReducer, tokenLoading, tokenReceived, tokenError} from './token';
 
-export { allIngredientsReducer, selectedIngredientsReducer, curentIngredientReducer, orderReducer, modalReducer, userReducer}
+export { allIngredientsReducer, selectedIngredientsReducer, curentIngredientReducer, 
+         orderReducer, modalReducer, userReducer, passwordReducer, tokenReducer }
 export { allIngredientsLoading, allIngredientsReceived, allIngredientsError, 
          addIngredient, removeIngredient, moveIngredient,
          setCurentIngredient, unSetCurentIngredient,
          orderLoading, orderReceived, orderError,
          showModal, closeModal,
-         userLoading, userReceived, userError };
+         userLoginLoading, userLoginReceived, userLoginByToken, userLogoutLoading, userLogoutReceived, userInfoLoading, userInfoReceived, userError, userClearError,
+         passwordLoading, forgotPasswordReceived, resetPasswordReceived, passwordError, passwordClearError,
+         tokenLoading, tokenReceived, tokenError };

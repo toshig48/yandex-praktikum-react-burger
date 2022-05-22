@@ -1,29 +1,27 @@
 import { memo, useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from './register.module.css';
 import { fetchRegisterUser } from '../../services/thunks';
+import { userClearError } from '../../services/slices/user';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const [valueName, setValueName] = useState('');
-  const [valueEmail, setValueEmail] = useState('');
-  const [valuePassword, setValuePassword] = useState('');
-  const {loading, loggedIn, error } = useSelector(state => state.user);
+  const [form, setValue] = useState({name: '', email: '', password: '' });
+  const {loading, error } = useSelector(state => state.user);
   
   useEffect(() => {
-    if (loggedIn){
-       return navigate("/");
-    }
- },[loggedIn]);
+    dispatch(userClearError());
+ },[dispatch]);
+
+ const onChange = e => {
+  setValue({ ...form, [e.target.name]: e.target.value });
+};
 
   const handlOnsubmin = async (e) => {
     e.preventDefault();
-    dispatch(fetchRegisterUser(valueName, valueEmail, valuePassword));
+    dispatch(fetchRegisterUser(form.name, form.email, form.password));
   }
 
   return (
@@ -35,22 +33,22 @@ const RegisterPage = () => {
             name="name" 
             type="text" 
             placeholder="Имя"
-            value={valueName}
-            onChange={e => setValueName(e.target.value)}/>
+            value={form.name}
+            onChange={onChange}/>
         </div>
         <div className="mb-6 custom_input">
           <Input 
             name="email" 
             type="email" 
             placeholder="E-mail"
-            value={valueEmail}
-            onChange={e => setValueEmail(e.target.value)}/>
+            value={form.email}
+            onChange={onChange}/>
         </div>
         <div className='mb-6 custom_input'>
           <PasswordInput 
             name="password"
-            value={valuePassword}
-            onChange={e => setValuePassword(e.target.value)}/>
+            value={form.password}
+            onChange={onChange}/>
         </div>
         <Button className="mt-6" type="primary" size="medium" disabled={(loading) ? true : false}>
           {loading ? "Ожидание..." : "Зарегистрироваться"}

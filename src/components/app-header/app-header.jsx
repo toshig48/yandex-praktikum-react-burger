@@ -1,33 +1,36 @@
 import { memo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styles from './app-header.module.css';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 const AppHeader = () => {
+  const pathname = useLocation().pathname;
   return (
     <header className={styles.header}>
       <nav className={styles.menu}>
         <div className={styles.menu_item}>
           <Link className={`${styles.menu_item_a} p-4 mt-4 mb-4`} to="/">
-            <BurgerIcon type='primary' />
-            <span className='text text_type_main-default ml-2'>
+            <BurgerIcon type={pathname === '/' ? 'primary' : 'secondary'} />
+            <span className={`${pathname !== '/' && "secondary"} text text_type_main-default ml-2`}>
               Конструктор
             </span>
           </Link>
-          <Link className={`${styles.menu_item_a} p-4 mt-4 mb-4`} to="/">
-            <ListIcon type="secondary" />
-            <span className="secondary text text_type_main-default ml-2">
+          <Link className={`${styles.menu_item_a} p-4 mt-4 mb-4`} to="/list">
+            <ListIcon type={pathname === '/list' ? 'primary' : 'secondary'} />
+            <span className={`${pathname !== '/list' && "secondary"} text text_type_main-default ml-2`}>
               Лента заказов
             </span>
           </Link>
         </div>
         <div className={styles.menu_item}>
-          <Logo />
+          <Link className={`${styles.menu_item_a}`} to="/">
+            <Logo />
+          </Link>
         </div>
         <div className={styles.menu_item}>
           <Link className={`${styles.menu_item_a} p-4 mt-4 mb-4`} to="profile">
-            <ProfileIcon type="secondary" />
-            <span className="secondary text text_type_main-default ml-2">
+            <ProfileIcon type={pathname === '/profile' ? 'primary' : 'secondary'}  />
+            <span className={`${pathname !== '/profile' && "secondary"} text text_type_main-default ml-2`}>
               Личный кабинет
             </span>
           </Link>

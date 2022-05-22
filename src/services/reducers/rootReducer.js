@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
-import { allIngredientsReducer, selectedIngredientsReducer, curentIngredientReducer, orderReducer, modalReducer, userReducer } from '../slices'
+import { allIngredientsReducer, selectedIngredientsReducer, curentIngredientReducer, 
+         orderReducer, modalReducer, userReducer, passwordReducer, tokenReducer } from '../slices'
 
 
 export const rootReducer = combineReducers({
@@ -8,5 +9,7 @@ export const rootReducer = combineReducers({
   curentIngredient: curentIngredientReducer,
   order: orderReducer,
   modal: modalReducer,
-  user: userReducer
+  user: userReducer,
+  password: passwordReducer,
+  token: tokenReducer
 });

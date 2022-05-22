@@ -46,3 +46,7 @@ a {
 .custom_input .input_size_default{
   width: 500px !important;
 }
+
+.cursor_pointer {
+  cursor: pointer;
+}

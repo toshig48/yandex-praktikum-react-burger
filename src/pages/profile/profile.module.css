@@ -6,3 +6,8 @@
     align-items: center;
     color: inherit;
 }
+
+.right_align {
+    display: flex;
+    justify-content: flex-end;
+}
