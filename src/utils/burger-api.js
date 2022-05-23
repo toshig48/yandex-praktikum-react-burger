@@ -110,7 +110,7 @@ export const forgotPasswordUser = async (email) => {
         })
 }
 
-export const resetPasswordUser = async (password, token) => {
+export const resetPasswordUser = async (password, code) => {
     return await fetch(URL_API + "/password-reset/reset", {
         method: 'POST',
         headers: {
@@ -118,8 +118,8 @@ export const resetPasswordUser = async (password, token) => {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "email": password,
-            "token": token
+            "password": password,
+            "token": code
         })
     })
         .then(checkResponce)

@@ -1,9 +1,12 @@
-import { useRef, useState, useMemo, memo } from 'react';
-import { useSelector } from 'react-redux';
-
+import { useRef, useState, useEffect, useMemo, memo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { setCurentIngredient, showModal } from '../../services/slices';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
+import { unSetCurentIngredient } from '../../services/slices';
 
+import IngredientDetails from '../../components/ingredient-details/ingredient-details';
 import { INGREDIENT_BUN, INGREDIENT_SAUCE, INGREDIENT_MAIN } from '../../utils/config.js';
 
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
@@ -21,8 +24,12 @@ const BurgerIngredientGroups = (props) => {
 }
 
 const BurgerIngredients = () => {
+  const dispatch = useDispatch();
   const data = useSelector(state => state.allIngredients.items);
   const burgerConstructorData = useSelector(state => state.selectedIngredients.items);
+  const flagClear = useSelector(state => state.curentIngredient.flagClear);
+  const flagIngridientModal = localStorage.getItem('flagIngridientModal');
+  const { id } = useParams();
 
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
@@ -41,6 +48,29 @@ const BurgerIngredients = () => {
   const mains = useMemo(
     () => data.filter(x => x.type === INGREDIENT_MAIN.key),
     [data]
+  );
+
+  useEffect(
+    () => {
+      if (flagClear) {
+        dispatch(unSetCurentIngredient());
+      }
+    },
+    [flagClear, dispatch]
+  );
+
+  useEffect(
+    () => {
+      if (id && data && flagIngridientModal) {
+        const curentIngredient = data.filter(x => x._id === id)[0];
+        dispatch(setCurentIngredient(curentIngredient));
+        dispatch(showModal({
+          title: "Детали ингредиента",
+          content: <IngredientDetails />
+        }));
+      }
+    },
+    [id, data, flagIngridientModal, dispatch]
   );
 
   const handleTabClick = (tab) => {

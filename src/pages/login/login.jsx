@@ -8,7 +8,6 @@ import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burg
 
 const LoginPage = () => {
   const dispatch = useDispatch();
-  //const state = useLocation().state;
   const [form, setValue] = useState({ email: '', password: '' });
 
   const { loading,  error } = useSelector(state => state.user);

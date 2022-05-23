@@ -1,16 +1,19 @@
 import { useEffect, memo } from 'react';
 import ReactDOM from 'react-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import styles from './modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { unSetCurentIngredient, closeModal } from '../../services/slices';
+import { closeModal } from '../../services/slices';
+import { unSetCurentIngredient } from '../../services/slices';
 
 const modalRoot = document.getElementById("react-modals");
 
 const Modal = () => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const { titleModal, contentModal } = useSelector(state => state.modal);
 
   useEffect(() => {
@@ -26,6 +29,8 @@ const Modal = () => {
   const handleCloseModal = () => {
     dispatch(closeModal());
     dispatch(unSetCurentIngredient());
+    localStorage.removeItem('flagIngridientModal');
+    navigate(location.state?.pathname && '/');
   }
 
   const handleDivClick = (e) => {

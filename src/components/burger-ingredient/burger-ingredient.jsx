@@ -1,27 +1,31 @@
 import { memo } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDrag } from 'react-dnd';
+import { setCurentIngredient, showModal } from '../../services/slices';
+
 import PropTypes from 'prop-types';
 
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { burgerPropTypes } from '../../utils/prop-types.js';
 import styles from './burger-ingredient.module.css';
-
-
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import { setCurentIngredient, showModal } from '../../services/slices';
+import IngredientDetails from '../../components/ingredient-details/ingredient-details';
 
 const BurgerIngredient = (props) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const { item, count } = props;
-
-  const handleOpenModal = () => {
-    dispatch(setCurentIngredient(item));    
+  
+  const handleOpenModal = () => {    
+    dispatch(setCurentIngredient(item));   
     dispatch(showModal({
       title: "Детали ингредиента",
       content: <IngredientDetails />
     }));
+    localStorage.setItem('flagIngridientModal', true);
+    navigate('/ingredients/' + item._id, { state: location });   
   }
 
   const [{ opacity }, ref] = useDrag({

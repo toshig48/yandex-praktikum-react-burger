@@ -12,7 +12,16 @@ const IngredientComposition = (props) => {
 }
 
 const IngredientDetails = () => {
-  const data = useSelector(state => state.curentIngredient);
+  const data = useSelector(state => state.curentIngredient.item);
+
+  if (!data) {
+    return (
+      <p>
+        Нет такого ингридиента
+      </p>
+    );
+  }
+
   return (
     <>
       <img className={styles.img} src={data.image} alt={data.name}></img>

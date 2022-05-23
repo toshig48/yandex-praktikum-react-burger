@@ -9,7 +9,7 @@ import { ProtectedRoute } from '../routes';
 import { fetchTokenUser } from '../../services/thunks';
 import { GetRefreshToken } from '../../utils/token';
 
-import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, NotFound404Page } from '../../pages/';
+import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, IngredientDetails, NotFound404Page } from '../../pages/';
 
 import styles from './app.module.css';
 import Modal from '../modal/modal';
@@ -25,17 +25,16 @@ const App = () => {
 
   useEffect(() => {
     const refreshToken = GetRefreshToken();
-    if(refreshToken)
-    {
+    if (refreshToken) {
       dispatch(fetchTokenUser(refreshToken));
     }
   }, [dispatch])
 
   useEffect(() => {
-    if (loggedIn && user.name === undefined){
-       dispatch(fetchGetInfoUser())
+    if (loggedIn && user.name === undefined) {
+      dispatch(fetchGetInfoUser())
     }
- },[user, loggedIn, dispatch]);
+  }, [user, loggedIn, dispatch]);
 
   useEffect(() => {
     if (!loading && data.length === 0) {
@@ -64,43 +63,42 @@ const App = () => {
     );
   }
   return (
-    <>
+    <BrowserRouter>
       <div className={styles.app}>
-        <BrowserRouter>
-          <AppHeader />
-          <DndProvider backend={HTML5Backend}>
-            <div className={styles.main}>
+        <AppHeader />
+        <DndProvider backend={HTML5Backend}>
+          <div className={styles.main}>
 
-              <Routes>
-                <Route path='/' element={<HomePage />} />
+            <Routes>
+              <Route path='/' element={<HomePage />} />
 
-                <Route element={<ProtectedRoute redirectСondition={loggedIn} redirectPath="/" />}>
-                  <Route path='login' element={<LoginPage />} />
-                  <Route path='register' element={<RegisterPage />} />
-                  <Route path='forgot-password' element={<ForgotPasswordPage />} />
-                </Route>
+              <Route element={<ProtectedRoute redirectСondition={loggedIn} redirectPath="/" />}>
+                <Route path='login' element={<LoginPage />} />
+                <Route path='register' element={<RegisterPage />} />
+                <Route path='forgot-password' element={<ForgotPasswordPage />} />
+              </Route>
 
-                <Route element={<ProtectedRoute redirectСondition={loggedIn && !allowResetPassword} redirectPath="forgot-password" />}>
-                  <Route path='reset-password' element={<ResetPasswordPage />} />
-                </Route>
+              <Route element={<ProtectedRoute redirectСondition={loggedIn && !allowResetPassword} redirectPath="forgot-password" />}>
+                <Route path='reset-password' element={<ResetPasswordPage />} />
+              </Route>
 
-                <Route element={<ProtectedRoute redirectСondition={!loggedIn} redirectPath="login" />}>
-                  <Route path='profile/*' element={<ProfilePage />} />
-                </Route>
+              <Route element={<ProtectedRoute redirectСondition={!loggedIn} redirectPath="login" />}>
+                <Route path='profile/*' element={<ProfilePage />} />
+              </Route>
 
-                <Route path='ingredients/:id' element={<ProfilePage />} />
-                
-                <Route path='*' element={<NotFound404Page />} />
-              </Routes>
-            </div>
-          </DndProvider>
-        </BrowserRouter>
+              <Route path='ingredients/:id' element={<IngredientDetails />} />
+
+              <Route path='*' element={<NotFound404Page />} />
+            </Routes>
+          </div>
+        </DndProvider>
+
       </div>
       {
         isShowModal &&
         <Modal />
       }
-    </>
+    </BrowserRouter>
   );
 }
 

@@ -3,7 +3,7 @@ import {allIngredientsReducer, allIngredientsLoading, allIngredientsReceived, al
 // Cписок всех ингредиентов в текущем конструкторе бургера:
 import {selectedIngredientsReducer, addIngredient, removeIngredient, moveIngredient} from './selected-ingredients';
 // Объект текущего просматриваемого ингредиента:
-import {curentIngredientReducer, setCurentIngredient, unSetCurentIngredient} from './curent-ingredients';
+import {curentIngredientReducer, setCurentIngredient, unSetCurentIngredient, setFlagClear} from './curent-ingredients';
 // Объект созданного заказа:
 import {orderReducer, orderLoading, orderReceived, orderError} from './order';
 // Объект модального окна:
@@ -20,7 +20,7 @@ export { allIngredientsReducer, selectedIngredientsReducer, curentIngredientRedu
          orderReducer, modalReducer, userReducer, passwordReducer, tokenReducer }
 export { allIngredientsLoading, allIngredientsReceived, allIngredientsError, 
          addIngredient, removeIngredient, moveIngredient,
-         setCurentIngredient, unSetCurentIngredient,
+         setCurentIngredient, unSetCurentIngredient, setFlagClear,
          orderLoading, orderReceived, orderError,
          showModal, closeModal,
          userLoginLoading, userLoginReceived, userLoginByToken, userLogoutLoading, userLogoutReceived, userInfoLoading, userInfoReceived, userError, userClearError,

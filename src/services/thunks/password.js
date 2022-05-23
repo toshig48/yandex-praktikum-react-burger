@@ -13,9 +13,9 @@ export const fetchForgotPasswordUser = (email) => async (dispatch) => {
     });
 }
 
-export const fetchResetPasswordUser = (password, token) => async (dispatch) => {  
+export const fetchResetPasswordUser = (password, code) => async (dispatch) => {  
   dispatch(passwordLoading());
-  await resetPasswordUser(password, token)
+  await resetPasswordUser(password, code)
     .then(() => {
       dispatch(resetPasswordReceived());
     })
