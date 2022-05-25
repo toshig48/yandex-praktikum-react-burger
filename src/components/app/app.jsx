@@ -20,7 +20,6 @@ import styles from './app.module.css';
 const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  
   const data = useSelector(state => state.allIngredients.items);
   const { loading, error } = useSelector(state => state.allIngredients);
   const { allowResetPassword } = useSelector(state => state.password);
@@ -70,7 +69,7 @@ const App = () => {
         <AppHeader />
         <DndProvider backend={HTML5Backend}>
           <div className={styles.main}>
-            <Routes location={location.state ? location.state.pathnameModal : location.pathname}>
+            <Routes location={location.state?.pathnameModal !== undefined ? location.state.pathnameModal : location.pathname}>
               <Route path='/' element={<HomePage />} />
 
               <Route element={<ProtectedRoute redirectСondition={loggedIn} redirectPath="/" />}>
