@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const passwordInitialState = {
-  loading: false, 
+  loading: false,
   allowResetPassword: false,
   error: ''
 };

@@ -1,7 +1,9 @@
 import { memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import styles from './app-header.module.css';
+
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+
+import styles from './app-header.module.css';
 
 const AppHeader = () => {
   const pathname = useLocation().pathname;
@@ -29,8 +31,8 @@ const AppHeader = () => {
         </div>
         <div className={styles.menu_item}>
           <Link className={`${styles.menu_item_a} p-4 mt-4 mb-4`} to="profile">
-            <ProfileIcon type={pathname === '/profile' ? 'primary' : 'secondary'}  />
-            <span className={`${pathname !== '/profile' && "secondary"} text text_type_main-default ml-2`}>
+            <ProfileIcon type={pathname.indexOf('/profile') ? 'secondary' : 'primary'} />
+            <span className={`${pathname.indexOf('/profile') && "secondary"} text text_type_main-default ml-2`}>
               Личный кабинет
             </span>
           </Link>

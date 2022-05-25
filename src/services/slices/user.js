@@ -64,6 +64,6 @@ const userSlice = createSlice({
     }
   }
 })
-export const { userLoginLoading, userLoginReceived, userLogoutLoading, userLogoutReceived, userInfoLoading, 
-               userLoginByToken, userInfoReceived, userError, userClearError } = userSlice.actions;
+export const { userLoginLoading, userLoginReceived, userLogoutLoading, userLogoutReceived, userInfoLoading,
+  userLoginByToken, userInfoReceived, userError, userClearError } = userSlice.actions;
 export const userReducer = userSlice.reducer;

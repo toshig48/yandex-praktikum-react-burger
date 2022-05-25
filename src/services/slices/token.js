@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const tokenInitialState = {
-  loading: false, 
+  loading: false,
   error: ''
 };
 

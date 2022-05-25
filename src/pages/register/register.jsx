@@ -1,10 +1,13 @@
 import { memo, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import styles from './register.module.css';
+
+import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+
 import { fetchRegisterUser } from '../../services/thunks';
 import { userClearError } from '../../services/slices/user';
-import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+
+import styles from './register.module.css';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();

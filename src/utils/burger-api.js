@@ -1,9 +1,46 @@
-const URL_API = "https://norma.nomoreparties.space/api";
+import { URL_API } from './config'
+import { GetRefreshToken, SaveTokens } from './token';
 
-const checkResponce = (response) => {
+const fetchWithRefresh = async (url, params) => {
+    try {
+        const responce = await fetch(url, params);
+        return await checkResponce(responce);
+    }
+    catch (ex) {
+        if (ex.message === 'jwt malformed' || ex.message === 'jwt expired') {
+            var refreshToken = GetRefreshToken();
+            if (refreshToken) {
+                const refreshData = await tokenUser(refreshToken);
+                if (!refreshData.success) {
+                    Promise.reject(refreshData);
+                }
+                else {
+                    SaveTokens(refreshData.accessToken, refreshData.refreshToken);
+                    params.headers.authorization = refreshData.accessToken;
+                    const responce = await fetch(url, params);
+                    return await checkResponce(responce);
+                }
+            }
+            else {
+                Promise.reject("RefreshToken no find on local storage");
+            }
+        }
+        else {
+            Promise.reject(ex);
+        }
+    }
+}
+
+const checkResponce = async (response) => {
     const data = response.json();
-    if (!response.ok && response.status >= 500) {
-        throw new Error("Запрос вернул status = " + response.status);
+    if (!response.ok) {
+        const result = await data.then(result => result);
+        if (result.message) {
+            throw new Error(result.message);
+        }
+        else {
+            throw new Error("Запрос вернул status = " + response.status);
+        }
     }
     else {
         return data;
@@ -165,16 +202,15 @@ export const tokenUser = async (refreshToken) => {
         })
 }
 
-export const getInfoUser = async (authToken) => {
-    return await fetch(URL_API + "/auth/user ", {
+export const getInfoUser = async (authToken) => {        
+    return await fetchWithRefresh(URL_API + "/auth/user ", {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',            
+            'Content-Type': 'application/json',
             'authorization': 'Bearer ' + authToken
         }
     })
-        .then(checkResponce)
         .then(checkSuccess)
         .then((data) => {
             return data;
@@ -182,11 +218,11 @@ export const getInfoUser = async (authToken) => {
 }
 
 export const setInfoUser = async (authToken, name, email, password) => {
-    return await fetch(URL_API + "/auth/user ", {
+    return await fetchWithRefresh(URL_API + "/auth/user ", {
         method: 'PATCH',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',            
+            'Content-Type': 'application/json',
             'authorization': 'Bearer ' + authToken
         },
         body: JSON.stringify({
@@ -195,7 +231,6 @@ export const setInfoUser = async (authToken, name, email, password) => {
             "password": password
         })
     })
-        .then(checkResponce)
         .then(checkSuccess)
         .then((data) => {
             return data;

@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const curentIngredientInitialState = {
-    flagClear: false,
-    item: null
-  };
+  flagClear: false,
+  item: null
+};
 
 const curentIngredientSlice = createSlice({
   name: 'curentIngredient',

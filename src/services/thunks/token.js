@@ -2,7 +2,7 @@ import { tokenUser } from '../../utils/burger-api';
 import { SaveTokens, ClearTokens } from '../../utils/token';
 import { userLoginByToken, tokenLoading, tokenReceived, tokenError } from '../slices';
 
-export const fetchTokenUser = (refreshToken) => async (dispatch) => {  
+export const fetchTokenUser = (refreshToken) => async (dispatch) => {
   dispatch(tokenLoading());
   await tokenUser(refreshToken)
     .then((data) => {
@@ -12,7 +12,8 @@ export const fetchTokenUser = (refreshToken) => async (dispatch) => {
     })
     .catch((ex) => {
       console.error(ex);
-      dispatch(tokenError(ex.message));   
+      dispatch(tokenError(ex.message));
       ClearTokens();
     });
 }
+

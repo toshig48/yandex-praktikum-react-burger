@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { useSelector } from 'react-redux';
+
 import styles from './ingredient-details.module.css';
 
 const IngredientComposition = (props) => {

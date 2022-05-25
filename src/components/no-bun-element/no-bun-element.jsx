@@ -5,6 +5,7 @@ import { useDrag, useDrop } from 'react-dnd'
 import PropTypes from 'prop-types';
 
 import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+
 import { removeIngredient, moveIngredient } from '../../services/slices';
 import { burgerPropTypes } from '../../utils/prop-types.js';
 

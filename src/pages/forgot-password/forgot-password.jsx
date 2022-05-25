@@ -2,10 +2,13 @@ import { memo, useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import styles from './forgot-password.module.css';
+
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
+
 import { fetchForgotPasswordUser } from '../../services/thunks';
 import { passwordClearError } from '../../services/slices/password';
+
+import styles from './forgot-password.module.css';
 
 const ForgotPasswordPage = () => {
   const dispatch = useDispatch();

@@ -7,6 +7,9 @@ export function getCookie(name) {
 
 export function setCookie(name, value, props) {
   props = props || {};
+
+  props = {path: '/', ...props};
+  
   let exp = props.expires;
   if (typeof exp == 'number' && exp) {
     const d = new Date();
@@ -30,13 +33,4 @@ export function setCookie(name, value, props) {
 
 export function deleteCookie(name) {
   setCookie(name, null, { expires: -1 });
-}
-
-export const SaveTokenToCookie = (authToken, refreshToken) =>
-{
-  if (authToken.indexOf('Bearer') === 0) {
-    authToken = authToken.split('Bearer ')[1];
-  }
-  setCookie('token', authToken, { expires: 20 *60 });
-  localStorage.setItem('token', refreshToken)
 }

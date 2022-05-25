@@ -28,7 +28,6 @@
 .menu_item_a {
     display: flex;
     align-items: center;
-    color: inherit;
 }
 
 .menu_item_a:first-child {

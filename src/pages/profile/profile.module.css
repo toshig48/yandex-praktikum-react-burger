@@ -1,10 +1,13 @@
 .left_menu {
     width: 320px;
 }
-.item_a {
-    display: flex;
-    align-items: center;
-    color: inherit;
+.left_menu ul {
+    margin: 0;
+    padding: 0;
+}
+.left_menu li {
+    list-style-type: none; /* Убираем маркеры */
+    margin: calc(var(--offset-base-size) * 6) 0;
 }
 
 .right_align {

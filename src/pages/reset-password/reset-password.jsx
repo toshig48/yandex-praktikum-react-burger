@@ -2,32 +2,36 @@ import { memo, useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import styles from './reset-password.module.css';
+
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { fetchResetPasswordUser} from '../../services/thunks';
+
+import { fetchResetPasswordUser } from '../../services/thunks';
 import { passwordClearError } from '../../services/slices/password';
-const ResetPassword = () => {  
+
+import styles from './reset-password.module.css';
+
+const ResetPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [form, setValue] = useState({ password: '', code: '' });
 
-  const {loading, allowResetPassword, error } = useSelector(state => state.password);
+  const { loading, allowResetPassword, error } = useSelector(state => state.password);
 
   useEffect(() => {
     dispatch(passwordClearError());
- },[dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
-    if (!allowResetPassword){
-       return navigate("/login");
+    if (!allowResetPassword) {
+      return navigate("/login");
     }
- },[allowResetPassword, navigate]);
+  }, [allowResetPassword, navigate]);
 
- 
- const onChange = e => {
-  setValue({ ...form, [e.target.name]: e.target.value });
-};
+
+  const onChange = e => {
+    setValue({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handlOnsubmin = async (e) => {
     e.preventDefault();
@@ -37,21 +41,21 @@ const ResetPassword = () => {
   return (
     <div className={styles.main}>
       <h3 className='text text_type_main-medium mb-6'>Восстановление пароля</h3>
-      <form onSubmit={handlOnsubmin}>      
+      <form onSubmit={handlOnsubmin}>
         <div className='mb-6 custom_input'>
-          <PasswordInput 
+          <PasswordInput
             name="password"
             value={form.password}
-            onChange={onChange}         
-            placeholder="Введите новый пароль"/>
+            onChange={onChange}
+            placeholder="Введите новый пароль" />
         </div>
         <div className="mb-6 custom_input">
-          <Input 
-            name="code" 
-            type="text" 
+          <Input
+            name="code"
+            type="text"
             value={form.code}
-            onChange={onChange}              
-            placeholder="Введите код из письма"/>
+            onChange={onChange}
+            placeholder="Введите код из письма" />
         </div>
         <Button className="mt-6" type="primary" size="medium" disabled={(loading) ? true : false}>
           {loading ? "Ожидание..." : "Сохранить"}

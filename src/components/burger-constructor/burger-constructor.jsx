@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 
-import styles from "./burger-constructor.module.css";
 import { ConstructorElement, Button, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { INGREDIENT_BUN } from "../../utils/config.js";
 import OrderDetails from "../order-details/order-details";
 import NoBunElement from "../no-bun-element/no-bun-element";
 
+import { INGREDIENT_BUN } from "../../utils/config.js";
 import { addIngredient, showModal } from '../../services/slices';
 import { fetchCreateOrder } from '../../services/thunks';
+
+import styles from "./burger-constructor.module.css";
 
 const FilledBunElement = (props) => {
   let text = "";
@@ -63,7 +64,7 @@ const BurgerConstructor = () => {
   const dispatch = useDispatch();
   const moveItem = (item) => {
 
-    dispatch(addIngredient({...item, key : uuidv4()}));
+    dispatch(addIngredient({ ...item, key: uuidv4() }));
   };
 
   const [{ isHover }, dropTarget] = useDrop({

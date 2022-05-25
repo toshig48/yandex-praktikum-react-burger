@@ -1,37 +1,45 @@
-import { useEffect, memo } from 'react';
 import ReactDOM from 'react-dom';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect, memo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+
 import ModalOverlay from '../modal-overlay/modal-overlay';
-import styles from './modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+
 import { closeModal } from '../../services/slices';
 import { unSetCurentIngredient } from '../../services/slices';
+import { FLAG_INGRIDIENT_SHOW_MODAL } from '../../utils/config';
+
+import styles from './modal.module.css';
 
 const modalRoot = document.getElementById("react-modals");
 
 const Modal = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const { titleModal, contentModal } = useSelector(state => state.modal);
+  const curentIngredient = useSelector(state => state.curentIngredient.item);
+
+  const handleCloseModal = useCallback(() => {
+    dispatch(closeModal());
+
+    if (curentIngredient) {
+      localStorage.removeItem(FLAG_INGRIDIENT_SHOW_MODAL);
+      dispatch(unSetCurentIngredient());
+      navigate(-1);
+    }
+  }, [navigate, curentIngredient, dispatch]);
+
+  const close = useCallback((e) => {
+    if (e.key === "Escape" || e.key === "Esc") {
+      handleCloseModal();
+    }
+  }, [handleCloseModal]);
 
   useEffect(() => {
-    const close = (e) => {
-      if (e.key === "Escape" || e.key === "Esc") {
-        handleCloseModal();
-      }
-    }
     window.addEventListener('keydown', close)
     return () => window.removeEventListener('keydown', close)
-  }, [])
-
-  const handleCloseModal = () => {
-    dispatch(closeModal());
-    dispatch(unSetCurentIngredient());
-    localStorage.removeItem('flagIngridientModal');
-    navigate(location.state?.pathname && '/');
-  }
+  }, [close])
 
   const handleDivClick = (e) => {
     e.stopPropagation();

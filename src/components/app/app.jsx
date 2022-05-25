@@ -2,22 +2,25 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import AppHeader from '../app-header/app-header';
 import { ProtectedRoute } from '../routes';
+import Modal from '../modal/modal';
+import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, IngredientDetails, NotFound404Page, Orders } from '../../pages/';
+
 import { fetchTokenUser } from '../../services/thunks';
 import { GetRefreshToken } from '../../utils/token';
-
-import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, IngredientDetails, NotFound404Page } from '../../pages/';
-
-import styles from './app.module.css';
-import Modal from '../modal/modal';
 import { fetchAllIngredients, fetchGetInfoUser } from '../../services/thunks';
 import { showModal } from '../../services/slices';
 
+
+import styles from './app.module.css';
+
 const App = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  
   const data = useSelector(state => state.allIngredients.items);
   const { loading, error } = useSelector(state => state.allIngredients);
   const { allowResetPassword } = useSelector(state => state.password);
@@ -37,10 +40,10 @@ const App = () => {
   }, [user, loggedIn, dispatch]);
 
   useEffect(() => {
-    if (!loading && data.length === 0) {
+    if (!loading && !error && data.length === 0) {
       dispatch(fetchAllIngredients());
     }
-  }, [loading, data, dispatch])
+  }, [loading, data, error, dispatch])
 
   useEffect(
     () => {
@@ -56,20 +59,18 @@ const App = () => {
 
   const { isShowModal } = useSelector(state => state.modal);
 
-
   if (loading) {
     return (
       <p className={`${styles.message} text text_type_main-medium`}>Загрузка данных...</p>
     );
   }
   return (
-    <BrowserRouter>
+    <>
       <div className={styles.app}>
         <AppHeader />
         <DndProvider backend={HTML5Backend}>
           <div className={styles.main}>
-
-            <Routes>
+            <Routes location={location.state ? location.state.pathnameModal : location.pathname}>
               <Route path='/' element={<HomePage />} />
 
               <Route element={<ProtectedRoute redirectСondition={loggedIn} redirectPath="/" />}>
@@ -84,6 +85,7 @@ const App = () => {
 
               <Route element={<ProtectedRoute redirectСondition={!loggedIn} redirectPath="login" />}>
                 <Route path='profile/*' element={<ProfilePage />} />
+                <Route path='list' element={<Orders />} />
               </Route>
 
               <Route path='ingredients/:id' element={<IngredientDetails />} />
@@ -92,13 +94,12 @@ const App = () => {
             </Routes>
           </div>
         </DndProvider>
-
       </div>
       {
         isShowModal &&
         <Modal />
       }
-    </BrowserRouter>
+    </>
   );
 }
 

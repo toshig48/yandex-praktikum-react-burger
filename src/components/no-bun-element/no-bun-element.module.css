@@ -1,14 +1,14 @@
+.item {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
-.item 
-    {
-        list-style-type: none;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .item:last-child {
-        margin-bottom: 0;
-    }
-    .item > svg {
-        cursor: pointer;
-    }
+.item:last-child {
+    margin-bottom: 0;
+}
+
+.item>svg {
+    cursor: pointer;
+}

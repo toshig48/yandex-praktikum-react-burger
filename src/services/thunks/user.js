@@ -1,8 +1,8 @@
 import { registerUser, loginUser, logoutUser, getInfoUser, setInfoUser } from '../../utils/burger-api';
-import { GetAuthToken, GetRefreshToken, SaveTokens, ClearTokens } from '../../utils/token';
+import { GetRefreshToken, SaveTokens, ClearTokens, GetAuthToken } from '../../utils/token';
 import { userLoginLoading, userLoginReceived, userLogoutLoading, userLogoutReceived, userInfoLoading, userInfoReceived, userError } from '../slices';
 
-export const fetchRegisterUser = (name, email, password) => async (dispatch) => {  
+export const fetchRegisterUser = (name, email, password) => async (dispatch) => {
   dispatch(userLoginLoading());
   await registerUser(name, email, password)
     .then((data) => {
@@ -15,7 +15,7 @@ export const fetchRegisterUser = (name, email, password) => async (dispatch) => 
     });
 }
 
-export const fetchLoginUser = (email, password) => async (dispatch) => {  
+export const fetchLoginUser = (email, password) => async (dispatch) => {
   dispatch(userLoginLoading());
   await loginUser(email, password)
     .then((data) => {
@@ -24,11 +24,11 @@ export const fetchLoginUser = (email, password) => async (dispatch) => {
     })
     .catch((ex) => {
       console.error(ex);
-      dispatch(userError(ex.message));      
+      dispatch(userError(ex.message));
     });
 }
 
-export const fetchLogoutUser = () => async (dispatch) => {  
+export const fetchLogoutUser = () => async (dispatch) => {
   dispatch(userLogoutLoading());
   await logoutUser(GetRefreshToken())
     .then(() => {
@@ -37,30 +37,30 @@ export const fetchLogoutUser = () => async (dispatch) => {
     })
     .catch((ex) => {
       console.error(ex);
-      dispatch(userError(ex.message));      
+      dispatch(userError(ex.message));
     });
 }
 
-export const fetchGetInfoUser = () => async (dispatch) => {  
+export const fetchGetInfoUser = () => async (dispatch) => {
   dispatch(userInfoLoading());
   await getInfoUser(GetAuthToken())
     .then((data) => {
       dispatch(userInfoReceived(data.user));
     })
-    .catch((ex) => {
-      console.error(ex);
-      dispatch(userError(ex.message));      
+    .catch((ex) => {      
+      console.error(ex);  
+      dispatch(userError(ex.message)); 
     });
 }
 
-export const fetchSetInfoUser = (name, email, password) => async (dispatch) => {  
+export const fetchSetInfoUser = (name, email, password) => async (dispatch) => {
   dispatch(userInfoLoading());
   await setInfoUser(GetAuthToken(), name, email, password)
     .then((data) => {
       dispatch(userInfoReceived(data.user));
     })
-    .catch((ex) => {
-      console.error(ex);
+    .catch((ex) => {   
+      console.error(ex);  
       dispatch(userError(ex.message));      
     });
 }

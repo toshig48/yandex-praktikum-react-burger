@@ -1,16 +1,18 @@
 import { memo, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import styles from './login.module.css';
-import { fetchLoginUser } from '../../services/thunks';
-import { userClearError } from '../../services/slices/user';
+
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { fetchLoginUser } from '../../services/thunks';
+import { userClearError } from '../../services/slices/user';
+
+import styles from './login.module.css';
 const LoginPage = () => {
   const dispatch = useDispatch();
   const [form, setValue] = useState({ email: '', password: '' });
 
-  const { loading,  error } = useSelector(state => state.user);
+  const { loading, error } = useSelector(state => state.user);
 
   useEffect(() => {
     dispatch(userClearError());
