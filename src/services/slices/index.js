@@ -1,7 +1,7 @@
 // Cписок всех полученных ингредиентов:
 import { allIngredientsReducer, allIngredientsLoading, allIngredientsReceived, allIngredientsError } from './all-ingredients';
 // Cписок всех ингредиентов в текущем конструкторе бургера:
-import { selectedIngredientsReducer, addIngredient, removeIngredient, moveIngredient } from './selected-ingredients';
+import { selectedIngredientsReducer, addIngredient, removeIngredient, moveIngredient , clearIngredients} from './selected-ingredients';
 // Объект текущего просматриваемого ингредиента:
 import { curentIngredientReducer, setCurentIngredient, unSetCurentIngredient, setFlagClear } from './curent-ingredients';
 // Объект созданного заказа:
@@ -24,7 +24,7 @@ export {
 }
 export {
         allIngredientsLoading, allIngredientsReceived, allIngredientsError,
-        addIngredient, removeIngredient, moveIngredient,
+        addIngredient, removeIngredient, moveIngredient, clearIngredients,
         setCurentIngredient, unSetCurentIngredient, setFlagClear,
         orderLoading, orderReceived, orderError,
         showModal, closeModal,

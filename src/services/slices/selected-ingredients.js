@@ -29,8 +29,9 @@ const selectedIngredientsSlice = createSlice({
       data.splice(dragIndex, 2, data[hoverIndex], data[dragIndex]);
       state.items = data;
     },
+    clearIngredients: (state) => selectedIngredientsInitialState,
   }
 })
 
-export const { addIngredient, removeIngredient, moveIngredient } = selectedIngredientsSlice.actions;
+export const { addIngredient, removeIngredient, moveIngredient, clearIngredients } = selectedIngredientsSlice.actions;
 export const selectedIngredientsReducer = selectedIngredientsSlice.reducer;

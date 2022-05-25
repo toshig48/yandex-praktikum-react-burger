@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Input, Button, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { useFormAndValidation } from '../../hooks/use-form-and-validation';
 import { fetchSetInfoUser } from '../../services/thunks';
 
 import styles from './profile-user.module.css';
@@ -13,31 +14,25 @@ function ProfileUser() {
 
   const [firstLoadFlag, setFirstLoadFlag] = useState(true);
 
+  const { values, setValues, isChange, setIsChange, handleChange, resetForm } = useFormAndValidation()
+
   useEffect(() => {
     if (user.name !== undefined && firstLoadFlag) {
-      setValue({ ...form, "name": user.name, "email": user.email });
+      setValues({ "name": user.name, "email": user.email });
       setFirstLoadFlag(false);
     }
-  }, [user, firstLoadFlag]);
+  }, [user, firstLoadFlag, setValues]);
 
-  const [changeFlag, setChangeFlag] = useState(false);
-  const [form, setValue] = useState({ name: '', email: '', password: '' });
-
-  const onChange = e => {
-    setValue({ ...form, [e.target.name]: e.target.value });
-    setChangeFlag(true);
-  };
 
   const handlCansel = async (e) => {
     e.preventDefault();
-    setValue(user);
-    setChangeFlag(false);
+    resetForm({ ...values, "name": user.name, "email": user.email });
   }
 
   const handlOnsubmin = async (e) => {
     e.preventDefault();
-    dispatch(fetchSetInfoUser(form.name, form.email, form.password));
-    setChangeFlag(false);
+    dispatch(fetchSetInfoUser(values.name, values.email, values.password));
+    setIsChange(false);
   }
 
   return (
@@ -49,8 +44,8 @@ function ProfileUser() {
             name="name"
             type="text"
             placeholder="Имя"
-            value={form.name}
-            onChange={onChange} />
+            value={values.name}
+            onChange={handleChange} />
         </div>
         <div className="mb-6 custom_input">
           <Input
@@ -58,16 +53,16 @@ function ProfileUser() {
             name="email"
             type="text"
             placeholder="Логин"
-            value={form.email}
-            onChange={onChange} />
+            value={values.email}
+            onChange={handleChange} />
         </div>
         <div className='mb-6 custom_input'>
           <PasswordInput
             name="password"
-            value={form.password}
-            onChange={onChange} />
+            value={values.password}
+            onChange={handleChange} />
         </div>
-        <div className={styles.right_align} style={{ visibility: changeFlag ? "visible" : "hidden" }}>
+        <div className={styles.right_align} style={{ visibility: isChange ? "visible" : "hidden" }}>
           <Button className="mt-6" type="secondary" size="medium" onClick={handlCansel} disabled={loading ? true : false}>
             Отмена
           </Button>

@@ -5,14 +5,14 @@ import { DndProvider } from 'react-dnd';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
 import AppHeader from '../app-header/app-header';
-import { ProtectedRoute } from '../routes';
+import { ProtectedRoute } from '../protected-route';
 import Modal from '../modal/modal';
 import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, IngredientDetails, NotFound404Page, Orders } from '../../pages/';
 
 import { fetchTokenUser } from '../../services/thunks';
-import { GetRefreshToken } from '../../utils/token';
+import { getRefreshToken } from '../../utils/token';
 import { fetchAllIngredients, fetchGetInfoUser } from '../../services/thunks';
-import { showModal } from '../../services/slices';
+import { showModal,setCurentIngredient } from '../../services/slices';
 
 
 import styles from './app.module.css';
@@ -20,13 +20,14 @@ import styles from './app.module.css';
 const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+
   const data = useSelector(state => state.allIngredients.items);
   const { loading, error } = useSelector(state => state.allIngredients);
   const { allowResetPassword } = useSelector(state => state.password);
   const { loggedIn, user } = useSelector(state => state.user);
 
   useEffect(() => {
-    const refreshToken = GetRefreshToken();
+    const refreshToken = getRefreshToken();
     if (refreshToken) {
       dispatch(fetchTokenUser(refreshToken));
     }
@@ -54,6 +55,15 @@ const App = () => {
       }
     },
     [error, dispatch]
+  );
+
+  useEffect(
+    () => {
+      if (data.length > 0 && location.state?.ingredientId !== undefined) {
+        dispatch(setCurentIngredient(data.filter(x => x._id === location.state?.ingredientId)[0]));        
+      }
+    },
+    [location, data, dispatch]
   );
 
   const { isShowModal } = useSelector(state => state.modal);

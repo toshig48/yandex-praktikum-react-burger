@@ -32,7 +32,7 @@ const BurgerIngredient = (props) => {
 
   return (
     <li className={`${styles.item} mb-8`} data-id={item._id} onClick={handleOpenModal} style={{ opacity }}>
-      <Link to={`ingredients/${item._id}`} state={{ pathnameModal: pathname }}>
+      <Link to={`ingredients/${item._id}`} state={{ pathnameModal: pathname, ingredientId : item._id }}>
         <div ref={ref}>
           <img src={item.image} className='ml-4 mr-4' alt={item.name}></img>
           <p className="text text_type_digits-default mb-1 mt-1">

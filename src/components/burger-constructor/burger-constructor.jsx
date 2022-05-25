@@ -1,7 +1,8 @@
-import { useEffect, useMemo, memo } from "react";
+import { useEffect, useMemo, memo, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from "react-router-dom";
 
 import { ConstructorElement, Button, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import OrderDetails from "../order-details/order-details";
@@ -62,8 +63,10 @@ const BunElement = ({ data, position }) => {
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
-  const moveItem = (item) => {
+  const { loggedIn } = useSelector(state => state.user);
+  const navigate = useNavigate();
 
+  const moveItem = (item) => {
     dispatch(addIngredient({ ...item, key: uuidv4() }));
   };
 
@@ -95,8 +98,18 @@ const BurgerConstructor = () => {
     [burgerConstructorData]
   );
 
-  const handleOpenModal = async () => {
+  const [showModalFlag, setShowModalFlag] = useState(false);
+
+  const handleCreateOrder = async () => {
+    if(loggedIn)
+    {
     dispatch(fetchCreateOrder(burgerConstructorData.map(item => item._id)));
+    setShowModalFlag(true);
+    }
+    else
+    {
+      navigate("/login");
+    }
   }
 
   useEffect(
@@ -113,14 +126,15 @@ const BurgerConstructor = () => {
 
   useEffect(
     () => {
-      if (order.number > 0) {
+      if (order.number > 0 && showModalFlag) {
+        setShowModalFlag(false);
         dispatch(showModal({
           title: "",
           content: <OrderDetails orderNumber={order.number} />
         }));
       }
     },
-    [order, dispatch]
+    [order, showModalFlag, dispatch]
   );
 
   return (
@@ -143,7 +157,7 @@ const BurgerConstructor = () => {
           </span>
           <CurrencyIcon />
         </span>
-        <Button type="primary" size="medium" onClick={handleOpenModal} disabled={(burgerConstructorData.length === 0 || loading) ? true : false}>
+        <Button type="primary" size="medium" onClick={handleCreateOrder} disabled={(burgerConstructorData.length === 0 || loading) ? true : false}>
           {loading ? "Ожидание..." : "Оформить заказ"}
         </Button>
       </div>

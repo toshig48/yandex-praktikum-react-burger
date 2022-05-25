@@ -1,17 +1,16 @@
 import { useRef, useState, useEffect, useMemo, memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientDetails from '../../components/ingredient-details/ingredient-details';
+import BurgerIngredient from '../burger-ingredient/burger-ingredient';
 
 import { showModal } from '../../services/slices';
 import { unSetCurentIngredient } from '../../services/slices';
 import { INGREDIENT_BUN, INGREDIENT_SAUCE, INGREDIENT_MAIN, FLAG_INGRIDIENT_SHOW_MODAL } from '../../utils/config.js';
 
 import styles from './burger-ingredients.module.css';
-
-
-import BurgerIngredient from '../burger-ingredient/burger-ingredient';
 
 const BurgerIngredientGroups = (props) => {
   return (
@@ -26,17 +25,22 @@ const BurgerIngredientGroups = (props) => {
 }
 
 const BurgerIngredients = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();  
+  const navigate = useNavigate();
+
   const data = useSelector(state => state.allIngredients.items);
   const burgerConstructorData = useSelector(state => state.selectedIngredients.items);
   const flagClear = useSelector(state => state.curentIngredient.flagClear);
   const curentIngredient = useSelector(state => state.curentIngredient.item);
+  const { isShowModal } = useSelector(state => state.modal);
+
   const flagIngridientShowModal = localStorage.getItem(FLAG_INGRIDIENT_SHOW_MODAL);
 
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
   const mainRef = useRef(null);
 
+  const [startShowModal, setStartShowModal] = useState(false)
   const [currentTab, setCurrentTab] = useState(INGREDIENT_BUN.key)
 
   const buns = useMemo(
@@ -62,13 +66,25 @@ const BurgerIngredients = () => {
   );
 
   useEffect(
+    () => {        
+    if (curentIngredient && startShowModal && !isShowModal) {
+      setStartShowModal(false);
+      localStorage.removeItem(FLAG_INGRIDIENT_SHOW_MODAL);
+      dispatch(unSetCurentIngredient());
+      navigate(-1);
+    }      
+    },
+    [curentIngredient, startShowModal, setStartShowModal, isShowModal, navigate, dispatch]
+  );
+
+  useEffect(
     () => {
       if (curentIngredient && flagIngridientShowModal) {
-        window.history.replaceState(null, 'Детали ингредиента ' + curentIngredient.name, '/ingredients/' + curentIngredient._id);
         dispatch(showModal({
           title: "Детали ингредиента",
           content: <IngredientDetails />
         }));
+        setStartShowModal(true);
       }
     },
     [curentIngredient, flagIngridientShowModal, dispatch]

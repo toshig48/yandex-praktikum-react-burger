@@ -1,5 +1,5 @@
 import { registerUser, loginUser, logoutUser, getInfoUser, setInfoUser } from '../../utils/burger-api';
-import { GetRefreshToken, SaveTokens, ClearTokens, GetAuthToken } from '../../utils/token';
+import { getRefreshToken, saveTokens, clearTokens, getAuthToken } from '../../utils/token';
 import { userLoginLoading, userLoginReceived, userLogoutLoading, userLogoutReceived, userInfoLoading, userInfoReceived, userError } from '../slices';
 
 export const fetchRegisterUser = (name, email, password) => async (dispatch) => {
@@ -7,7 +7,7 @@ export const fetchRegisterUser = (name, email, password) => async (dispatch) => 
   await registerUser(name, email, password)
     .then((data) => {
       dispatch(userLoginReceived(data.user));
-      SaveTokens(data.accessToken, data.refreshToken);
+      saveTokens(data.accessToken, data.refreshToken);
     })
     .catch((ex) => {
       dispatch(userError(ex.message));
@@ -20,7 +20,7 @@ export const fetchLoginUser = (email, password) => async (dispatch) => {
   await loginUser(email, password)
     .then((data) => {
       dispatch(userLoginReceived(data.user));
-      SaveTokens(data.accessToken, data.refreshToken);
+      saveTokens(data.accessToken, data.refreshToken);
     })
     .catch((ex) => {
       console.error(ex);
@@ -30,10 +30,10 @@ export const fetchLoginUser = (email, password) => async (dispatch) => {
 
 export const fetchLogoutUser = () => async (dispatch) => {
   dispatch(userLogoutLoading());
-  await logoutUser(GetRefreshToken())
+  await logoutUser(getRefreshToken())
     .then(() => {
       dispatch(userLogoutReceived());
-      ClearTokens();
+      clearTokens();
     })
     .catch((ex) => {
       console.error(ex);
@@ -43,7 +43,7 @@ export const fetchLogoutUser = () => async (dispatch) => {
 
 export const fetchGetInfoUser = () => async (dispatch) => {
   dispatch(userInfoLoading());
-  await getInfoUser(GetAuthToken())
+  await getInfoUser(getAuthToken())
     .then((data) => {
       dispatch(userInfoReceived(data.user));
     })
@@ -55,7 +55,7 @@ export const fetchGetInfoUser = () => async (dispatch) => {
 
 export const fetchSetInfoUser = (name, email, password) => async (dispatch) => {
   dispatch(userInfoLoading());
-  await setInfoUser(GetAuthToken(), name, email, password)
+  await setInfoUser(getAuthToken(), name, email, password)
     .then((data) => {
       dispatch(userInfoReceived(data.user));
     })

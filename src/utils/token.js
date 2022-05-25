@@ -1,14 +1,14 @@
 import { getCookie, setCookie } from './cookie';
 
-export const GetAuthToken = () => {
+export const getAuthToken = () => {
   return getCookie('token')
 }
 
-export const GetRefreshToken = () => {
+export const getRefreshToken = () => {
   return localStorage.getItem('token');
 }
 
-export const SaveTokens = (authToken, refreshToken) => {
+export const saveTokens = (authToken, refreshToken) => {
   if (authToken.indexOf('Bearer') === 0) {
     authToken = authToken.split('Bearer ')[1];
   }
@@ -16,7 +16,7 @@ export const SaveTokens = (authToken, refreshToken) => {
   localStorage.setItem('token', refreshToken);
 }
 
-export const ClearTokens = () => {
+export const clearTokens = () => {
   setCookie('token', null, { expires: -1 });
   localStorage.removeItem('token');
 }

@@ -1,5 +1,5 @@
 import { URL_API } from './config'
-import { GetRefreshToken, SaveTokens } from './token';
+import { getRefreshToken, saveTokens } from './token';
 
 const fetchWithRefresh = async (url, params) => {
     try {
@@ -8,14 +8,14 @@ const fetchWithRefresh = async (url, params) => {
     }
     catch (ex) {
         if (ex.message === 'jwt malformed' || ex.message === 'jwt expired') {
-            var refreshToken = GetRefreshToken();
+            var refreshToken = getRefreshToken();
             if (refreshToken) {
                 const refreshData = await tokenUser(refreshToken);
                 if (!refreshData.success) {
                     Promise.reject(refreshData);
                 }
                 else {
-                    SaveTokens(refreshData.accessToken, refreshData.refreshToken);
+                    saveTokens(refreshData.accessToken, refreshData.refreshToken);
                     params.headers.authorization = refreshData.accessToken;
                     const responce = await fetch(url, params);
                     return await checkResponce(responce);
@@ -72,18 +72,18 @@ export const getIngredientsData = async () => {
         })
 }
 
-export const createOrder = async (data) => {
-    return await fetch(URL_API + "/orders", {
+export const createOrder = async (authToken, data) => {
+    return await fetchWithRefresh(URL_API + "/orders", {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'authorization': 'Bearer ' + authToken
         },
         body: JSON.stringify({
             "ingredients": data
         })
     })
-        .then(checkResponce)
         .then(checkSuccess)
         .then((data) => {
             return data.order;

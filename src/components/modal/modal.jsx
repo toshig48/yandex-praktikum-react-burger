@@ -1,14 +1,11 @@
 import ReactDOM from 'react-dom';
 import { useEffect, memo, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { closeModal } from '../../services/slices';
-import { unSetCurentIngredient } from '../../services/slices';
-import { FLAG_INGRIDIENT_SHOW_MODAL } from '../../utils/config';
 
 import styles from './modal.module.css';
 
@@ -16,19 +13,11 @@ const modalRoot = document.getElementById("react-modals");
 
 const Modal = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { titleModal, contentModal } = useSelector(state => state.modal);
-  const curentIngredient = useSelector(state => state.curentIngredient.item);
 
   const handleCloseModal = useCallback(() => {
     dispatch(closeModal());
-
-    if (curentIngredient) {
-      localStorage.removeItem(FLAG_INGRIDIENT_SHOW_MODAL);
-      dispatch(unSetCurentIngredient());
-      navigate(-1);
-    }
-  }, [navigate, curentIngredient, dispatch]);
+  }, [ dispatch]);
 
   const close = useCallback((e) => {
     if (e.key === "Escape" || e.key === "Esc") {
