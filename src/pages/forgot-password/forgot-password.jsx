@@ -1,10 +1,11 @@
-import { memo, useState, useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { useFormAndValidation } from '../../hooks/use-form-and-validation';
 import { fetchForgotPasswordUser } from '../../services/thunks';
 import { passwordClearError } from '../../services/slices/password';
 
@@ -13,7 +14,8 @@ import styles from './forgot-password.module.css';
 const ForgotPasswordPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [valueEmail, setValueEmail] = useState('');
+
+  const { values, handleChange } = useFormAndValidation();
   const { loading, allowResetPassword, error } = useSelector(state => state.password);
 
   useEffect(() => {
@@ -28,7 +30,7 @@ const ForgotPasswordPage = () => {
 
   const handlOnsubmin = async (e) => {
     e.preventDefault();
-    dispatch(fetchForgotPasswordUser(valueEmail));
+    dispatch(fetchForgotPasswordUser(values.email));
   }
 
   return (
@@ -40,8 +42,8 @@ const ForgotPasswordPage = () => {
             name="email"
             type="email"
             placeholder="Укажите e-mail"
-            value={valueEmail}
-            onChange={e => setValueEmail(e.target.value)} />
+            value={values.email || ""}
+            onChange={handleChange} />
         </div>
         <Button className="mt-6" type="primary" size="medium" disabled={(loading) ? true : false}>
           {loading ? "Ожидание..." : "Восстановить"}

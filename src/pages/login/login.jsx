@@ -1,7 +1,8 @@
-import { memo, useState, useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { useFormAndValidation } from '../../hooks/use-form-and-validation';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { fetchLoginUser } from '../../services/thunks';
@@ -10,21 +11,17 @@ import { userClearError } from '../../services/slices/user';
 import styles from './login.module.css';
 const LoginPage = () => {
   const dispatch = useDispatch();
-  const [form, setValue] = useState({ email: '', password: '' });
-
+  
+  const { values, handleChange } = useFormAndValidation();
   const { loading, error } = useSelector(state => state.user);
 
   useEffect(() => {
     dispatch(userClearError());
   }, [dispatch]);
 
-  const onChange = e => {
-    setValue({ ...form, [e.target.name]: e.target.value });
-  };
-
   const handlOnsubmin = async (e) => {
     e.preventDefault();
-    dispatch(fetchLoginUser(form.email, form.password));
+    dispatch(fetchLoginUser(values.email, values.password));
   }
   return (
     <div className={styles.main}>
@@ -35,14 +32,14 @@ const LoginPage = () => {
             name="email"
             type="email"
             placeholder="E-Mail"
-            value={form.email}
-            onChange={onChange} />
+            value={values.email || ""}
+            onChange={handleChange} />
         </div>
         <div className='mb-6 custom_input'>
           <PasswordInput
             name="password"
-            value={form.password}
-            onChange={onChange} />
+            value={values.password || ""}
+            onChange={handleChange} />
         </div>
         <Button className="mt-6" type="primary" size="medium" disabled={(loading) ? true : false}>
           {loading ? "Ожидание..." : "Войти"}

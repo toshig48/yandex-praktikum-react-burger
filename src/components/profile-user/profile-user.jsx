@@ -14,7 +14,7 @@ function ProfileUser() {
 
   const [firstLoadFlag, setFirstLoadFlag] = useState(true);
 
-  const { values, setValues, isChange, setIsChange, handleChange, resetForm } = useFormAndValidation()
+  const { values, setValues, isChange, setIsChange, handleChange, resetForm } = useFormAndValidation();
 
   useEffect(() => {
     if (user.name !== undefined && firstLoadFlag) {
@@ -44,7 +44,7 @@ function ProfileUser() {
             name="name"
             type="text"
             placeholder="Имя"
-            value={values.name}
+            value={values.name || ""}
             onChange={handleChange} />
         </div>
         <div className="mb-6 custom_input">
@@ -53,13 +53,13 @@ function ProfileUser() {
             name="email"
             type="text"
             placeholder="Логин"
-            value={values.email}
+            value={values.email || ""}
             onChange={handleChange} />
         </div>
         <div className='mb-6 custom_input'>
           <PasswordInput
             name="password"
-            value={values.password}
+            value={values.password || ""}
             onChange={handleChange} />
         </div>
         <div className={styles.right_align} style={{ visibility: isChange ? "visible" : "hidden" }}>

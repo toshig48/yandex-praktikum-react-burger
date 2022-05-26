@@ -1,9 +1,10 @@
-import { memo, useState, useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { useFormAndValidation } from '../../hooks/use-form-and-validation';
 import { fetchRegisterUser } from '../../services/thunks';
 import { userClearError } from '../../services/slices/user';
 
@@ -11,20 +12,17 @@ import styles from './register.module.css';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
-  const [form, setValue] = useState({name: '', email: '', password: '' });
+
+  const { values, handleChange } = useFormAndValidation();
   const {loading, error } = useSelector(state => state.user);
   
   useEffect(() => {
     dispatch(userClearError());
  },[dispatch]);
 
- const onChange = e => {
-  setValue({ ...form, [e.target.name]: e.target.value });
-};
-
   const handlOnsubmin = async (e) => {
     e.preventDefault();
-    dispatch(fetchRegisterUser(form.name, form.email, form.password));
+    dispatch(fetchRegisterUser(values.name, values.email, values.password));
   }
 
   return (
@@ -36,22 +34,22 @@ const RegisterPage = () => {
             name="name" 
             type="text" 
             placeholder="Имя"
-            value={form.name}
-            onChange={onChange}/>
+            value={values.name || ""}
+            onChange={handleChange}/>
         </div>
         <div className="mb-6 custom_input">
           <Input 
             name="email" 
             type="email" 
             placeholder="E-mail"
-            value={form.email}
-            onChange={onChange}/>
+            value={values.email || ""}
+            onChange={handleChange}/>
         </div>
         <div className='mb-6 custom_input'>
           <PasswordInput 
             name="password"
-            value={form.password}
-            onChange={onChange}/>
+            value={values.password || ""}
+            onChange={handleChange}/>
         </div>
         <Button className="mt-6" type="primary" size="medium" disabled={(loading) ? true : false}>
           {loading ? "Ожидание..." : "Зарегистрироваться"}

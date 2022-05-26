@@ -1,10 +1,11 @@
-import { memo, useState, useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { useFormAndValidation } from '../../hooks/use-form-and-validation';
 import { fetchResetPasswordUser } from '../../services/thunks';
 import { passwordClearError } from '../../services/slices/password';
 
@@ -14,8 +15,7 @@ const ResetPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [form, setValue] = useState({ password: '', code: '' });
-
+  const { values, handleChange } = useFormAndValidation();
   const { loading, allowResetPassword, error } = useSelector(state => state.password);
 
   useEffect(() => {
@@ -29,13 +29,9 @@ const ResetPassword = () => {
   }, [allowResetPassword, navigate]);
 
 
-  const onChange = e => {
-    setValue({ ...form, [e.target.name]: e.target.value });
-  };
-
   const handlOnsubmin = async (e) => {
     e.preventDefault();
-    dispatch(fetchResetPasswordUser(form.password, form.code));
+    dispatch(fetchResetPasswordUser(values.password, values.code));
   }
 
   return (
@@ -45,16 +41,16 @@ const ResetPassword = () => {
         <div className='mb-6 custom_input'>
           <PasswordInput
             name="password"
-            value={form.password}
-            onChange={onChange}
+            value={values.password || ""}
+            onChange={handleChange}
             placeholder="Введите новый пароль" />
         </div>
         <div className="mb-6 custom_input">
           <Input
             name="code"
             type="text"
-            value={form.code}
-            onChange={onChange}
+            value={values.code || ""}
+            onChange={handleChange}
             placeholder="Введите код из письма" />
         </div>
         <Button className="mt-6" type="primary" size="medium" disabled={(loading) ? true : false}>
