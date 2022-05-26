@@ -1,13 +1,13 @@
 import { useRef, useState, useEffect, useMemo, memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientDetails from '../../components/ingredient-details/ingredient-details';
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
 
 import { showModal } from '../../services/slices';
-import { unSetCurentIngredient } from '../../services/slices';
+import { setCurentIngredient, unSetCurentIngredient } from '../../services/slices';
 import { INGREDIENT_BUN, INGREDIENT_SAUCE, INGREDIENT_MAIN, FLAG_INGRIDIENT_SHOW_MODAL } from '../../utils/config.js';
 
 import styles from './burger-ingredients.module.css';
@@ -25,8 +25,9 @@ const BurgerIngredientGroups = (props) => {
 }
 
 const BurgerIngredients = () => {
-  const dispatch = useDispatch();  
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const data = useSelector(state => state.allIngredients.items);
   const burgerConstructorData = useSelector(state => state.selectedIngredients.items);
@@ -56,6 +57,7 @@ const BurgerIngredients = () => {
     [data]
   );
 
+  // Если есть флаг очистки выбранного элемента flagClear - очищаем выбранный элемент в редьюсере (при показе страницы ingredients):
   useEffect(
     () => {
       if (flagClear) {
@@ -65,18 +67,20 @@ const BurgerIngredients = () => {
     [flagClear, dispatch]
   );
 
+  // При закрытии модального окна с информацией об ингридиенте - очищаем выбранный элемент в редьюсере:
   useEffect(
-    () => {        
-    if (curentIngredient && startShowModal && !isShowModal) {
-      setStartShowModal(false);
-      localStorage.removeItem(FLAG_INGRIDIENT_SHOW_MODAL);
-      dispatch(unSetCurentIngredient());
-      navigate(-1);
-    }      
+    () => {
+      if (curentIngredient && startShowModal && !isShowModal) {
+        setStartShowModal(false);
+        localStorage.removeItem(FLAG_INGRIDIENT_SHOW_MODAL);
+        dispatch(unSetCurentIngredient());
+        navigate(-1);
+      }
     },
     [curentIngredient, startShowModal, setStartShowModal, isShowModal, navigate, dispatch]
   );
 
+  // Открываем модальное окно с информацией об ингридиенте при установке выбранного элемента в редьюсере:
   useEffect(
     () => {
       if (curentIngredient && flagIngridientShowModal) {
@@ -88,6 +92,16 @@ const BurgerIngredients = () => {
       }
     },
     [curentIngredient, flagIngridientShowModal, dispatch]
+  );
+
+  // Если есть ID выбранного индридиента(при первоначальной загрузке страницы) - фиксируем это в редьюсере:
+  useEffect(
+    () => {
+      if (data.length > 0 && location.state?.ingredientId !== undefined) {
+        dispatch(setCurentIngredient(data.filter(x => x._id === location.state?.ingredientId)[0]));
+      }
+    },
+    [location, data, dispatch]
   );
 
   const handleTabClick = (tab) => {

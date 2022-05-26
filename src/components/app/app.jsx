@@ -12,8 +12,7 @@ import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, Res
 import { fetchTokenUser } from '../../services/thunks';
 import { getRefreshToken } from '../../utils/token';
 import { fetchAllIngredients, fetchGetInfoUser } from '../../services/thunks';
-import { showModal,setCurentIngredient } from '../../services/slices';
-
+import { showModal } from '../../services/slices';
 
 import styles from './app.module.css';
 
@@ -25,7 +24,9 @@ const App = () => {
   const { loading, error } = useSelector(state => state.allIngredients);
   const { allowResetPassword } = useSelector(state => state.password);
   const { loggedIn, user } = useSelector(state => state.user);
+  const { isShowModal } = useSelector(state => state.modal);
 
+  // Если есть RefreshToken, то получаем AccessToken:
   useEffect(() => {
     const refreshToken = getRefreshToken();
     if (refreshToken) {
@@ -33,18 +34,21 @@ const App = () => {
     }
   }, [dispatch])
 
+  // Если пользак залогинен, но инфы о пользаке нет - загружаем инфу:
   useEffect(() => {
     if (loggedIn && user.name === undefined) {
       dispatch(fetchGetInfoUser())
     }
   }, [user, loggedIn, dispatch]);
 
+  // Загружаем список ингридиентов:
   useEffect(() => {
     if (!loading && !error && data.length === 0) {
       dispatch(fetchAllIngredients());
     }
   }, [loading, data, error, dispatch])
 
+  // Вызываем модальное окно при наличии ошибки:
   useEffect(
     () => {
       if (error) {
@@ -57,22 +61,12 @@ const App = () => {
     [error, dispatch]
   );
 
-  useEffect(
-    () => {
-      if (data.length > 0 && location.state?.ingredientId !== undefined) {
-        dispatch(setCurentIngredient(data.filter(x => x._id === location.state?.ingredientId)[0]));        
-      }
-    },
-    [location, data, dispatch]
-  );
-
-  const { isShowModal } = useSelector(state => state.modal);
-
   if (loading) {
     return (
       <p className={`${styles.message} text text_type_main-medium`}>Загрузка данных...</p>
     );
   }
+
   return (
     <>
       <div className={styles.app}>
@@ -105,8 +99,7 @@ const App = () => {
         </DndProvider>
       </div>
       {
-        isShowModal &&
-        <Modal />
+        isShowModal && <Modal />
       }
     </>
   );
