@@ -1,32 +1,34 @@
-import { useEffect, memo } from 'react';
 import ReactDOM from 'react-dom';
+import { useEffect, memo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
 import ModalOverlay from '../modal-overlay/modal-overlay';
-import styles from './modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { unSetCurentIngredient, closeModal } from '../../services/slices';
+
+import { closeModal } from '../../services/slices';
+
+import styles from './modal.module.css';
 
 const modalRoot = document.getElementById("react-modals");
 
 const Modal = () => {
   const dispatch = useDispatch();
-
   const { titleModal, contentModal } = useSelector(state => state.modal);
 
-  useEffect(() => {
-    const close = (e) => {
-      if (e.key === "Escape" || e.key === "Esc") {
-        handleCloseModal();
-      }
+  const handleCloseModal = useCallback(() => {
+    dispatch(closeModal());
+  }, [ dispatch]);
+
+  const close = useCallback((e) => {
+    if (e.key === "Escape" || e.key === "Esc") {
+      handleCloseModal();
     }
+  }, [handleCloseModal]);
+
+  useEffect(() => {
     window.addEventListener('keydown', close)
     return () => window.removeEventListener('keydown', close)
-  }, [])
-
-  const handleCloseModal = () => {
-    dispatch(closeModal());
-    dispatch(unSetCurentIngredient());
-  }
+  }, [close])
 
   const handleDivClick = (e) => {
     e.stopPropagation();

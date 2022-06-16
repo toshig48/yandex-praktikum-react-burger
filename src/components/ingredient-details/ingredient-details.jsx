@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { useSelector } from 'react-redux';
+
 import styles from './ingredient-details.module.css';
 
 const IngredientComposition = (props) => {
@@ -13,6 +14,15 @@ const IngredientComposition = (props) => {
 
 const IngredientDetails = () => {
   const data = useSelector(state => state.curentIngredient.item);
+
+  if (!data) {
+    return (
+      <p>
+        Нет такого ингридиента
+      </p>
+    );
+  }
+
   return (
     <>
       <img className={styles.img} src={data.image} alt={data.name}></img>

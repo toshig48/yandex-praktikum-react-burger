@@ -25,12 +25,9 @@
     justify-content: flex-end;
 }
 
-
 .menu_item_a {
-    text-decoration: none;
     display: flex;
     align-items: center;
-    color: inherit;
 }
 
 .menu_item_a:first-child {

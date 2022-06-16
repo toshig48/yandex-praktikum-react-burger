@@ -2,11 +2,17 @@ import { memo } from "react";
 import { useDispatch } from 'react-redux';
 import { useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
+import PropTypes from 'prop-types';
+
 import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+
 import { removeIngredient, moveIngredient } from '../../services/slices';
+import { burgerPropTypes } from '../../utils/prop-types.js';
+
 import styles from "./no-bun-element.module.css";
 
-const NoBunElement = ({ item, index }) => {
+const NoBunElement = (props) => {
+    const { item, index } = props;
     const dispatch = useDispatch();
 
     const handleRemoveElement = (index) => {
@@ -70,3 +76,9 @@ const NoBunElement = ({ item, index }) => {
 }
 
 export default memo(NoBunElement);
+
+
+NoBunElement.propTypes = {
+    item: burgerPropTypes.isRequired,
+    index: PropTypes.number.isRequired
+};

@@ -1,10 +1,12 @@
 import { memo } from 'react';
 import { useSelector } from 'react-redux';
-import styles from './order-details.module.css';
+
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+
 import image1 from '../../images/order/vector-1.svg'
 import image2 from '../../images/order/vector-2.svg'
 import image3 from '../../images/order/vector-3.svg'
+import styles from './order-details.module.css';
 
 const OrderDetails = () => {
   const orderNumber = useSelector(state => state.order.order.number);

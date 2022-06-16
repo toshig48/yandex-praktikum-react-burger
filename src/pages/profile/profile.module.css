@@ -1,0 +1,16 @@
+.left_menu {
+    width: 320px;
+}
+.left_menu ul {
+    margin: 0;
+    padding: 0;
+}
+.left_menu li {
+    list-style-type: none; /* Убираем маркеры */
+    margin: calc(var(--offset-base-size) * 6) 0;
+}
+
+.right_align {
+    display: flex;
+    justify-content: flex-end;
+}
