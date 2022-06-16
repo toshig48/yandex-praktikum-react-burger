@@ -1,12 +1,13 @@
+import { TBurger } from '../services/types';
 import { URL_API } from './config'
 import { getRefreshToken, saveTokens } from './token';
 
-const fetchWithRefresh = async (url, params) => {
+const fetchWithRefresh = async (url: string, params: RequestInit) => {
     try {
         const responce = await fetch(url, params);
         return await checkResponce(responce);
     }
-    catch (ex) {
+    catch (ex: any) {
         if (ex.message === 'jwt malformed' || ex.message === 'jwt expired') {
             var refreshToken = getRefreshToken();
             if (refreshToken) {
@@ -16,7 +17,7 @@ const fetchWithRefresh = async (url, params) => {
                 }
                 else {
                     saveTokens(refreshData.accessToken, refreshData.refreshToken);
-                    params.headers.authorization = refreshData.accessToken;
+                    (params.headers as { [key: string]: string }).authorization = refreshData.accessToken;
                     const responce = await fetch(url, params);
                     return await checkResponce(responce);
                 }
@@ -31,7 +32,7 @@ const fetchWithRefresh = async (url, params) => {
     }
 }
 
-const checkResponce = async (response) => {
+const checkResponce = async (response: Response) => {
     const data = response.json();
     if (!response.ok) {
         const result = await data.then(result => result);
@@ -47,7 +48,7 @@ const checkResponce = async (response) => {
     }
 }
 
-const checkSuccess = (data) => {
+const checkSuccess = (data : any) => {
     if (data.success) {
         return data;
     }
@@ -72,7 +73,7 @@ export const getIngredientsData = async () => {
         })
 }
 
-export const createOrder = async (authToken, data) => {
+export const createOrder = async (authToken: string, data: Array<string>) => {
     return await fetchWithRefresh(URL_API + "/orders", {
         method: 'POST',
         headers: {
@@ -90,7 +91,7 @@ export const createOrder = async (authToken, data) => {
         })
 }
 
-export const registerUser = async (name, email, password) => {
+export const registerUser = async (name: string, email: string, password: string) => {
     return await fetch(URL_API + "/auth/register", {
         method: 'POST',
         headers: {
@@ -110,7 +111,7 @@ export const registerUser = async (name, email, password) => {
         })
 }
 
-export const loginUser = async (email, password) => {
+export const loginUser = async (email: string, password: string) => {
     return await fetch(URL_API + "/auth/login", {
         method: 'POST',
         headers: {
@@ -129,7 +130,7 @@ export const loginUser = async (email, password) => {
         })
 }
 
-export const forgotPasswordUser = async (email) => {
+export const forgotPasswordUser = async (email: string) => {
     return await fetch(URL_API + "/password-reset", {
         method: 'POST',
         headers: {
@@ -147,7 +148,7 @@ export const forgotPasswordUser = async (email) => {
         })
 }
 
-export const resetPasswordUser = async (password, code) => {
+export const resetPasswordUser = async (password: string, code: string) => {
     return await fetch(URL_API + "/password-reset/reset", {
         method: 'POST',
         headers: {
@@ -166,7 +167,7 @@ export const resetPasswordUser = async (password, code) => {
         })
 }
 
-export const logoutUser = async (refreshToken) => {
+export const logoutUser = async (refreshToken: string) => {
     return await fetch(URL_API + "/auth/logout", {
         method: 'POST',
         headers: {
@@ -184,7 +185,7 @@ export const logoutUser = async (refreshToken) => {
         })
 }
 
-export const tokenUser = async (refreshToken) => {
+export const tokenUser = async (refreshToken: string) => {
     return await fetch(URL_API + "/auth/token", {
         method: 'POST',
         headers: {
@@ -202,7 +203,7 @@ export const tokenUser = async (refreshToken) => {
         })
 }
 
-export const getInfoUser = async (authToken) => {        
+export const getInfoUser = async (authToken: string) => {        
     return await fetchWithRefresh(URL_API + "/auth/user ", {
         method: 'GET',
         headers: {
@@ -217,7 +218,7 @@ export const getInfoUser = async (authToken) => {
         })
 }
 
-export const setInfoUser = async (authToken, name, email, password) => {
+export const setInfoUser = async (authToken: string, name: string, email: string, password: string) => {
     return await fetchWithRefresh(URL_API + "/auth/user ", {
         method: 'PATCH',
         headers: {

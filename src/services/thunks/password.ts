@@ -1,7 +1,7 @@
 import { forgotPasswordUser, resetPasswordUser } from '../../utils/burger-api';
 import { passwordLoading, forgotPasswordReceived, resetPasswordReceived, passwordError } from '../slices';
 
-export const fetchForgotPasswordUser = (email) => async (dispatch) => {
+export const fetchForgotPasswordUser = (email: string) => async (dispatch: any) => {
   dispatch(passwordLoading());
   await forgotPasswordUser(email)
     .then(() => {
@@ -13,7 +13,7 @@ export const fetchForgotPasswordUser = (email) => async (dispatch) => {
     });
 }
 
-export const fetchResetPasswordUser = (password, code) => async (dispatch) => {
+export const fetchResetPasswordUser = (password: string, code: string) => async (dispatch: any) => {
   dispatch(passwordLoading());
   await resetPasswordUser(password, code)
     .then(() => {

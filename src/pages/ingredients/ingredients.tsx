@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import IngredientDetails from '../../components/ingredient-details/ingredient-details';
 
 import { setCurentIngredient, setFlagClear } from '../../services/slices';
+import { TBurger } from '../../services/types';
 import { FLAG_INGRIDIENT_SHOW_MODAL } from '../../utils/config';
 
 import styles from './ingredients.module.css';
@@ -12,8 +13,8 @@ const IngredientsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const data = useSelector(state => state.allIngredients.items);
-  const curentIngredient = useSelector(state => state.curentIngredient.item);
+  const data = useSelector((state:any) => state.allIngredients.items) as Array<TBurger>;
+  const curentIngredient = useSelector((state:any) => state.curentIngredient.item);
   const { id } = useParams();
   const flagIngridientModal = localStorage.getItem(FLAG_INGRIDIENT_SHOW_MODAL);
 

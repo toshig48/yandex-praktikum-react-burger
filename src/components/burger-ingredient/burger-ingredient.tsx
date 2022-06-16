@@ -1,25 +1,29 @@
-import { memo } from 'react';
+import { FC, memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useDrag } from 'react-dnd';
-import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { burgerPropTypes } from '../../utils/prop-types.js';
 import { setCurentIngredient } from '../../services/slices';
 import { FLAG_INGRIDIENT_SHOW_MODAL } from '../../utils/config';
 
 import styles from './burger-ingredient.module.css';
+import { TBurger } from '../../services/types';
 
-const BurgerIngredient = (props) => {
+interface IBurgerIngredientProps {
+  item: TBurger;
+  count: number;
+};
+
+const BurgerIngredient: FC<IBurgerIngredientProps> = (props) => {
   const dispatch = useDispatch();
   const pathname = useLocation().pathname;
   const { item, count } = props;
 
   const handleOpenModal = () => {
     dispatch(setCurentIngredient(item));
-    localStorage.setItem(FLAG_INGRIDIENT_SHOW_MODAL, true);
+    localStorage.setItem(FLAG_INGRIDIENT_SHOW_MODAL, "true");
   }
 
   const [{ opacity }, ref] = useDrag({
@@ -39,7 +43,7 @@ const BurgerIngredient = (props) => {
             <span className="mr-2">
               {item.price}
             </span>
-            <CurrencyIcon />
+            <CurrencyIcon type={'primary'} />
           </p>
           <p className="text text_type_main-default">{item.name} </p>
         </div>
@@ -55,8 +59,3 @@ const BurgerIngredient = (props) => {
 }
 
 export default memo(BurgerIngredient);
-
-BurgerIngredient.propTypes = {
-  item: burgerPropTypes.isRequired,
-  count: PropTypes.number.isRequired
-};

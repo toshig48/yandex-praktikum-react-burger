@@ -2,9 +2,9 @@ import { createOrder } from '../../utils/burger-api';
 import { orderLoading, orderReceived, orderError, clearIngredients } from '../slices';
 import { getAuthToken } from '../../utils/token';
 
-export const fetchCreateOrder = (ingredients) => async (dispatch) => {
+export const fetchCreateOrder = (ingredientIds: Array<string>) => async (dispatch: any) => {
   dispatch(orderLoading());
-  await createOrder(getAuthToken(), ingredients)
+  await createOrder(getAuthToken(), ingredientIds)
     .then((data) => {
       dispatch(orderReceived(data));
     })

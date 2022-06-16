@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { INGREDIENT_BUN } from "../../utils/config.js";
+import { INGREDIENT_BUN } from "../../utils/config.ts";
 
 // Cписок всех ингредиентов в текущем конструкторе бургера:
 const selectedIngredientsInitialState = {

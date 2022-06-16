@@ -1,11 +1,11 @@
-import { memo, useEffect } from 'react';
+import { memo, SyntheticEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { useFormAndValidation } from '../../hooks/use-form-and-validation';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { fetchLoginUser } from '../../services/thunks';
+import { fetchLoginUser } from '../../services/thunks/index';
 import { userClearError } from '../../services/slices/user';
 
 import styles from './login.module.css';
@@ -13,15 +13,15 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   
   const { values, handleChange } = useFormAndValidation();
-  const { loading, error } = useSelector(state => state.user);
+  const { loading, error } = useSelector((state:any) => state.user);
 
   useEffect(() => {
     dispatch(userClearError());
   }, [dispatch]);
 
-  const handlOnsubmin = async (e) => {
+  const handlOnsubmin = async (e :SyntheticEvent) => {
     e.preventDefault();
-    dispatch(fetchLoginUser(values.email, values.password));
+    dispatch(fetchLoginUser(values.email, values.password) as any);
   }
   return (
     <div className={styles.main}>
@@ -41,7 +41,7 @@ const LoginPage = () => {
             value={values.password || ""}
             onChange={handleChange} />
         </div>
-        <Button className="mt-6" type="primary" size="medium" disabled={(loading) ? true : false}>
+        <Button type="primary" size="medium" disabled={(loading) ? true : false}>
           {loading ? "Ожидание..." : "Войти"}
         </Button>
       </form>

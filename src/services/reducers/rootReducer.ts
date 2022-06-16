@@ -4,7 +4,6 @@ import {
   orderReducer, modalReducer, userReducer, passwordReducer, tokenReducer
 } from '../slices'
 
-
 export const rootReducer = combineReducers({
   allIngredients: allIngredientsReducer,
   selectedIngredients: selectedIngredientsReducer,

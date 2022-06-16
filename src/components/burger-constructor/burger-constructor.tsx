@@ -8,13 +8,21 @@ import { ConstructorElement, Button, CurrencyIcon } from "@ya.praktikum/react-de
 import OrderDetails from "../order-details/order-details";
 import NoBunElement from "../no-bun-element/no-bun-element";
 
-import { INGREDIENT_BUN } from "../../utils/config.js";
+import { INGREDIENT_BUN } from "../../utils/config";
 import { addIngredient, showModal } from '../../services/slices';
-import { fetchCreateOrder } from '../../services/thunks';
+import { TBurger, TPosition } from '../../services/types';
+import { fetchCreateOrder } from '../../services/thunks/index';
 
 import styles from "./burger-constructor.module.css";
 
-const FilledBunElement = (props) => {
+type TFilledBunElementProps = {
+  position: TPosition;
+  name: string;
+  price: number;
+  image: string;
+};
+
+const FilledBunElement = (props : TFilledBunElementProps) => {
   let text = "";
   let classDiv = "";
   if (props.position === "top") {
@@ -37,7 +45,11 @@ const FilledBunElement = (props) => {
   );
 }
 
-const EmptyBunElement = (props) => {
+type TEmptyBunElementProps = {
+  position: TPosition;
+};
+
+const EmptyBunElement = (props :TEmptyBunElementProps) => {
   let className = props.position === "top" ? "constructor-element_pos_top" : "constructor-element_pos_bottom";
   return (
     <div className="pl-8 ml-4 mr-4">
@@ -48,7 +60,12 @@ const EmptyBunElement = (props) => {
   );
 }
 
-const BunElement = ({ data, position }) => {
+type TBunElementProps = {
+  position: TPosition;
+  data: TBurger;
+};
+
+const BunElement = ({ data, position } : TBunElementProps) => {
   return (
     <>
       {
@@ -63,16 +80,16 @@ const BunElement = ({ data, position }) => {
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
-  const { loggedIn } = useSelector(state => state.user);
+  const { loggedIn } = useSelector((state:any) => state.user);
   const navigate = useNavigate();
 
-  const moveItem = (item) => {
+  const moveItem = (item: TBurger) => {
     dispatch(addIngredient({ ...item, key: uuidv4() }));
   };
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
-    drop(item) {
+    drop(item: TBurger) {
       moveItem(item)
     },
     collect: monitor => ({
@@ -80,8 +97,8 @@ const BurgerConstructor = () => {
     })
   });
 
-  const burgerConstructorData = useSelector(state => state.selectedIngredients.items);
-  const { loading, order, error } = useSelector(state => state.order);
+  const burgerConstructorData = useSelector((state:any) => state.selectedIngredients.items) as Array<TBurger>;
+  const { loading, order, error } = useSelector((state:any) => state.order);
 
   const bunIngredient = useMemo(
     () => burgerConstructorData.filter(x => x.type === INGREDIENT_BUN.key)[0],
@@ -94,7 +111,7 @@ const BurgerConstructor = () => {
   );
 
   const totalPrice = useMemo(
-    () => burgerConstructorData.reduce((partialSum, a) => partialSum + a.price, 0),
+    () => burgerConstructorData.reduce((partialSum: number, a: TBurger) => partialSum + a.price, 0),
     [burgerConstructorData]
   );
 
@@ -103,7 +120,7 @@ const BurgerConstructor = () => {
   const handleCreateOrder = async () => {
     if(loggedIn)
     {
-    dispatch(fetchCreateOrder(burgerConstructorData.map(item => item._id)));
+    dispatch(fetchCreateOrder(burgerConstructorData.map(item => item._id)) as any);
     setShowModalFlag(true);
     }
     else
@@ -130,7 +147,7 @@ const BurgerConstructor = () => {
         setShowModalFlag(false);
         dispatch(showModal({
           title: "",
-          content: <OrderDetails orderNumber={order.number} />
+          content: <OrderDetails />
         }));
       }
     },
@@ -143,7 +160,7 @@ const BurgerConstructor = () => {
         <BunElement data={bunIngredient} position="top" />
         <ul className={`${styles.list} ml-4 mt-4 mb-4 custom_scroll`} >
           {
-            noBunIngredients.map((item, index) => (
+            noBunIngredients.map((item, index: number) => (
               <NoBunElement key={item.key} item={item} index={index} />
             ))
           }
@@ -155,7 +172,7 @@ const BurgerConstructor = () => {
           <span className="text text_type_digits-medium mr-1">
             {totalPrice}
           </span>
-          <CurrencyIcon />
+          <CurrencyIcon type={"primary"} />
         </span>
         <Button type="primary" size="medium" onClick={handleCreateOrder} disabled={(burgerConstructorData.length === 0 || loading) ? true : false}>
           {loading ? "Ожидание..." : "Оформить заказ"}
