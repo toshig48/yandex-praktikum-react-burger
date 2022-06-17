@@ -5,11 +5,12 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
-import { CustomizedState, TBurger } from '../../services/types';
+import { TBurger } from '../../services/type';
+import { CustomizedState } from '../../services/interface';
 
 import { showModal } from '../../services/slices';
 import { setCurentIngredient, unSetCurentIngredient } from '../../services/slices';
-import { INGREDIENT_BUN, INGREDIENT_SAUCE, INGREDIENT_MAIN, FLAG_INGRIDIENT_SHOW_MODAL } from '../../utils/config';
+import { INGREDIENT_BUN, INGREDIENT_SAUCE, INGREDIENT_MAIN, FLAG_INGRIDIENT_SHOW_MODAL } from '../../services/utils/config';
 
 import styles from './burger-ingredients.module.css';
 
@@ -35,7 +36,7 @@ const BurgerIngredientGroups: FC<IBurgerIngredientGroupsProps> = (props) => {
 const BurgerIngredients = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const state = useLocation().state as CustomizedState; 
+  const state = useLocation().state as CustomizedState;
   const data = useSelector((state: any) => state.allIngredients.items) as Array<TBurger>;
   const burgerConstructorData = useSelector((state: any) => state.selectedIngredients.items) as Array<TBurger>;
   const flagClear = useSelector((state: any) => state.curentIngredient.flagClear) as boolean;

@@ -1,4 +1,4 @@
-import { getIngredientsData } from '../../utils/burger-api';
+import { getIngredientsData } from '../utils/burger-api';
 import { allIngredientsLoading, allIngredientsReceived, allIngredientsError } from '../slices';
 
 export const fetchAllIngredients = () => async (dispatch: any) => {

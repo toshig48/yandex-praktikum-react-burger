@@ -6,10 +6,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { setCurentIngredient } from '../../services/slices';
-import { FLAG_INGRIDIENT_SHOW_MODAL } from '../../utils/config';
+import { FLAG_INGRIDIENT_SHOW_MODAL } from '../../services/utils/config';
 
 import styles from './burger-ingredient.module.css';
-import { TBurger } from '../../services/types';
+import { TBurger } from '../../services/type';
 
 interface IBurgerIngredientProps {
   item: TBurger;
@@ -36,7 +36,7 @@ const BurgerIngredient: FC<IBurgerIngredientProps> = (props) => {
 
   return (
     <li className={`${styles.item} mb-8`} data-id={item._id} onClick={handleOpenModal} style={{ opacity }}>
-      <Link to={`ingredients/${item._id}`} state={{ pathnameModal: pathname, ingredientId : item._id }}>
+      <Link to={`ingredients/${item._id}`} state={{ pathnameModal: pathname, ingredientId: item._id }}>
         <div ref={ref}>
           <img src={item.image} className='ml-4 mr-4' alt={item.name}></img>
           <p className="text text_type_digits-default mb-1 mt-1">

@@ -1,5 +1,5 @@
-import { registerUser, loginUser, logoutUser, getInfoUser, setInfoUser } from '../../utils/burger-api';
-import { getRefreshToken, saveTokens, clearTokens, getAuthToken } from '../../utils/token';
+import { registerUser, loginUser, logoutUser, getInfoUser, setInfoUser } from '../utils/burger-api';
+import { getRefreshToken, saveTokens, clearTokens, getAuthToken } from '../utils/token';
 import { userLoginLoading, userLoginReceived, userLogoutLoading, userLogoutReceived, userInfoLoading, userInfoReceived, userError } from '../slices';
 
 export const fetchRegisterUser = (name: string, email: string, password: string) => async (dispatch: any) => {
@@ -47,9 +47,9 @@ export const fetchGetInfoUser = () => async (dispatch: any) => {
     .then((data) => {
       dispatch(userInfoReceived(data.user));
     })
-    .catch((ex) => {      
-      console.error(ex);  
-      dispatch(userError(ex.message)); 
+    .catch((ex) => {
+      console.error(ex);
+      dispatch(userError(ex.message));
     });
 }
 
@@ -59,8 +59,8 @@ export const fetchSetInfoUser = (name: string, email: string, password: string) 
     .then((data) => {
       dispatch(userInfoReceived(data.user));
     })
-    .catch((ex) => {   
-      console.error(ex);  
-      dispatch(userError(ex.message));      
+    .catch((ex) => {
+      console.error(ex);
+      dispatch(userError(ex.message));
     });
 }

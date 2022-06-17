@@ -1,5 +1,5 @@
-import { tokenUser } from '../../utils/burger-api';
-import { saveTokens, clearTokens } from '../../utils/token';
+import { tokenUser } from '../utils/burger-api';
+import { saveTokens, clearTokens } from '../utils/token';
 import { userLoginByToken, tokenLoading, tokenReceived, tokenError } from '../slices';
 
 export const fetchTokenUser = (refreshToken: string) => async (dispatch: any) => {

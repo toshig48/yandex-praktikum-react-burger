@@ -8,9 +8,9 @@ import { ConstructorElement, Button, CurrencyIcon } from "@ya.praktikum/react-de
 import OrderDetails from "../order-details/order-details";
 import NoBunElement from "../no-bun-element/no-bun-element";
 
-import { INGREDIENT_BUN } from "../../utils/config";
+import { INGREDIENT_BUN } from "../../services/utils/config";
 import { addIngredient, showModal } from '../../services/slices';
-import { TBurger, TPosition } from '../../services/types';
+import { TBurger, TPosition } from '../../services/type';
 import { fetchCreateOrder } from '../../services/thunks/index';
 
 import styles from "./burger-constructor.module.css";
@@ -22,7 +22,7 @@ type TFilledBunElementProps = {
   image: string;
 };
 
-const FilledBunElement = (props : TFilledBunElementProps) => {
+const FilledBunElement = (props: TFilledBunElementProps) => {
   let text = "";
   let classDiv = "";
   if (props.position === "top") {
@@ -49,7 +49,7 @@ type TEmptyBunElementProps = {
   position: TPosition;
 };
 
-const EmptyBunElement = (props :TEmptyBunElementProps) => {
+const EmptyBunElement = (props: TEmptyBunElementProps) => {
   let className = props.position === "top" ? "constructor-element_pos_top" : "constructor-element_pos_bottom";
   return (
     <div className="pl-8 ml-4 mr-4">
@@ -65,7 +65,7 @@ type TBunElementProps = {
   data: TBurger;
 };
 
-const BunElement = ({ data, position } : TBunElementProps) => {
+const BunElement = ({ data, position }: TBunElementProps) => {
   return (
     <>
       {
@@ -80,7 +80,7 @@ const BunElement = ({ data, position } : TBunElementProps) => {
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
-  const { loggedIn } = useSelector((state:any) => state.user);
+  const { loggedIn } = useSelector((state: any) => state.user);
   const navigate = useNavigate();
 
   const moveItem = (item: TBurger) => {
@@ -97,8 +97,8 @@ const BurgerConstructor = () => {
     })
   });
 
-  const burgerConstructorData = useSelector((state:any) => state.selectedIngredients.items) as Array<TBurger>;
-  const { loading, order, error } = useSelector((state:any) => state.order);
+  const burgerConstructorData = useSelector((state: any) => state.selectedIngredients.items) as Array<TBurger>;
+  const { loading, order, error } = useSelector((state: any) => state.order);
 
   const bunIngredient = useMemo(
     () => burgerConstructorData.filter(x => x.type === INGREDIENT_BUN.key)[0],
@@ -118,13 +118,11 @@ const BurgerConstructor = () => {
   const [showModalFlag, setShowModalFlag] = useState(false);
 
   const handleCreateOrder = async () => {
-    if(loggedIn)
-    {
-    dispatch(fetchCreateOrder(burgerConstructorData.map(item => item._id)) as any);
-    setShowModalFlag(true);
+    if (loggedIn) {
+      dispatch(fetchCreateOrder(burgerConstructorData.map(item => item._id)) as any);
+      setShowModalFlag(true);
     }
-    else
-    {
+    else {
       navigate("/login");
     }
   }

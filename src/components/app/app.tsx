@@ -9,22 +9,22 @@ import { ProtectedRoute } from '../protected-route';
 import Modal from '../modal/modal';
 import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, IngredientDetails, NotFound404Page, Orders } from '../../pages';
 
-import { getRefreshToken } from '../../utils/token';
+import { getRefreshToken } from '../../services/utils/token';
 import { fetchTokenUser, fetchAllIngredients, fetchGetInfoUser } from '../../services/thunks/index';
 import { showModal } from '../../services/slices';
 
 import styles from './app.module.css';
-import { CustomizedState } from '../../services/types';
+import { CustomizedState } from '../../services/interface';
 
 const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const state = location.state as CustomizedState; 
-  const data = useSelector((state:any) => state.allIngredients.items);
-  const { loading, error } = useSelector((state:any) => state.allIngredients);
-  const { allowResetPassword } = useSelector((state:any) => state.password);
-  const { loggedIn, user } = useSelector((state:any) => state.user);
-  const { isShowModal } = useSelector((state:any) => state.modal);
+  const state = location.state as CustomizedState;
+  const data = useSelector((state: any) => state.allIngredients.items);
+  const { loading, error } = useSelector((state: any) => state.allIngredients);
+  const { allowResetPassword } = useSelector((state: any) => state.password);
+  const { loggedIn, user } = useSelector((state: any) => state.user);
+  const { isShowModal } = useSelector((state: any) => state.modal);
 
   // Если есть RefreshToken, то получаем AccessToken:
   useEffect(() => {

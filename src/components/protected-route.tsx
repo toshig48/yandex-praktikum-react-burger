@@ -1,17 +1,18 @@
 import { ReactChild } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { CustomizedState } from '../services/types';
+import { CustomizedState } from '../services/interface';
 
 type TProtectedRouteProps = {
-  redirectСondition : boolean, 
-  redirectPath: string, 
-  children? : ReactChild
+  redirectСondition: boolean,
+  redirectPath: string,
+  children?: ReactChild
 };
-export const ProtectedRoute  = ({ redirectСondition, redirectPath, children } : TProtectedRouteProps) => {
+
+export const ProtectedRoute = ({ redirectСondition, redirectPath, children }: TProtectedRouteProps) => {
   const location = useLocation();
-  const state = location.state as CustomizedState; 
+  const state = location.state as CustomizedState;
   if (redirectСondition) {
-    return <Navigate to={state.location.pathname || redirectPath} replace state={{ location }} />;
+    return <Navigate to={state?.location?.pathname || redirectPath} replace state={{ location }} />;
   }
   return children ? <>{children}</> : <Outlet />;
 };

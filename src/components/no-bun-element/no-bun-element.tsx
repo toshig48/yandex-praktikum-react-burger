@@ -2,14 +2,13 @@ import { FC, memo, MutableRefObject } from "react";
 import { useDispatch } from 'react-redux';
 import { useRef } from 'react'
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
-import { TBurger } from '../../services/types';
+import { TBurger } from '../../services/type';
 
 import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { removeIngredient, moveIngredient } from '../../services/slices';
 
 import styles from "./no-bun-element.module.css";
-import { Identifier } from "typescript";
 
 interface INoBunElement {
     item: TBurger;
@@ -20,7 +19,7 @@ const NoBunElement: FC<INoBunElement> = (props) => {
     const { item, index } = props;
     const dispatch = useDispatch();
 
-    const handleRemoveElement = (index : number) => {
+    const handleRemoveElement = (index: number) => {
         dispatch(removeIngredient(index));
     }
 
@@ -43,16 +42,15 @@ const NoBunElement: FC<INoBunElement> = (props) => {
             const hoverBoundingRect = ref.current?.getBoundingClientRect()
             const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
             const clientOffset = monitor.getClientOffset();
-            if(clientOffset)
-            {
-            const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+            if (clientOffset) {
+                const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
-            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return
-            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return
+                if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return
+                if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return
 
-            dispatch(moveIngredient({ dragIndex, hoverIndex }));
+                dispatch(moveIngredient({ dragIndex, hoverIndex }));
 
-            item.index = hoverIndex
+                item.index = hoverIndex
             }
         },
     })
