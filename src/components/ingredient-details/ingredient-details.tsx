@@ -1,9 +1,14 @@
-import { memo } from 'react';
+import { FC, memo } from 'react';
 import { useSelector } from 'react-redux';
 
 import styles from './ingredient-details.module.css';
 
-const IngredientComposition = (props) => {
+interface IngredientCompositionProps {
+  title: string;
+  text: string;
+};
+
+const IngredientComposition: FC<IngredientCompositionProps> = (props) => {
   return (
     <div className='mr-5 secondary'>
       <p className="text text_type_main-default">{props.title} </p>
@@ -13,7 +18,7 @@ const IngredientComposition = (props) => {
 }
 
 const IngredientDetails = () => {
-  const data = useSelector(state => state.curentIngredient.item);
+  const data = useSelector((state:any) => state.curentIngredient.item);
 
   if (!data) {
     return (

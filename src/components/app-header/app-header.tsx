@@ -6,7 +6,7 @@ import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-dev
 import styles from './app-header.module.css';
 
 const AppHeader = () => {
-  const pathname = useLocation().pathname;
+  const pathname: string = useLocation().pathname;
   return (
     <header className={styles.header}>
       <nav className={styles.menu}>

@@ -1,14 +1,14 @@
 import { getCookie, setCookie } from './cookie';
 
-export const getAuthToken = () => {
-  return getCookie('token')
+export const getAuthToken = (): string => {
+  return getCookie('token') as string
 }
 
-export const getRefreshToken = () => {
-  return localStorage.getItem('token');
+export const getRefreshToken = (): string => {
+  return localStorage.getItem('token') as string;
 }
 
-export const saveTokens = (authToken, refreshToken) => {
+export const saveTokens = (authToken: string, refreshToken: string) => {
   if (authToken.indexOf('Bearer') === 0) {
     authToken = authToken.split('Bearer ')[1];
   }

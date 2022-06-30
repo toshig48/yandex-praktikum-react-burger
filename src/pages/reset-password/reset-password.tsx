@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, SyntheticEvent, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { useFormAndValidation } from '../../hooks/use-form-and-validation';
-import { fetchResetPasswordUser } from '../../services/thunks';
+import { fetchResetPasswordUser } from '../../services/thunks/index';
 import { passwordClearError } from '../../services/slices/password';
 
 import styles from './reset-password.module.css';
@@ -16,7 +16,7 @@ const ResetPassword = () => {
   const navigate = useNavigate();
 
   const { values, handleChange } = useFormAndValidation();
-  const { loading, allowResetPassword, error } = useSelector(state => state.password);
+  const { loading, allowResetPassword, error } = useSelector((state:any) => state.password);
 
   useEffect(() => {
     dispatch(passwordClearError());
@@ -29,9 +29,9 @@ const ResetPassword = () => {
   }, [allowResetPassword, navigate]);
 
 
-  const handlOnsubmin = async (e) => {
+  const handlOnsubmin = async (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(fetchResetPasswordUser(values.password, values.code));
+    dispatch(fetchResetPasswordUser(values.password, values.code) as any);
   }
 
   return (
@@ -43,7 +43,7 @@ const ResetPassword = () => {
             name="password"
             value={values.password || ""}
             onChange={handleChange}
-            placeholder="Введите новый пароль" />
+            />
         </div>
         <div className="mb-6 custom_input">
           <Input
@@ -53,7 +53,7 @@ const ResetPassword = () => {
             onChange={handleChange}
             placeholder="Введите код из письма" />
         </div>
-        <Button className="mt-6" type="primary" size="medium" disabled={(loading) ? true : false}>
+        <Button type="primary" size="medium" disabled={(loading) ? true : false}>
           {loading ? "Ожидание..." : "Сохранить"}
         </Button>
       </form>

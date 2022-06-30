@@ -7,44 +7,44 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import AppHeader from '../app-header/app-header';
 import { ProtectedRoute } from '../protected-route';
 import Modal from '../modal/modal';
-import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, IngredientDetails, NotFound404Page, Orders } from '../../pages/';
+import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, IngredientDetails, NotFound404Page, Orders } from '../../pages';
 
-import { fetchTokenUser } from '../../services/thunks';
-import { getRefreshToken } from '../../utils/token';
-import { fetchAllIngredients, fetchGetInfoUser } from '../../services/thunks';
+import { getRefreshToken } from '../../services/utils/token';
+import { fetchTokenUser, fetchAllIngredients, fetchGetInfoUser } from '../../services/thunks/index';
 import { showModal } from '../../services/slices';
 
 import styles from './app.module.css';
+import { CustomizedState } from '../../services/interface';
 
 const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-
-  const data = useSelector(state => state.allIngredients.items);
-  const { loading, error } = useSelector(state => state.allIngredients);
-  const { allowResetPassword } = useSelector(state => state.password);
-  const { loggedIn, user } = useSelector(state => state.user);
-  const { isShowModal } = useSelector(state => state.modal);
+  const state = location.state as CustomizedState;
+  const data = useSelector((state: any) => state.allIngredients.items);
+  const { loading, error } = useSelector((state: any) => state.allIngredients);
+  const { allowResetPassword } = useSelector((state: any) => state.password);
+  const { loggedIn, user } = useSelector((state: any) => state.user);
+  const { isShowModal } = useSelector((state: any) => state.modal);
 
   // Если есть RefreshToken, то получаем AccessToken:
   useEffect(() => {
     const refreshToken = getRefreshToken();
     if (refreshToken) {
-      dispatch(fetchTokenUser(refreshToken));
+      dispatch(fetchTokenUser(refreshToken) as any);
     }
   }, [dispatch])
 
   // Если пользак залогинен, но инфы о пользаке нет - загружаем инфу:
   useEffect(() => {
     if (loggedIn && user.name === undefined) {
-      dispatch(fetchGetInfoUser())
+      dispatch(fetchGetInfoUser() as any)
     }
   }, [user, loggedIn, dispatch]);
 
   // Загружаем список ингридиентов:
   useEffect(() => {
     if (!loading && !error && data.length === 0) {
-      dispatch(fetchAllIngredients());
+      dispatch(fetchAllIngredients() as any);
     }
   }, [loading, data, error, dispatch])
 
@@ -73,7 +73,7 @@ const App = () => {
         <AppHeader />
         <DndProvider backend={HTML5Backend}>
           <div className={styles.main}>
-            <Routes location={location.state?.pathnameModal !== undefined ? location.state.pathnameModal : location.pathname}>
+            <Routes location={state?.pathnameModal !== undefined ? state?.pathnameModal : location.pathname}>
               <Route path='/' element={<HomePage />} />
 
               <Route element={<ProtectedRoute redirectСondition={loggedIn} redirectPath="/" />}>
@@ -106,3 +106,9 @@ const App = () => {
 }
 
 export default App;
+
+declare module 'react' {
+  interface FunctionComponent<P = {}> {
+    (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null;
+  }
+}

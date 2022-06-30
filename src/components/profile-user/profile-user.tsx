@@ -1,16 +1,16 @@
-import { memo, useState, useEffect } from 'react';
+import { memo, useState, useEffect, SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Input, Button, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { useFormAndValidation } from '../../hooks/use-form-and-validation';
-import { fetchSetInfoUser } from '../../services/thunks';
+import { fetchSetInfoUser } from '../../services/thunks/index';
 
 import styles from './profile-user.module.css';
 
-function ProfileUser() {
+const ProfileUser = () => {
   const dispatch = useDispatch();
-  const { loading, user, error } = useSelector(state => state.user);
+  const { loading, user, error } = useSelector((state: any) => state.user);
 
   const [firstLoadFlag, setFirstLoadFlag] = useState(true);
 
@@ -24,14 +24,14 @@ function ProfileUser() {
   }, [user, firstLoadFlag, setValues]);
 
 
-  const handlCansel = async (e) => {
+  const handlCansel = async (e: SyntheticEvent) => {
     e.preventDefault();
     resetForm({ ...values, "name": user.name, "email": user.email });
   }
 
-  const handlOnsubmin = async (e) => {
+  const handlOnsubmin = async (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(fetchSetInfoUser(values.name, values.email, values.password));
+    dispatch(fetchSetInfoUser(values.name, values.email, values.password) as any);
     setIsChange(false);
   }
 
@@ -63,10 +63,10 @@ function ProfileUser() {
             onChange={handleChange} />
         </div>
         <div className={styles.right_align} style={{ visibility: isChange ? "visible" : "hidden" }}>
-          <Button className="mt-6" type="secondary" size="medium" onClick={handlCansel} disabled={loading ? true : false}>
+          <Button type="secondary" size="medium" onClick={handlCansel} disabled={loading ? true : false}>
             Отмена
           </Button>
-          <Button className="mt-6" type="primary" size="medium" disabled={loading ? true : false}>
+          <Button type="primary" size="medium" disabled={loading ? true : false}>
             {loading ? "Ожидание..." : "Сохранить"}
           </Button>
         </div>

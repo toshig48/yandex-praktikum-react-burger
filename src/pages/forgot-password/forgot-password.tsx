@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, SyntheticEvent, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { useFormAndValidation } from '../../hooks/use-form-and-validation';
-import { fetchForgotPasswordUser } from '../../services/thunks';
+import { fetchForgotPasswordUser } from '../../services/thunks/index';
 import { passwordClearError } from '../../services/slices/password';
 
 import styles from './forgot-password.module.css';
@@ -16,7 +16,7 @@ const ForgotPasswordPage = () => {
   const navigate = useNavigate();
 
   const { values, handleChange } = useFormAndValidation();
-  const { loading, allowResetPassword, error } = useSelector(state => state.password);
+  const { loading, allowResetPassword, error } = useSelector((state: any) => state.password);
 
   useEffect(() => {
     dispatch(passwordClearError());
@@ -28,9 +28,9 @@ const ForgotPasswordPage = () => {
     }
   }, [allowResetPassword, navigate]);
 
-  const handlOnsubmin = async (e) => {
+  const handlOnsubmin = async (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(fetchForgotPasswordUser(values.email));
+    dispatch(fetchForgotPasswordUser(values.email) as any);
   }
 
   return (
@@ -45,7 +45,7 @@ const ForgotPasswordPage = () => {
             value={values.email || ""}
             onChange={handleChange} />
         </div>
-        <Button className="mt-6" type="primary" size="medium" disabled={(loading) ? true : false}>
+        <Button type="primary" size="medium" disabled={(loading) ? true : false}>
           {loading ? "Ожидание..." : "Восстановить"}
         </Button>
       </form>
@@ -61,3 +61,4 @@ const ForgotPasswordPage = () => {
 }
 
 export default memo(ForgotPasswordPage);
+

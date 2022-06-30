@@ -1,33 +1,37 @@
-import { memo } from "react";
+import { FC, memo, MutableRefObject } from "react";
 import { useDispatch } from 'react-redux';
 import { useRef } from 'react'
-import { useDrag, useDrop } from 'react-dnd'
-import PropTypes from 'prop-types';
+import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
+import { TBurger } from '../../services/type';
 
 import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { removeIngredient, moveIngredient } from '../../services/slices';
-import { burgerPropTypes } from '../../utils/prop-types.js';
 
 import styles from "./no-bun-element.module.css";
 
-const NoBunElement = (props) => {
+interface INoBunElement {
+    item: TBurger;
+    index: number;
+};
+
+const NoBunElement: FC<INoBunElement> = (props) => {
     const { item, index } = props;
     const dispatch = useDispatch();
 
-    const handleRemoveElement = (index) => {
+    const handleRemoveElement = (index: number) => {
         dispatch(removeIngredient(index));
     }
 
-    const ref = useRef(null)
-    const [{ handlerId }, drop] = useDrop({
+    const ref = useRef<HTMLLIElement>(null) as MutableRefObject<HTMLLIElement>;
+    const [handlerId, drop] = useDrop<TBurger>({
         accept: 'selectedIngredient',
-        collect(monitor) {
+        collect(monitor: DropTargetMonitor) {
             return {
                 handlerId: monitor.getHandlerId(),
             }
         },
-        hover(item, monitor) {
+        hover(item: TBurger, monitor: DropTargetMonitor) {
             if (!ref.current) return
 
             const dragIndex = item.index;
@@ -38,14 +42,16 @@ const NoBunElement = (props) => {
             const hoverBoundingRect = ref.current?.getBoundingClientRect()
             const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
             const clientOffset = monitor.getClientOffset();
-            const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+            if (clientOffset) {
+                const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
-            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return
-            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return
+                if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return
+                if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return
 
-            dispatch(moveIngredient({ dragIndex, hoverIndex }));
+                dispatch(moveIngredient({ dragIndex, hoverIndex }));
 
-            item.index = hoverIndex
+                item.index = hoverIndex
+            }
         },
     })
 
@@ -63,7 +69,7 @@ const NoBunElement = (props) => {
 
     return (
         <li ref={ref} className={`${styles.item} mb-4 mr-2`} style={{ opacity }} data-handler-id={handlerId}>
-            <DragIcon />
+            <DragIcon type={"primary"} />
             <i className="ml-2" />
             <ConstructorElement
                 price={item.price}
@@ -77,8 +83,3 @@ const NoBunElement = (props) => {
 
 export default memo(NoBunElement);
 
-
-NoBunElement.propTypes = {
-    item: burgerPropTypes.isRequired,
-    index: PropTypes.number.isRequired
-};

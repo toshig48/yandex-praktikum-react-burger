@@ -1,11 +1,11 @@
-import { memo, useEffect } from 'react';
+import { memo, SyntheticEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { useFormAndValidation } from '../../hooks/use-form-and-validation';
-import { fetchRegisterUser } from '../../services/thunks';
+import { fetchRegisterUser } from '../../services/thunks/index';
 import { userClearError } from '../../services/slices/user';
 
 import styles from './register.module.css';
@@ -14,15 +14,15 @@ const RegisterPage = () => {
   const dispatch = useDispatch();
 
   const { values, handleChange } = useFormAndValidation();
-  const {loading, error } = useSelector(state => state.user);
+  const {loading, error } = useSelector((state:any) => state.user);
   
   useEffect(() => {
     dispatch(userClearError());
  },[dispatch]);
 
-  const handlOnsubmin = async (e) => {
+  const handlOnsubmin = async (e : SyntheticEvent) => {
     e.preventDefault();
-    dispatch(fetchRegisterUser(values.name, values.email, values.password));
+    dispatch(fetchRegisterUser(values.name, values.email, values.password) as any);
   }
 
   return (
@@ -34,7 +34,7 @@ const RegisterPage = () => {
             name="name" 
             type="text" 
             placeholder="Имя"
-            value={values.name || ""}
+            value={values['name'] || ""}
             onChange={handleChange}/>
         </div>
         <div className="mb-6 custom_input">
@@ -51,7 +51,7 @@ const RegisterPage = () => {
             value={values.password || ""}
             onChange={handleChange}/>
         </div>
-        <Button className="mt-6" type="primary" size="medium" disabled={(loading) ? true : false}>
+        <Button type="primary" size="medium" disabled={(loading) ? true : false}>
           {loading ? "Ожидание..." : "Зарегистрироваться"}
         </Button>
       </form>

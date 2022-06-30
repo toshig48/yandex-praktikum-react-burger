@@ -1,37 +1,40 @@
+import { TCheckSuccess, TCreateOrder, TGetIngredientsData, TInfoUser, TLoginUser, TTokenUser } from '../type';
 import { URL_API } from './config'
 import { getRefreshToken, saveTokens } from './token';
 
-const fetchWithRefresh = async (url, params) => {
+const fetchWithRefresh = async (url: string, params: RequestInit) => {
     try {
         const responce = await fetch(url, params);
         return await checkResponce(responce);
     }
-    catch (ex) {
-        if (ex.message === 'jwt malformed' || ex.message === 'jwt expired') {
-            var refreshToken = getRefreshToken();
-            if (refreshToken) {
-                const refreshData = await tokenUser(refreshToken);
-                if (!refreshData.success) {
-                    Promise.reject(refreshData);
+    catch (ex: unknown) {
+        if (ex instanceof Error) {
+            if (ex.message === 'jwt malformed' || ex.message === 'jwt expired') {
+                var refreshToken = getRefreshToken();
+                if (refreshToken) {
+                    const refreshData = await tokenUser(refreshToken);
+                    if (!refreshData.success) {
+                        Promise.reject(refreshData);
+                    }
+                    else {
+                        saveTokens(refreshData.accessToken, refreshData.refreshToken);
+                        (params.headers as { [key: string]: string }).authorization = refreshData.accessToken;
+                        const responce = await fetch(url, params);
+                        return await checkResponce(responce);
+                    }
                 }
                 else {
-                    saveTokens(refreshData.accessToken, refreshData.refreshToken);
-                    params.headers.authorization = refreshData.accessToken;
-                    const responce = await fetch(url, params);
-                    return await checkResponce(responce);
+                    Promise.reject("RefreshToken no find on local storage");
                 }
             }
             else {
-                Promise.reject("RefreshToken no find on local storage");
+                Promise.reject(ex);
             }
-        }
-        else {
-            Promise.reject(ex);
         }
     }
 }
 
-const checkResponce = async (response) => {
+const checkResponce = async (response: Response) => {
     const data = response.json();
     if (!response.ok) {
         const result = await data.then(result => result);
@@ -47,7 +50,7 @@ const checkResponce = async (response) => {
     }
 }
 
-const checkSuccess = (data) => {
+const checkSuccess = <T>(data: TCheckSuccess<T>) => {
     if (data.success) {
         return data;
     }
@@ -66,13 +69,13 @@ const checkSuccess = (data) => {
 export const getIngredientsData = async () => {
     return await fetch(URL_API + "/ingredients")
         .then(checkResponce)
-        .then(checkSuccess)
-        .then((data) => {
+        .then((data) => checkSuccess<TGetIngredientsData>(data))
+        .then((data) => {      
             return data.data;
         })
 }
 
-export const createOrder = async (authToken, data) => {
+export const createOrder = async (authToken: string, data: Array<string>) => {
     return await fetchWithRefresh(URL_API + "/orders", {
         method: 'POST',
         headers: {
@@ -84,13 +87,13 @@ export const createOrder = async (authToken, data) => {
             "ingredients": data
         })
     })
-        .then(checkSuccess)
+        .then((data) => checkSuccess<TCreateOrder>(data))
         .then((data) => {
             return data.order;
         })
 }
 
-export const registerUser = async (name, email, password) => {
+export const registerUser = async (name: string, email: string, password: string) => {
     return await fetch(URL_API + "/auth/register", {
         method: 'POST',
         headers: {
@@ -104,13 +107,13 @@ export const registerUser = async (name, email, password) => {
         })
     })
         .then(checkResponce)
-        .then(checkSuccess)
+        .then((data) => checkSuccess<TLoginUser>(data))
         .then((data) => {
             return data;
         })
 }
 
-export const loginUser = async (email, password) => {
+export const loginUser = async (email: string, password: string) => {
     return await fetch(URL_API + "/auth/login", {
         method: 'POST',
         headers: {
@@ -123,13 +126,13 @@ export const loginUser = async (email, password) => {
         })
     })
         .then(checkResponce)
-        .then(checkSuccess)
-        .then((data) => {
+        .then((data) => checkSuccess<TLoginUser>(data))
+        .then((data) => {        
             return data;
         })
 }
 
-export const forgotPasswordUser = async (email) => {
+export const forgotPasswordUser = async (email: string) => {
     return await fetch(URL_API + "/password-reset", {
         method: 'POST',
         headers: {
@@ -147,7 +150,7 @@ export const forgotPasswordUser = async (email) => {
         })
 }
 
-export const resetPasswordUser = async (password, code) => {
+export const resetPasswordUser = async (password: string, code: string) => {
     return await fetch(URL_API + "/password-reset/reset", {
         method: 'POST',
         headers: {
@@ -166,7 +169,7 @@ export const resetPasswordUser = async (password, code) => {
         })
 }
 
-export const logoutUser = async (refreshToken) => {
+export const logoutUser = async (refreshToken: string) => {
     return await fetch(URL_API + "/auth/logout", {
         method: 'POST',
         headers: {
@@ -184,7 +187,7 @@ export const logoutUser = async (refreshToken) => {
         })
 }
 
-export const tokenUser = async (refreshToken) => {
+export const tokenUser = async (refreshToken: string) => {
     return await fetch(URL_API + "/auth/token", {
         method: 'POST',
         headers: {
@@ -196,13 +199,13 @@ export const tokenUser = async (refreshToken) => {
         })
     })
         .then(checkResponce)
-        .then(checkSuccess)
+        .then((data) => checkSuccess<TTokenUser>(data))
         .then((data) => {
             return data;
         })
 }
 
-export const getInfoUser = async (authToken) => {        
+export const getInfoUser = async (authToken: string) => {
     return await fetchWithRefresh(URL_API + "/auth/user ", {
         method: 'GET',
         headers: {
@@ -211,13 +214,13 @@ export const getInfoUser = async (authToken) => {
             'authorization': 'Bearer ' + authToken
         }
     })
-        .then(checkSuccess)
+        .then((data) => checkSuccess<TInfoUser>(data))
         .then((data) => {
             return data;
         })
 }
 
-export const setInfoUser = async (authToken, name, email, password) => {
+export const setInfoUser = async (authToken: string, name: string, email: string, password: string) => {
     return await fetchWithRefresh(URL_API + "/auth/user ", {
         method: 'PATCH',
         headers: {
@@ -231,7 +234,7 @@ export const setInfoUser = async (authToken, name, email, password) => {
             "password": password
         })
     })
-        .then(checkSuccess)
+        .then((data) => checkSuccess<TInfoUser>(data))
         .then((data) => {
             return data;
         })

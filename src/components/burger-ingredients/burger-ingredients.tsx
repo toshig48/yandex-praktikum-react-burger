@@ -1,18 +1,27 @@
-import { useRef, useState, useEffect, useMemo, memo } from 'react';
+import { useRef, useState, useEffect, useMemo, memo, MutableRefObject, SyntheticEvent, FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import IngredientDetails from '../../components/ingredient-details/ingredient-details';
+import IngredientDetails from '../ingredient-details/ingredient-details';
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
+import { TBurger } from '../../services/type';
+import { CustomizedState } from '../../services/interface';
 
 import { showModal } from '../../services/slices';
 import { setCurentIngredient, unSetCurentIngredient } from '../../services/slices';
-import { INGREDIENT_BUN, INGREDIENT_SAUCE, INGREDIENT_MAIN, FLAG_INGRIDIENT_SHOW_MODAL } from '../../utils/config.js';
+import { INGREDIENT_BUN, INGREDIENT_SAUCE, INGREDIENT_MAIN, FLAG_INGRIDIENT_SHOW_MODAL } from '../../services/utils/config';
 
 import styles from './burger-ingredients.module.css';
 
-const BurgerIngredientGroups = (props) => {
+interface IBurgerIngredientGroupsProps {
+  text: string;
+  tilteRef: MutableRefObject<HTMLParagraphElement>;
+  data: Array<TBurger>;
+  burgerConstructorData: Array<TBurger>;
+};
+
+const BurgerIngredientGroups: FC<IBurgerIngredientGroupsProps> = (props) => {
   return (
     <section >
       <p className="text text_type_main-medium pb-6" ref={props.tilteRef}>{props.text}</p>
@@ -27,19 +36,18 @@ const BurgerIngredientGroups = (props) => {
 const BurgerIngredients = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const data = useSelector(state => state.allIngredients.items);
-  const burgerConstructorData = useSelector(state => state.selectedIngredients.items);
-  const flagClear = useSelector(state => state.curentIngredient.flagClear);
-  const curentIngredient = useSelector(state => state.curentIngredient.item);
-  const { isShowModal } = useSelector(state => state.modal);
+  const state = useLocation().state as CustomizedState;
+  const data = useSelector((state: any) => state.allIngredients.items) as Array<TBurger>;
+  const burgerConstructorData = useSelector((state: any) => state.selectedIngredients.items) as Array<TBurger>;
+  const flagClear = useSelector((state: any) => state.curentIngredient.flagClear) as boolean;
+  const curentIngredient = useSelector((state: any) => state.curentIngredient.item) as TBurger;
+  const isShowModal = useSelector((state: any) => state.modal.isShowModal) as boolean;
 
   const flagIngridientShowModal = localStorage.getItem(FLAG_INGRIDIENT_SHOW_MODAL);
 
-  const bunRef = useRef(null);
-  const sauceRef = useRef(null);
-  const mainRef = useRef(null);
+  const bunRef = useRef<HTMLParagraphElement>(null) as MutableRefObject<HTMLParagraphElement>;
+  const sauceRef = useRef<HTMLParagraphElement>(null) as MutableRefObject<HTMLParagraphElement>;
+  const mainRef = useRef<HTMLParagraphElement>(null) as MutableRefObject<HTMLParagraphElement>;
 
   const [startShowModal, setStartShowModal] = useState(false)
   const [currentTab, setCurrentTab] = useState(INGREDIENT_BUN.key)
@@ -97,39 +105,45 @@ const BurgerIngredients = () => {
   // Если есть ID выбранного индридиента(при первоначальной загрузке страницы) - фиксируем это в редьюсере:
   useEffect(
     () => {
-      if (data.length > 0 && location.state?.ingredientId !== undefined) {
-        dispatch(setCurentIngredient(data.filter(x => x._id === location.state?.ingredientId)[0]));
+      if (data.length > 0 && state?.ingredientId !== undefined) {
+        dispatch(setCurentIngredient(data.filter(x => x._id === state?.ingredientId)[0]));
       }
     },
-    [location, data, dispatch]
+    [state, data, dispatch]
   );
 
-  const handleTabClick = (tab) => {
+  const handleTabClick = (tab: string) => {
     setCurrentTab(tab);
     switch (tab) {
       case INGREDIENT_BUN.key:
         {
-          bunRef.current.scrollIntoView({ behavior: "smooth" });
+          if (bunRef.current) {
+            bunRef.current.scrollIntoView({ behavior: "smooth" });
+          }
           break;
         }
       case INGREDIENT_SAUCE.key:
         {
-          sauceRef.current.scrollIntoView({ behavior: "smooth" });
+          if (sauceRef.current) {
+            sauceRef.current!.scrollIntoView({ behavior: "smooth" });
+          }
           break;
         }
       case INGREDIENT_MAIN.key:
         {
-          mainRef.current.scrollIntoView({ behavior: "smooth" });
+          if (mainRef.current) {
+            mainRef.current!.scrollIntoView({ behavior: "smooth" });
+          }
           break;
         }
       default: { break; }
     }
   }
 
-  const handleScroll = (e) => {
+  const handleScroll = (e: SyntheticEvent) => {
     const y = e.currentTarget.getBoundingClientRect().y + 50;
-    const sauceY = mainRef.current.getBoundingClientRect().y;
-    const mainY = sauceRef.current.getBoundingClientRect().y;
+    const sauceY = mainRef.current!.getBoundingClientRect().y;
+    const mainY = sauceRef.current!.getBoundingClientRect().y;
     sauceY < y ? setCurrentTab(INGREDIENT_MAIN.key) : mainY < y ? setCurrentTab(INGREDIENT_SAUCE.key) : setCurrentTab(INGREDIENT_BUN.key);
   }
 
@@ -141,9 +155,15 @@ const BurgerIngredients = () => {
         <>
           <p className="text text_type_main-large mt-10 mb-5">Соберите бургер</p>
           <div className={styles.tabs}>
-            <Tab active={currentTab === INGREDIENT_BUN.key} value={INGREDIENT_BUN.key} onClick={handleTabClick}>{INGREDIENT_BUN.name}</Tab>
-            <Tab active={currentTab === INGREDIENT_SAUCE.key} value={INGREDIENT_SAUCE.key} onClick={handleTabClick}>{INGREDIENT_SAUCE.name}</Tab>
-            <Tab active={currentTab === INGREDIENT_MAIN.key} value={INGREDIENT_MAIN.key} onClick={handleTabClick}>{INGREDIENT_MAIN.name}</Tab>
+            <Tab active={currentTab === INGREDIENT_BUN.key} value={INGREDIENT_BUN.key} onClick={handleTabClick}>
+              {INGREDIENT_BUN.name}
+            </Tab>
+            <Tab active={currentTab === INGREDIENT_SAUCE.key} value={INGREDIENT_SAUCE.key} onClick={handleTabClick}>
+              {INGREDIENT_SAUCE.name}
+            </Tab>
+            <Tab active={currentTab === INGREDIENT_MAIN.key} value={INGREDIENT_MAIN.key} onClick={handleTabClick}>
+              {INGREDIENT_MAIN.name}
+            </Tab>
           </div>
           <div className={`${styles.group_list} custom_scroll mt-10`} onScroll={handleScroll}>
             <BurgerIngredientGroups tilteRef={bunRef} text={INGREDIENT_BUN.name} data={buns} burgerConstructorData={burgerConstructorData} />
