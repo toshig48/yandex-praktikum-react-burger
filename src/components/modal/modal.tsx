@@ -1,23 +1,22 @@
 import ReactDOM from 'react-dom';
 import { useEffect, memo, useCallback, SyntheticEvent } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { closeModal } from '../../services/slices';
-
+import { useAppDispatch, useAppSelector } from '../../hooks/dispatch';
 import styles from './modal.module.css';
 
 const modalRoot = document.getElementById("react-modals") as HTMLElement;
 
 const Modal = () => {
-  const dispatch = useDispatch();
-  const { titleModal, contentModal } = useSelector((state:any) => state.modal);
+  const dispatch = useAppDispatch();
+  const { titleModal, contentModal } = useAppSelector(state => state.modal);
 
   const handleCloseModal = useCallback(() => {
     dispatch(closeModal());
-  }, [ dispatch]);
+  }, [dispatch]);
 
   const close = useCallback((e: KeyboardEvent) => {
     if (e.key === "Escape" || e.key === "Esc") {
@@ -30,7 +29,7 @@ const Modal = () => {
     return () => window.removeEventListener('keydown', close)
   }, [close])
 
-  const handleDivClick = useCallback((e : SyntheticEvent) => {
+  const handleDivClick = useCallback((e: SyntheticEvent) => {
     e.stopPropagation();
   }, []);
 

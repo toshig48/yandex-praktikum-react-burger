@@ -1,25 +1,27 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TTokenState } from "../types";
+import { SliceNames } from '../constant'
 
-const tokenInitialState = {
+const tokenInitialState: TTokenState = {
   loading: false,
   error: ''
 };
 
 const tokenSlice = createSlice({
-  name: 'token',
+  name: SliceNames.TOKEN,
   initialState: tokenInitialState,
   reducers: {
-    tokenLoading: (state) => {
+    tokenLoading: (state: TTokenState) => {
       state.loading = true;
       state.error = '';
     },
 
-    tokenReceived: (state) => {
+    tokenReceived: (state: TTokenState) => {
       state.loading = false;
       state.error = '';
     },
 
-    tokenError: (state, action) => {
+    tokenError: (state: TTokenState, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
     },

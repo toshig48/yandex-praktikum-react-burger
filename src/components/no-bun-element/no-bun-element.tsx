@@ -1,12 +1,12 @@
 import { FC, memo, MutableRefObject } from "react";
-import { useDispatch } from 'react-redux';
 import { useRef } from 'react'
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
-import { TBurger } from '../../services/type';
+import { TBurger } from '../../services/types';
 
 import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { removeIngredient, moveIngredient } from '../../services/slices';
+import { useAppDispatch } from '../../hooks/dispatch';
 
 import styles from "./no-bun-element.module.css";
 
@@ -17,7 +17,7 @@ interface INoBunElement {
 
 const NoBunElement: FC<INoBunElement> = (props) => {
     const { item, index } = props;
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const handleRemoveElement = (index: number) => {
         dispatch(removeIngredient(index));

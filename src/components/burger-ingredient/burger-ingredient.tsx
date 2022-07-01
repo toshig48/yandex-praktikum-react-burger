@@ -1,5 +1,4 @@
 import { FC, memo } from 'react';
-import { useDispatch } from 'react-redux';
 import { useDrag } from 'react-dnd';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -9,15 +8,15 @@ import { setCurentIngredient } from '../../services/slices';
 import { FLAG_INGRIDIENT_SHOW_MODAL } from '../../services/utils/config';
 
 import styles from './burger-ingredient.module.css';
-import { TBurger } from '../../services/type';
-
+import { TBurger } from '../../services/types';
+import { useAppDispatch } from '../../hooks/dispatch'
 interface IBurgerIngredientProps {
   item: TBurger;
   count: number;
 };
 
 const BurgerIngredient: FC<IBurgerIngredientProps> = (props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const pathname = useLocation().pathname;
   const { item, count } = props;
 

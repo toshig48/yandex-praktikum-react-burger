@@ -1,39 +1,40 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TPasswordState } from "../types";
+import { SliceNames } from '../constant'
 
-const passwordInitialState = {
+const passwordInitialState: TPasswordState = {
   loading: false,
   allowResetPassword: false,
   error: ''
 };
 
 const passwordSlice = createSlice({
-  name: 'password',
+  name: SliceNames.PASSWORD,
   initialState: passwordInitialState,
   reducers: {
-    passwordLoading: (state) => {
+    passwordLoading: (state: TPasswordState) => {
       state.loading = true;
       state.error = '';
     },
 
-    forgotPasswordReceived: (state) => {
+    forgotPasswordReceived: (state: TPasswordState) => {
       state.loading = false;
       state.allowResetPassword = true;
       state.error = '';
     },
 
-    resetPasswordReceived: (state) => {
+    resetPasswordReceived: (state: TPasswordState) => {
       state.loading = false;
       state.allowResetPassword = false;
       state.error = '';
     },
 
-    passwordError: (state, action) => {
+    passwordError: (state: TPasswordState, action: PayloadAction<string>) => {
       state.loading = false;
-      state.loggedIn = false;
       state.error = action.payload;
     },
 
-    passwordClearError: (state) => {
+    passwordClearError: (state: TPasswordState) => {
       state.error = '';
     }
   }

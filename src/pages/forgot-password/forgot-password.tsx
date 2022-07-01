@@ -1,6 +1,5 @@
 import { memo, SyntheticEvent, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -8,15 +7,16 @@ import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-component
 import { useFormAndValidation } from '../../hooks/use-form-and-validation';
 import { fetchForgotPasswordUser } from '../../services/thunks/index';
 import { passwordClearError } from '../../services/slices/password';
+import { useAppDispatch, useAppSelector } from '../../hooks/dispatch';
 
 import styles from './forgot-password.module.css';
 
 const ForgotPasswordPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const { values, handleChange } = useFormAndValidation();
-  const { loading, allowResetPassword, error } = useSelector((state: any) => state.password);
+  const { loading, allowResetPassword, error } = useAppSelector(state => state.password);
 
   useEffect(() => {
     dispatch(passwordClearError());
@@ -30,7 +30,7 @@ const ForgotPasswordPage = () => {
 
   const handlOnsubmin = async (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(fetchForgotPasswordUser(values.email) as any);
+    dispatch(fetchForgotPasswordUser(values.email));
   }
 
   return (

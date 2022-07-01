@@ -1,0 +1,19 @@
+.flex_item {
+    flex-basis: calc(50% - calc(var(--offset-base-size) * 2));
+}
+
+.order_list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    grid-gap: 5px;
+    gap: 5px;
+}
+
+.order_num {
+    color: #00CCCC;
+}

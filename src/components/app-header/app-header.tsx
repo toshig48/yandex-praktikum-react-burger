@@ -17,9 +17,9 @@ const AppHeader = () => {
               Конструктор
             </span>
           </Link>
-          <Link className={`${styles.menu_item_a} p-4 mt-4 mb-4`} to="/list">
-            <ListIcon type={pathname === '/list' ? 'primary' : 'secondary'} />
-            <span className={`${pathname !== '/list' && "secondary"} text text_type_main-default ml-2`}>
+          <Link className={`${styles.menu_item_a} p-4 mt-4 mb-4`} to="/feed">
+            <ListIcon type={pathname === '/feed ' ? 'primary' : 'secondary'} />
+            <span className={`${pathname !== '/feed ' && "secondary"} text text_type_main-default ml-2`}>
               Лента заказов
             </span>
           </Link>

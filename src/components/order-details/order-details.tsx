@@ -1,7 +1,7 @@
 import { memo } from 'react';
-import { useSelector } from 'react-redux';
 
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useAppSelector } from '../../hooks/dispatch';
 
 import image1 from '../../images/order/vector-1.svg'
 import image2 from '../../images/order/vector-2.svg'
@@ -9,10 +9,10 @@ import image3 from '../../images/order/vector-3.svg'
 import styles from './order-details.module.css';
 
 const OrderDetails = () => {
-  const orderNumber = useSelector((state:any) => state.order.order.number);
+  const orderNumber = useAppSelector(state => state.order.order?.number);
   return (
     <>
-      <p className={`${styles.order_number} text text_type_digits-large mt-20`}>{orderNumber} </p>
+      <p className='order_number_shadow text text_type_digits-large mt-20'>{orderNumber} </p>
       <p className="text text_type_main-medium mt-8 mb-15">Идентификатор заказа</p>
       <div className={styles.wrapper_check_mark_icon}>
         <CheckMarkIcon type={'primary'} />

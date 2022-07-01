@@ -1,6 +1,6 @@
 import { ReactChild } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { CustomizedState } from '../services/interface';
+import { CustomizedState } from '../services/interfaces';
 
 type TProtectedRouteProps = {
   redirectСondition: boolean,

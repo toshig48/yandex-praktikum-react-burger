@@ -1,21 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TModalState, TShowModal } from "../types";
+import { SliceNames } from '../constant'
 
-const modalInitialState = {
+const modalInitialState: TModalState = {
   isShowModal: false,
   titleModal: '',
   contentModal: null
 };
 
 const modalSlice = createSlice({
-  name: 'modal',
+  name: SliceNames.MODAL,
   initialState: modalInitialState,
   reducers: {
-    showModal: (state, action) => {
+    showModal: (state: TModalState, action: PayloadAction<TShowModal>) => {
       state.isShowModal = true;
       state.titleModal = action.payload.title;
       state.contentModal = action.payload.content;
     },
-    closeModal: (state) => {
+    closeModal: (state: TModalState) => {
       state.isShowModal = false;
       state.titleModal = '';
       state.contentModal = null;

@@ -1,6 +1,13 @@
-.main {
-    margin: calc(100vh * 0.30) auto 0 auto;
-    width: 500px;
-    position: relative;
-    text-align: center !important;
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.flex_item {
+    flex-basis: calc(50% - calc(var(--offset-base-size) * 5));
+}
+
+.flex_item__statistic {
+    composes: flex_item;
+    margin-top: 100px;
 }

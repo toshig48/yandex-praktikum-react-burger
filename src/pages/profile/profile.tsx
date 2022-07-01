@@ -1,19 +1,19 @@
 import { memo } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link, useLocation, Routes, Route } from 'react-router-dom';
 
 import ProfileUser from '../../components/profile-user/profile-user';
 
 import { fetchLogoutUser } from '../../services/thunks/index';
+import { useAppDispatch } from '../../hooks/dispatch';
 
 import styles from './profile.module.css';
 
 const ProfilePage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const pathname = useLocation().pathname;
 
   const handlExit = async () => {
-    dispatch(fetchLogoutUser() as any);
+    dispatch(fetchLogoutUser());
   }
 
   return (

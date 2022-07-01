@@ -1,7 +1,8 @@
 import { getIngredientsData } from '../utils/burger-api';
 import { allIngredientsLoading, allIngredientsReceived, allIngredientsError } from '../slices';
+import { AppDispatch, AppThunk } from '../types';
 
-export const fetchAllIngredients = () => async (dispatch: any) => {
+export const fetchAllIngredients = (): AppThunk => async (dispatch: AppDispatch) => {
   dispatch(allIngredientsLoading());
   await getIngredientsData()
     .then((data) => {
