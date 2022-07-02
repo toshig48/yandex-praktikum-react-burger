@@ -1,4 +1,4 @@
-import { memo, SyntheticEvent, useEffect } from 'react';
+import { FC, memo, SyntheticEvent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/dispatch';
 
 import styles from './register.module.css';
 
-const RegisterPage = () => {
+const RegisterPage: FC = () => {
   const dispatch = useAppDispatch();
 
   const { values, handleChange } = useFormAndValidation();

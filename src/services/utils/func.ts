@@ -1,22 +1,72 @@
 import moment from 'moment';
 import 'moment/locale/ru'
-export const GetDateStringForOrdersList = (dateStr: string): string => {
+import { Status } from '../constant';
+export const getDateStringForOrdersList = (date: Date): string => {
     moment.locale('ru');
     const now = new Date();
-    const date = new Date(dateStr);
-    const days = Math.abs(Number(now) - Number(date)) / (3600 * 1000 * 24);
+    const todayMoment = moment({
+        year: now.getFullYear(),
+        month: now.getMonth(),
+        day: now.getDate()
+    });
+    const dateMoment = moment({
+        year: date.getFullYear(),
+        month: date.getMonth(),
+        day: date.getDate()
+    });
+    const days = todayMoment.diff(dateMoment, 'days');
     let ret = "";
-    if (days <= 1) {
+    if (days < 1) {
         ret = "Сегодня";
     }
     else {
-        if (days <= 2) {
+        if (days < 2) {
             ret = "Вчера";
         }
         else {
-            ret = `${days} дней назад`;
+            ret = `${Math.round(days)} ${getNoun(days, 'день', 'дня', 'дней')} назад`;
         }
     }
-    //${moment(date).fromNow()}
     return `${ret}, ${moment(date).format('HH:mm')}`;
+}
+
+function getNoun(number: number, one: string, two: string, five: string) {
+    let n = Math.abs(number);
+    n %= 100;
+    if (n >= 5 && n <= 20) {
+        return five;
+    }
+    n %= 10;
+    if (n === 1) {
+        return one;
+    }
+    if (n >= 2 && n <= 4) {
+        return two;
+    }
+    return five;
+}
+
+export function getStatus(value: string): string {
+    switch (value) {
+        case Status.DONE:
+            {
+                return "Выполнен"
+            }
+        case Status.PENDING:
+            {
+                return "Готовиться"
+            }
+        case Status.CREATE:
+            {
+                return "Создан"
+            }
+        case Status.CREATE:
+            {
+                return "Отменён"
+            }
+        default:
+            {
+                return value;
+            }
+    }
 }

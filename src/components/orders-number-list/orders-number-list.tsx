@@ -1,20 +1,20 @@
-import { memo, useMemo } from 'react';
+import { FC, memo, useMemo } from 'react';
 
 import styles from './orders-number-list.module.css';
 
-type TModalOverlayProps = {
+type TOrdersNumberListProps = {
   title: string;
   ordersId: Array<number> | undefined;
   isDone: boolean;
 };
 
-const OrdersNumberList = (props: TModalOverlayProps) => {
+const OrdersNumberList: FC<TOrdersNumberListProps> = (props) => {
   const className = useMemo(
-    () => props.isDone ? styles.order_num : '',
+    () => props.isDone ? 'status_done' : '',
     [props.isDone]
   );
   return (
-    <div className={styles.flex_item}>
+    <div>
       <p className="text text_type_main-medium mb-4">{props.title}:</p>
       <ul className={styles.order_list}>
         {props.ordersId && props.ordersId.map((data) =>

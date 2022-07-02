@@ -3,12 +3,12 @@ import { useAppSelector } from '../../hooks/dispatch';
 
 import styles from './ingredient-details.module.css';
 
-interface IngredientCompositionProps {
+interface IIngredientCompositionProps {
   title: string;
   text: string;
 };
 
-const IngredientComposition: FC<IngredientCompositionProps> = (props) => {
+const IngredientComposition: FC<IIngredientCompositionProps> = (props) => {
   return (
     <div className='mr-5 secondary'>
       <p className="text text_type_main-default">{props.title} </p>
@@ -17,7 +17,7 @@ const IngredientComposition: FC<IngredientCompositionProps> = (props) => {
   );
 }
 
-const IngredientDetails = () => {
+const IngredientDetails: FC = () => {
   const data = useAppSelector(state => state.curentIngredient.item);
 
   if (!data) {

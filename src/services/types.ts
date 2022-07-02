@@ -53,8 +53,8 @@ export type TOrder = {
   }
   status: string;
   name: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   number: number;
   price: number;
 }

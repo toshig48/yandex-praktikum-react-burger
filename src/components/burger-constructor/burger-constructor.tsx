@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from "react-router-dom";
 
 import { ConstructorElement, Button, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import OrderDetails from "../order-details/order-details";
+import OrderDetails from "../order-create/order-create";
 import NoBunElement from "../no-bun-element/no-bun-element";
 
 import { INGREDIENT_BUN } from "../../services/utils/config";

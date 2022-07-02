@@ -15,6 +15,17 @@ a {
   color: inherit;
 }
 
+.d_flex_vertical_center {
+  display: flex;
+
+  align-items: center;
+}
+
+.d_flex_space_between {
+  display: flex;
+  justify-content: space-between;
+}
+
 .custom_scroll::-webkit-scrollbar {
   width: calc(var(--offset-base-size) * 2);
   height: 5px;
@@ -38,6 +49,10 @@ a {
 
 .secondary {
   color: #8585AD;
+}
+
+.status_done {
+  color: #00CCCC;
 }
 
 .text_center {

@@ -1,9 +1,9 @@
-import { memo } from 'react';
+import { FC, memo } from 'react';
 import { Link } from 'react-router-dom';
 
 import styles from './not-found.module.css';
 
-const NotFound404Page = () => {
+const NotFound404Page: FC = () => {
 
   return (
     <div className={styles.main}>

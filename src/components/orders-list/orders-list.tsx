@@ -1,25 +1,30 @@
-import { memo } from 'react';
+import { FC, memo, useMemo } from 'react';
 
 import { useAppSelector } from '../../hooks/dispatch';
+import Order from '../order/order';
+import { TBurger, TWSOrder } from '../../services/types';
 
 import styles from './orders-list.module.css';
-import Order from '../order/order';
-import { TBurger } from '../../services/types';
 
-const OrdersList = () => {
-  const orders = useAppSelector(state => state.wsAllOrders.orders);
+type TOrdersListProps = {
+  orders: Array<TWSOrder>;
+  isShowStatus: boolean;
+};
+
+const OrdersList: FC<TOrdersListProps> = (props) => {
   const burgerConstructorData = useAppSelector(state => state.allIngredients.items) as Array<TBurger>;
+  const className = useMemo(
+    () => props.isShowStatus ? styles.my_orders : styles.all_orders,
+    [props.isShowStatus]
+  );
   return (
-    <>
-      <p className="text text_type_main-large mt-10 mb-5">Лента заказов</p>
-      <ul className={`${styles.list} custom_scroll`} >
-        {
-          orders?.orders.map((item, index: number) => (
-            <Order key={index} item={item} index={index} allIngredients={burgerConstructorData} />
-          ))
-        }
-      </ul>
-    </>
+    <ul className={`${className} ${styles.list} custom_scroll`} >
+      {
+        props.orders.map((item, index: number) => (
+          <Order key={index} item={item} index={index} allIngredients={burgerConstructorData} isShowStatus={props.isShowStatus} />
+        ))
+      }
+    </ul>
   );
 }
 

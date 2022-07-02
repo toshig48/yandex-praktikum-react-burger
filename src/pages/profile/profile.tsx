@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { FC, memo } from 'react';
 import { Link, useLocation, Routes, Route } from 'react-router-dom';
 
 import ProfileUser from '../../components/profile-user/profile-user';
@@ -7,8 +7,9 @@ import { fetchLogoutUser } from '../../services/thunks/index';
 import { useAppDispatch } from '../../hooks/dispatch';
 
 import styles from './profile.module.css';
+import OrdersUser from '../../components/orders-user/orders-user';
 
-const ProfilePage = () => {
+const ProfilePage: FC = () => {
   const dispatch = useAppDispatch();
   const pathname = useLocation().pathname;
 
@@ -41,10 +42,10 @@ const ProfilePage = () => {
         </p>
       </div>
 
-      <div className="mt-30 ml-15">
+      <div className="ml-15">
         <Routes>
           <Route path='/' element={<ProfileUser />} />
-          <Route path='orders' element={<span>В разработке</span>} />
+          <Route path='orders' element={<OrdersUser />} />
         </Routes>
       </div>
     </>

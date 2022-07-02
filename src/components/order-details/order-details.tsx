@@ -1,27 +1,54 @@
-import { memo } from 'react';
+import { FC, memo, useMemo } from 'react';
 
-import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useAppSelector } from '../../hooks/dispatch';
 
-import image1 from '../../images/order/vector-1.svg'
-import image2 from '../../images/order/vector-2.svg'
-import image3 from '../../images/order/vector-3.svg'
-import styles from './order-details.module.css';
+import { TBurger, TWSOrder } from '../../services/types';
+import { Status } from '../../services/constant';
+import { getStatus } from '../../services/utils/func';
+import IngredientsList from '../ingredients-list/ingredients-list';
 
-const OrderDetails = () => {
-  const orderNumber = useAppSelector(state => state.order.order?.number);
+
+import styles from './order-details.module.css';
+import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+
+interface IOrderDetails {
+  item?: TWSOrder | null;
+};
+
+const OrderDetails: FC<IOrderDetails> = (props) => {
+  const item = props.item;
+  const allIngredients = useAppSelector(state => state.allIngredients.items) as Array<TBurger>;
+  const ingredients = useMemo(
+    () => allIngredients.filter(function (a) {
+      return item?.ingredients.indexOf(a._id) !== -1;
+    }),
+    [item, allIngredients]
+  );
+
+  const totalPrice = useMemo(
+    () => ingredients.reduce((partialSum: number, a: TBurger) => partialSum + a.price, 0),
+    [ingredients]
+  );
   return (
     <>
-      <p className='order_number_shadow text text_type_digits-large mt-20'>{orderNumber} </p>
-      <p className="text text_type_main-medium mt-8 mb-15">Идентификатор заказа</p>
-      <div className={styles.wrapper_check_mark_icon}>
-        <CheckMarkIcon type={'primary'} />
-        <img src={image3} className={styles.img_3} alt='image3' />
-        <img src={image2} className={styles.img_2} alt='image2' />
-        <img src={image1} className={styles.img_1} alt='image1' />
-      </div>
-      <p className="text text_type_main-default mt-15">Ваш заказ начали готовить</p>
-      <p className="text text_type_main-default secondary mt-2 mb-20">Дождитесь готовности на орбитальной станции</p>
+      {item &&
+        <div className={styles.main_div}>
+          <p className={`text text_type_digits-default ${styles.number}`}>#{item.number} </p>
+          <p className="text text_type_main-medium mt-10 mb-3">{item.name}</p>
+          <p className={item.status === Status.DONE ? 'status_done' : ''}>{getStatus(item.status)}</p>
+          <p className="text text_type_main-medium mt-15 mb-6">Состав:</p>
+          <IngredientsList ingredients={ingredients} />
+          <div className="d_flex_space_between mt-10">
+            <span className="secondary text text_type_main-default">{`${item.dateBeautifulString}`}</span>
+            <span className="ml-4">
+              <span className="text text_type_digits-medium mr-1">
+                {totalPrice}
+              </span>
+              <CurrencyIcon type={"primary"} />
+            </span>
+          </div>
+        </div>
+      }
     </>
   );
 }

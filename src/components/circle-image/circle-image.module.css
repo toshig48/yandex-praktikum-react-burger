@@ -1,0 +1,32 @@
+.img_circle {
+    width: 64px;
+    height: 64px;
+    position: relative;
+    display: inline-flex;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    background-image: linear-gradient(#000, #000), linear-gradient(63deg, #801ab3, #4c4cff);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    margin-left: -16px;
+}
+
+.img_circle:first-child {
+    margin-left: 0;
+}
+
+.img_circle img {
+    height: 55px;
+    margin-left: -23px;
+    margin-top: 6px;
+}
+
+.img_circle span {
+    margin-left: -64px;
+    margin-top: 22px;
+    z-index: 100;
+}
+
+.img_blackout {
+    opacity: 0.4;
+}

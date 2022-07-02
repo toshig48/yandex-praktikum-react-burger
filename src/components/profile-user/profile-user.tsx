@@ -1,4 +1,4 @@
-import { memo, useState, useEffect, SyntheticEvent } from 'react';
+import React, { memo, useState, useEffect, SyntheticEvent } from 'react';
 
 import { Input, Button, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -37,7 +37,7 @@ const ProfileUser = () => {
   }
 
   return (
-    <>
+    <div className="mt-30">
       <form onSubmit={handlOnsubmin} className="form mb-20">
         <div className="mb-6 custom_input">
           <Input
@@ -76,7 +76,7 @@ const ProfileUser = () => {
         error &&
         <p className="text text_type_main-default red mt-6">{error}</p>
       }
-    </>
+    </div>
   );
 }
 

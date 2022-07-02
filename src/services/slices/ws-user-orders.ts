@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { TWebSocketState, TWSOrders } from "../types";
 import { SliceNames } from '../constant'
+import { getDateStringForOrdersList } from '../utils/func';
 
 const webSocketInitialState: TWebSocketState = {
   isConnected: false,
@@ -34,6 +35,12 @@ const webSocketUserOrdersSlice = createSlice({
     },
 
     onUserOrdersMessage: (state: TWebSocketState, action: PayloadAction<TWSOrders>) => {
+      action.payload.orders.forEach(item => {
+        item.createdAt = new Date(item.createdAt);
+        item.updatedAt = new Date(item.updatedAt);
+        item.dateBeautifulString = getDateStringForOrdersList(item.createdAt);
+      });
+      action.payload.orders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
       state.orders = action.payload;
     },
   }

@@ -1,4 +1,4 @@
-import { memo, SyntheticEvent, useEffect } from 'react';
+import { FC, memo, SyntheticEvent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useFormAndValidation } from '../../hooks/use-form-and-validation';
@@ -9,7 +9,7 @@ import { userClear } from '../../services/slices/user';
 import { useAppDispatch, useAppSelector } from '../../hooks/dispatch';
 
 import styles from './login.module.css';
-const LoginPage = () => {
+const LoginPage: FC = () => {
   const dispatch = useAppDispatch();
 
   const { values, handleChange } = useFormAndValidation();

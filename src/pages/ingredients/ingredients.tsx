@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { FC, memo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import IngredientDetails from '../../components/ingredient-details/ingredient-details';
@@ -9,7 +9,7 @@ import { FLAG_INGRIDIENT_SHOW_MODAL } from '../../services/utils/config';
 import { useAppDispatch, useAppSelector } from '../../hooks/dispatch';
 
 import styles from './ingredients.module.css';
-const IngredientsPage = () => {
+const IngredientsPage: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

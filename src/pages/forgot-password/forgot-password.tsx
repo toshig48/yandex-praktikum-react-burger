@@ -1,4 +1,4 @@
-import { memo, SyntheticEvent, useEffect } from 'react';
+import { FC, memo, SyntheticEvent, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 
@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/dispatch';
 
 import styles from './forgot-password.module.css';
 
-const ForgotPasswordPage = () => {
+const ForgotPasswordPage: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

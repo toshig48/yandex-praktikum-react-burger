@@ -8,4 +8,11 @@ export enum SliceNames {
   TOKEN = 'TOKEN',
   USER = 'USER',
   WS = 'WS'
+}
+
+export enum Status {
+  DONE = 'done',
+  PENDING = 'pending',
+  CREATE = 'created',
+  CANSEL = 'canseled',
 } 

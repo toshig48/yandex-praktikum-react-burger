@@ -1,26 +1,7 @@
-.wrapper_check_mark_icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.main_div {
+    text-align: left;
 }
 
-.wrapper_check_mark_icon svg {
-    width: calc(var(--offset-base-size) * 10);
-    height: calc(var(--offset-base-size) * 10);
-}
-
-.wrapper_check_mark_icon img {
-    position: absolute;
-}
-
-.img_1 {
-    opacity: 0.95;
-}
-
-.img_2 {
-    opacity: 0.5;
-}
-
-.img_3 {
-    opacity: 0.6;
+.main_div .number {
+    text-align: center;
 }

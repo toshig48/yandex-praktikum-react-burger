@@ -10,11 +10,12 @@ import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, Res
 
 import { getRefreshToken } from '../../services/utils/token';
 import { fetchTokenUser, fetchAllIngredients, fetchGetInfoUser } from '../../services/thunks/index';
-import { showModal, wsAllOrdersInit, wsUserOrdersInit } from '../../services/slices';
+import { showModal } from '../../services/slices';
 import { useAppDispatch, useAppSelector } from '../../hooks/dispatch'
 
 import styles from './app.module.css';
 import { CustomizedState } from '../../services/interfaces';
+import OrderDetails from '../order-details/order-details';
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -25,22 +26,6 @@ const App = () => {
   const { allowResetPassword } = useAppSelector((state) => state.password);
   const { loggedIn, user } = useAppSelector((state) => state.user);
   const { isShowModal } = useAppSelector((state) => state.modal);
-  const isConnectedWSUserOrders = useAppSelector((state) => state.wsUserOrders.isConnected);
-  const isConnectedWSAllOrders = useAppSelector((state) => state.wsAllOrders.isConnected);
-
-  // Если пользователь залогинен и веб-сокет списка заказов пользователя не инициализирован - инициализируем:
-  useEffect(() => {
-    if (!isConnectedWSUserOrders && user) {
-      dispatch(wsUserOrdersInit());
-    }
-  }, [dispatch, isConnectedWSUserOrders, user])
-
-  // Если пользователь залогинен и веб-сокет списка всех заказов не инициализирован - инициализируем:
-  useEffect(() => {
-    if (!isConnectedWSAllOrders) {
-      dispatch(wsAllOrdersInit());
-    }
-  }, [dispatch, isConnectedWSAllOrders])
 
   // Если есть RefreshToken, то получаем AccessToken:
   useEffect(() => {
@@ -91,6 +76,7 @@ const App = () => {
           <div className={styles.main}>
             <Routes location={state?.pathnameModal !== undefined ? state?.pathnameModal : location.pathname}>
               <Route path='/' element={<HomePage />} />
+              <Route path='feed/:id' element={<OrderDetails />} />
               <Route path='feed' element={<Orders />} />
               <Route path='ingredients/:id' element={<IngredientDetails />} />
 
