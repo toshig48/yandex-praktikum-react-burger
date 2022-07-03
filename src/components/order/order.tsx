@@ -48,6 +48,7 @@ const Order: FC<IOrder> = (props) => {
     const handleOpenModal = () => {
         dispatch(showModal({
             title: "",
+            isNavigateGoBack: true,
             content: <OrderDetails item={item} />
         }));
     }

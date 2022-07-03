@@ -80,14 +80,13 @@ export type TWSOrders = {
 export type TShowModal = {
   title: string;
   content: ReactChild;
+  isNavigateGoBack: boolean;
 }
 
 export type TMoveIngredient = {
   dragIndex: number;
   hoverIndex: number;
 }
-
-
 
 export type TTokenState = {
   loading: boolean,
@@ -112,6 +111,7 @@ export type TSelectedIngredientsState = {
 export type TModalState = {
   isShowModal: boolean,
   titleModal: string,
+  isNavigateGoBack: boolean,
   contentModal: ReactChild | null
 };
 

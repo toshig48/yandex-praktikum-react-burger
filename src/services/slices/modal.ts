@@ -4,6 +4,7 @@ import { SliceNames } from '../constant'
 
 const modalInitialState: TModalState = {
   isShowModal: false,
+  isNavigateGoBack: false,
   titleModal: '',
   contentModal: null
 };
@@ -16,6 +17,7 @@ const modalSlice = createSlice({
       state.isShowModal = true;
       state.titleModal = action.payload.title;
       state.contentModal = action.payload.content;
+      state.isNavigateGoBack = action.payload.isNavigateGoBack;
     },
     closeModal: (state: TModalState) => {
       state.isShowModal = false;

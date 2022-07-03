@@ -11,3 +11,8 @@
     composes: flex_item;
     margin-top: 100px;
 }
+
+.div_order_detail {
+    margin-left: auto;
+    margin-right: auto;
+}

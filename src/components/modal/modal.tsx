@@ -7,15 +7,20 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { closeModal } from '../../services/slices';
 import { useAppDispatch, useAppSelector } from '../../hooks/dispatch';
 import styles from './modal.module.css';
+import { useNavigate } from 'react-router-dom';
 
 const modalRoot = document.getElementById("react-modals") as HTMLElement;
 
 const Modal = () => {
   const dispatch = useAppDispatch();
-  const { titleModal, contentModal } = useAppSelector(state => state.modal);
+  const navigate = useNavigate();
+  const { titleModal, contentModal, isNavigateGoBack } = useAppSelector(state => state.modal);
 
   const handleCloseModal = useCallback(() => {
     dispatch(closeModal());
+    if (isNavigateGoBack) {
+      navigate(-1);
+    }
   }, [dispatch]);
 
   const close = useCallback((e: KeyboardEvent) => {

@@ -82,7 +82,6 @@ const BurgerIngredients = () => {
         setStartShowModal(false);
         localStorage.removeItem(FLAG_INGRIDIENT_SHOW_MODAL);
         dispatch(unSetCurentIngredient());
-        navigate(-1);
       }
     },
     [curentIngredient, startShowModal, setStartShowModal, isShowModal, navigate, dispatch]
@@ -94,6 +93,7 @@ const BurgerIngredients = () => {
       if (curentIngredient && flagIngridientShowModal) {
         dispatch(showModal({
           title: "Детали ингредиента",
+          isNavigateGoBack: true,
           content: <IngredientDetails />
         }));
         setStartShowModal(true);

@@ -132,6 +132,7 @@ const BurgerConstructor = () => {
       if (error) {
         dispatch(showModal({
           title: "",
+          isNavigateGoBack: false,
           content: `Ошибка при создании заказа: ${error}`
         }));
       }
@@ -145,6 +146,7 @@ const BurgerConstructor = () => {
         setShowModalFlag(false);
         dispatch(showModal({
           title: "",
+          isNavigateGoBack: false,
           content: <OrderDetails />
         }));
       }

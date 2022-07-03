@@ -27,11 +27,13 @@ const webSocketAllOrdersSlice = createSlice({
     wsAllOrdersConnectionError: (state: TWebSocketState, action: PayloadAction<string>) => {
       state.isConnected = false;
       state.error = action.payload;
+      state.orders = null;
     },
 
     wsAllOrdersConnectionClosed: (state: TWebSocketState) => {
       state.isConnected = false;
       state.error = '';
+      state.orders = null;
     },
 
     onAllOrdersMessage: (state: TWebSocketState, action: PayloadAction<TWSOrders>) => {

@@ -1,13 +1,19 @@
 import { FC, memo, useEffect } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { OrderDetailPage } from '..';
 import OrdersList from '../../components/orders-list/orders-list';
 import OrdersStatistic from '../../components/orders-statistic/orders-statistic';
 import { useAppDispatch, useAppSelector } from '../../hooks/dispatch';
+import { CustomizedState } from '../../services/interfaces';
 import { wsAllOrdersInit, wsAllOrdersConnectionClosed } from '../../services/slices';
 
 import styles from './feed.module.css';
 
-const Orders: FC = () => {
+const FeedPage: FC = () => {
   const dispatch = useAppDispatch();
+  const location = useLocation();
+  const state = location.state as CustomizedState;
+
   const isConnectedWSAllOrders = useAppSelector((state) => state.wsAllOrders.isConnected);
   const orders = useAppSelector(state => state.wsAllOrders.orders);
   // Закрываем веб-сокет при покидании страницы:
@@ -20,19 +26,23 @@ const Orders: FC = () => {
     if (!isConnectedWSAllOrders) {
       dispatch(wsAllOrdersInit());
     }
-  }, [dispatch, isConnectedWSAllOrders])
+  }, [dispatch, isConnectedWSAllOrders]);
 
   return (
-    <>
-      <div className={`${styles.flex_item}`}>
-        <p className="text text_type_main-large mt-10 mb-5">Лента заказов</p>
-        {orders && <OrdersList orders={orders.orders} isShowStatus={false} />}
-      </div>
-      <div className={`${styles.flex_item__statistic}`}>
-        <OrdersStatistic />
-      </div>
-    </>
+    <Routes location={state?.pathnameModal !== undefined ? state?.pathnameModal : location.pathname}>
+      <Route path='/' element={orders &&
+        <>
+          <div className={`${styles.flex_item}`}>
+            <p className="text text_type_main-large mt-10 mb-5">Лента заказов</p>
+            {<OrdersList orders={orders.orders} isShowStatus={false} />}
+          </div>
+          <div className={`${styles.flex_item__statistic}`}>
+            <OrdersStatistic />
+          </div>
+        </>} />
+      <Route path='/:id' element={<OrderDetailPage orders={orders?.orders} />} />
+    </Routes>
   );
 }
 
-export default memo(Orders);
+export default memo(FeedPage);

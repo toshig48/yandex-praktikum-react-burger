@@ -29,6 +29,7 @@ const OrderDetails: FC<IOrderDetails> = (props) => {
     () => ingredients.reduce((partialSum: number, a: TBurger) => partialSum + a.price, 0),
     [ingredients]
   );
+
   return (
     <>
       {item &&

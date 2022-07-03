@@ -6,7 +6,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import AppHeader from '../app-header/app-header';
 import { ProtectedRoute } from '../protected-route';
 import Modal from '../modal/modal';
-import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, IngredientDetails, NotFound404Page, Orders } from '../../pages';
+import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, IngredientDetails, NotFound404Page, FeedPage } from '../../pages';
 
 import { getRefreshToken } from '../../services/utils/token';
 import { fetchTokenUser, fetchAllIngredients, fetchGetInfoUser } from '../../services/thunks/index';
@@ -15,7 +15,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/dispatch'
 
 import styles from './app.module.css';
 import { CustomizedState } from '../../services/interfaces';
-import OrderDetails from '../order-details/order-details';
+import OrdersUser from '../orders-user/orders-user';
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -55,6 +55,7 @@ const App = () => {
       if (error) {
         dispatch(showModal({
           title: "",
+          isNavigateGoBack: false,
           content: `Ошибка при получении данных от API: ${error}`
         }));
       }
@@ -76,8 +77,7 @@ const App = () => {
           <div className={styles.main}>
             <Routes location={state?.pathnameModal !== undefined ? state?.pathnameModal : location.pathname}>
               <Route path='/' element={<HomePage />} />
-              <Route path='feed/:id' element={<OrderDetails />} />
-              <Route path='feed' element={<Orders />} />
+              <Route path='feed/*' element={<FeedPage />} />
               <Route path='ingredients/:id' element={<IngredientDetails />} />
 
               <Route element={<ProtectedRoute redirectСondition={loggedIn} redirectPath="/" />}>
