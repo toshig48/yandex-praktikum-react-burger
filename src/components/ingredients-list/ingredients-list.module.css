@@ -23,3 +23,8 @@
 .compositions div:last-child {
     margin-right: 0;
 }
+
+.price {
+    width: 220px;
+    text-align: right;
+}

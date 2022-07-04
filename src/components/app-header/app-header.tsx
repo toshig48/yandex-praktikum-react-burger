@@ -11,7 +11,7 @@ const AppHeader = () => {
     <header className={styles.header}>
       <nav className={styles.menu}>
         <div className={styles.menu_item}>
-          <Link className={`${styles.menu_item_a} p-4 mt-4 mb-4`} to="/">
+          <Link className={`${styles.menu_item_a} pr-4 mt-4 mb-4`} to="/">
             <BurgerIcon type={pathname === '/' ? 'primary' : 'secondary'} />
             <span className={`${pathname !== '/' && "secondary"} text text_type_main-default ml-2`}>
               Конструктор
@@ -30,7 +30,7 @@ const AppHeader = () => {
           </Link>
         </div>
         <div className={styles.menu_item}>
-          <Link className={`${styles.menu_item_a} p-4 mt-4 mb-4`} to="profile">
+          <Link className={`${styles.menu_item_a} mt-4 mb-4`} to="profile">
             <ProfileIcon type={pathname.indexOf('/profile') ? 'secondary' : 'primary'} />
             <span className={`${pathname.indexOf('/profile') && "secondary"} text text_type_main-default ml-2`}>
               Личный кабинет

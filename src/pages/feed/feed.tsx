@@ -16,6 +16,7 @@ const FeedPage: FC = () => {
 
   const isConnectedWSAllOrders = useAppSelector((state) => state.wsAllOrders.isConnected);
   const orders = useAppSelector(state => state.wsAllOrders.orders);
+  const isShowModal = useAppSelector(state => state.modal.isShowModal);
   // Закрываем веб-сокет при покидании страницы:
   useEffect(() => {
     return () => { dispatch(wsAllOrdersConnectionClosed()); }
@@ -29,7 +30,7 @@ const FeedPage: FC = () => {
   }, [dispatch, isConnectedWSAllOrders]);
 
   return (
-    <Routes location={state?.pathnameModal !== undefined ? state?.pathnameModal : location.pathname}>
+    <Routes location={state?.pathnameModal !== undefined && isShowModal ? state?.pathnameModal : location.pathname}>
       <Route path='/' element={orders &&
         <>
           <div className={`${styles.flex_item}`}>

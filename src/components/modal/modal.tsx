@@ -21,7 +21,7 @@ const Modal = () => {
     if (isNavigateGoBack) {
       navigate(-1);
     }
-  }, [dispatch]);
+  }, [dispatch, isNavigateGoBack, navigate]);
 
   const close = useCallback((e: KeyboardEvent) => {
     if (e.key === "Escape" || e.key === "Esc") {

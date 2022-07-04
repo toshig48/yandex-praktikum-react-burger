@@ -1,6 +1,7 @@
 import moment from 'moment';
 import 'moment/locale/ru'
 import { Status } from '../constant';
+import { TBurger, TBurgerGroupById } from '../types';
 export const getDateStringForOrdersList = (date: Date): string => {
     moment.locale('ru');
     const now = new Date();
@@ -60,7 +61,7 @@ export function getStatus(value: string): string {
             {
                 return "Создан"
             }
-        case Status.CREATE:
+        case Status.CANSEL:
             {
                 return "Отменён"
             }
@@ -70,3 +71,17 @@ export function getStatus(value: string): string {
             }
     }
 }
+
+export function groupIngredientsById(array: Array<TBurger>): Array<TBurgerGroupById> {
+    return array.reduce((result: Array<TBurgerGroupById>, currentValue: any) => {
+        let index = result.findIndex(x => x.item === currentValue);
+
+        if (index > -1) {
+            result[index].count++;
+        }
+        else {
+            result.push({ count: 1, item: currentValue });
+        }
+        return result;
+    }, []);
+};

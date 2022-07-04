@@ -1,5 +1,5 @@
 import { FC, memo, useMemo } from 'react';
-import { Link, useLocation, Routes, Route, useParams } from 'react-router-dom';
+import { Link, useLocation, Routes, Route } from 'react-router-dom';
 
 import ProfileUser from '../../components/profile-user/profile-user';
 
@@ -15,7 +15,6 @@ const ProfilePage: FC = () => {
   const location = useLocation();
   const state = location.state as CustomizedState;
   const pathname = location.pathname;
-  const urlParams = useParams();
 
   const isShowModal = useAppSelector(state => state.modal.isShowModal);
 
@@ -27,11 +26,12 @@ const ProfilePage: FC = () => {
     () => pathname === '/profile' || pathname === '/profile/orders' || isShowModal,
     [pathname, isShowModal]
   );
+
   return (
     <>
       {
         showLeftMenu &&
-        <div className={`mt-30 ${styles.left_menu}`}>
+        <div className={`mt-30 mr-15 ${styles.left_menu}`}>
           <ul>
             <li>
               <Link to="/profile">
@@ -50,7 +50,12 @@ const ProfilePage: FC = () => {
             </li>
           </ul>
           <p className="text text_type_main-default text_color_inactive mt-30">
-            В этом разделе вы можете изменить свои персональные данные
+            {
+              pathname === '/profile' ?
+                <span>В этом разделе вы можете изменить свои персональные данные</span> :
+                pathname.indexOf('/profile/orders') >= 0 ?
+                  <span>В этом разделе вы можете просмотреть свою историю заказов</span> : <></>
+            }
           </p>
         </div>
       }

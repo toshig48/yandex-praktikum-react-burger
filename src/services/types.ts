@@ -18,6 +18,11 @@ export type TBurger = {
   index: number;
 };
 
+export type TBurgerGroupById = {
+  item: TBurger;
+  count: number
+};
+
 export type TPosition = 'top' | 'bottom';
 
 export type TCheckSuccess<T> = T & {

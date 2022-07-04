@@ -14,7 +14,7 @@ const OrderDetailPage: FC<TOrderDetailPageProps> = (props) => {
   const orderId = urlParams.id;
   const orders = props.orders;
   const orderForDetail: TWSOrder | null = useMemo(
-    () => orders && orderId !== undefined ? orders.find(item => item._id == orderId) as TWSOrder : null,
+    () => orders && orderId !== undefined ? orders.find(item => item._id === orderId) as TWSOrder : null,
     [orders, orderId]
   );
   return (

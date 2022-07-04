@@ -36,8 +36,8 @@ const Order: FC<IOrder> = (props) => {
     );
 
     const totalPrice = useMemo(
-        () => ingredients.reduce((partialSum: number, a: TBurger) => partialSum + a.price, 0),
-        [ingredients]
+        () => ingredients.reduce((partialSum: number, a: TBurger) => partialSum + (a.price * item.ingredients.filter(x => x === a._id).length), 0),
+        [ingredients, item]
     );
 
     const ingredients_count = useMemo(

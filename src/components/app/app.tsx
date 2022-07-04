@@ -5,17 +5,17 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 
 import AppHeader from '../app-header/app-header';
 import { ProtectedRoute } from '../protected-route';
-import Modal from '../modal/modal';
 import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, IngredientDetails, NotFound404Page, FeedPage } from '../../pages';
 
 import { getRefreshToken } from '../../services/utils/token';
 import { fetchTokenUser, fetchAllIngredients, fetchGetInfoUser } from '../../services/thunks/index';
 import { showModal } from '../../services/slices';
 import { useAppDispatch, useAppSelector } from '../../hooks/dispatch'
+import { CustomizedState } from '../../services/interfaces';
+
+import Modal from '../modal/modal';
 
 import styles from './app.module.css';
-import { CustomizedState } from '../../services/interfaces';
-import OrdersUser from '../orders-user/orders-user';
 
 const App = () => {
   const dispatch = useAppDispatch();
