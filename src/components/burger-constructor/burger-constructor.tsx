@@ -1,17 +1,17 @@
 import { useEffect, useMemo, memo, useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from "react-router-dom";
 
 import { ConstructorElement, Button, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import OrderDetails from "../order-details/order-details";
+import OrderDetails from "../order-create/order-create";
 import NoBunElement from "../no-bun-element/no-bun-element";
 
 import { INGREDIENT_BUN } from "../../services/utils/config";
 import { addIngredient, showModal } from '../../services/slices';
-import { TBurger, TPosition } from '../../services/type';
+import { TBurger, TPosition } from '../../services/types';
 import { fetchCreateOrder } from '../../services/thunks/index';
+import { useAppDispatch, useAppSelector } from '../../hooks/dispatch'
 
 import styles from "./burger-constructor.module.css";
 
@@ -79,8 +79,8 @@ const BunElement = ({ data, position }: TBunElementProps) => {
 }
 
 const BurgerConstructor = () => {
-  const dispatch = useDispatch();
-  const { loggedIn } = useSelector((state: any) => state.user);
+  const dispatch = useAppDispatch();
+  const { loggedIn } = useAppSelector(state => state.user);
   const navigate = useNavigate();
 
   const moveItem = (item: TBurger) => {
@@ -97,8 +97,8 @@ const BurgerConstructor = () => {
     })
   });
 
-  const burgerConstructorData = useSelector((state: any) => state.selectedIngredients.items) as Array<TBurger>;
-  const { loading, order, error } = useSelector((state: any) => state.order);
+  const burgerConstructorData = useAppSelector(state => state.selectedIngredients.items) as Array<TBurger>;
+  const { loading, order, error } = useAppSelector(state => state.order);
 
   const bunIngredient = useMemo(
     () => burgerConstructorData.filter(x => x.type === INGREDIENT_BUN.key)[0],
@@ -119,7 +119,7 @@ const BurgerConstructor = () => {
 
   const handleCreateOrder = async () => {
     if (loggedIn) {
-      dispatch(fetchCreateOrder(burgerConstructorData.map(item => item._id)) as any);
+      dispatch(fetchCreateOrder(burgerConstructorData.map(item => item._id)));
       setShowModalFlag(true);
     }
     else {
@@ -132,6 +132,7 @@ const BurgerConstructor = () => {
       if (error) {
         dispatch(showModal({
           title: "",
+          isNavigateGoBack: false,
           content: `Ошибка при создании заказа: ${error}`
         }));
       }
@@ -141,10 +142,11 @@ const BurgerConstructor = () => {
 
   useEffect(
     () => {
-      if (order.number > 0 && showModalFlag) {
+      if (order != null && order.number > 0 && showModalFlag) {
         setShowModalFlag(false);
         dispatch(showModal({
           title: "",
+          isNavigateGoBack: false,
           content: <OrderDetails />
         }));
       }

@@ -6,6 +6,7 @@ import RegisterPage from './register/register';
 import ResetPasswordPage from './reset-password/reset-password';
 import IngredientDetails from './ingredients/ingredients';
 import NotFound404Page from './not-found/not-found';
-import Orders from './orders/orders';
+import FeedPage from './feed/feed';
+import OrderDetailPage from './order-detail/order-detail';
 
-export { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, IngredientDetails, NotFound404Page, Orders };
+export { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, IngredientDetails, NotFound404Page, FeedPage, OrderDetailPage };

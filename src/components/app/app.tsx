@@ -1,50 +1,51 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
 import AppHeader from '../app-header/app-header';
 import { ProtectedRoute } from '../protected-route';
-import Modal from '../modal/modal';
-import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, IngredientDetails, NotFound404Page, Orders } from '../../pages';
+import { ForgotPasswordPage, LoginPage, ProfilePage, HomePage, RegisterPage, ResetPasswordPage, IngredientDetails, NotFound404Page, FeedPage } from '../../pages';
 
 import { getRefreshToken } from '../../services/utils/token';
 import { fetchTokenUser, fetchAllIngredients, fetchGetInfoUser } from '../../services/thunks/index';
 import { showModal } from '../../services/slices';
+import { useAppDispatch, useAppSelector } from '../../hooks/dispatch'
+import { CustomizedState } from '../../services/interfaces';
+
+import Modal from '../modal/modal';
 
 import styles from './app.module.css';
-import { CustomizedState } from '../../services/interface';
 
 const App = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const state = location.state as CustomizedState;
-  const data = useSelector((state: any) => state.allIngredients.items);
-  const { loading, error } = useSelector((state: any) => state.allIngredients);
-  const { allowResetPassword } = useSelector((state: any) => state.password);
-  const { loggedIn, user } = useSelector((state: any) => state.user);
-  const { isShowModal } = useSelector((state: any) => state.modal);
+  const data = useAppSelector((state) => state.allIngredients.items);
+  const { loading, error } = useAppSelector((state) => state.allIngredients);
+  const { allowResetPassword } = useAppSelector((state) => state.password);
+  const { loggedIn, user } = useAppSelector((state) => state.user);
+  const { isShowModal } = useAppSelector((state) => state.modal);
 
   // Если есть RefreshToken, то получаем AccessToken:
   useEffect(() => {
     const refreshToken = getRefreshToken();
     if (refreshToken) {
-      dispatch(fetchTokenUser(refreshToken) as any);
+      dispatch(fetchTokenUser(refreshToken));
     }
   }, [dispatch])
 
   // Если пользак залогинен, но инфы о пользаке нет - загружаем инфу:
   useEffect(() => {
-    if (loggedIn && user.name === undefined) {
-      dispatch(fetchGetInfoUser() as any)
+    if (loggedIn && user?.name === undefined) {
+      dispatch(fetchGetInfoUser())
     }
   }, [user, loggedIn, dispatch]);
 
   // Загружаем список ингридиентов:
   useEffect(() => {
     if (!loading && !error && data.length === 0) {
-      dispatch(fetchAllIngredients() as any);
+      dispatch(fetchAllIngredients());
     }
   }, [loading, data, error, dispatch])
 
@@ -54,6 +55,7 @@ const App = () => {
       if (error) {
         dispatch(showModal({
           title: "",
+          isNavigateGoBack: false,
           content: `Ошибка при получении данных от API: ${error}`
         }));
       }
@@ -75,6 +77,8 @@ const App = () => {
           <div className={styles.main}>
             <Routes location={state?.pathnameModal !== undefined ? state?.pathnameModal : location.pathname}>
               <Route path='/' element={<HomePage />} />
+              <Route path='feed/*' element={<FeedPage />} />
+              <Route path='ingredients/:id' element={<IngredientDetails />} />
 
               <Route element={<ProtectedRoute redirectСondition={loggedIn} redirectPath="/" />}>
                 <Route path='login' element={<LoginPage />} />
@@ -88,10 +92,7 @@ const App = () => {
 
               <Route element={<ProtectedRoute redirectСondition={!loggedIn} redirectPath="login" />}>
                 <Route path='profile/*' element={<ProfilePage />} />
-                <Route path='list' element={<Orders />} />
               </Route>
-
-              <Route path='ingredients/:id' element={<IngredientDetails />} />
 
               <Route path='*' element={<NotFound404Page />} />
             </Routes>

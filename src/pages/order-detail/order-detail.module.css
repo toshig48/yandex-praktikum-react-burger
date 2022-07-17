@@ -1,0 +1,9 @@
+.main_div {
+    width: 100%;
+}
+
+.div_order_detail {
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px;
+}

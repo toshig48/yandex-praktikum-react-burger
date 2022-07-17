@@ -1,4 +1,4 @@
-import { TCheckSuccess, TCreateOrder, TGetIngredientsData, TInfoUser, TLoginUser, TTokenUser } from '../type';
+import { TCheckSuccess, TCreateOrder, TGetIngredientsData, TInfoUser, TLoginUser, TTokenUser } from '../types';
 import { URL_API } from './config'
 import { getRefreshToken, saveTokens } from './token';
 
@@ -70,7 +70,7 @@ export const getIngredientsData = async () => {
     return await fetch(URL_API + "/ingredients")
         .then(checkResponce)
         .then((data) => checkSuccess<TGetIngredientsData>(data))
-        .then((data) => {      
+        .then((data) => {
             return data.data;
         })
 }
@@ -127,7 +127,7 @@ export const loginUser = async (email: string, password: string) => {
     })
         .then(checkResponce)
         .then((data) => checkSuccess<TLoginUser>(data))
-        .then((data) => {        
+        .then((data) => {
             return data;
         })
 }

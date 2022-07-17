@@ -1,0 +1,11 @@
+.order_list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    grid-gap: 5px;
+    gap: 5px;
+}

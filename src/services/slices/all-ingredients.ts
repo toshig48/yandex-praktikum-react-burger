@@ -1,28 +1,30 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TBurger, TAllIngredientsState } from "../types";
+import { SliceNames } from '../constant'
 
-const allIngredientsInitialState = {
-  loading: false,
+const allIngredientsInitialState: TAllIngredientsState = {
   items: [],
+  loading: false,
   error: ''
 };
 
 const allIngredientsSlice = createSlice({
-  name: 'allIngredients',
+  name: SliceNames.ALL_INGREDIENTS,
   initialState: allIngredientsInitialState,
   reducers: {
-    allIngredientsLoading: (state) => {
+    allIngredientsLoading: (state: TAllIngredientsState) => {
       state.loading = true;
       state.items = [];
       state.error = '';
     },
 
-    allIngredientsReceived: (state, action) => {
+    allIngredientsReceived: (state: TAllIngredientsState, action: PayloadAction<Array<TBurger>>) => {
       state.loading = false;
       state.items = action.payload;
       state.error = '';
     },
 
-    allIngredientsError: (state, action) => {
+    allIngredientsError: (state: TAllIngredientsState, action: PayloadAction<string>) => {
       state.loading = false;
       state.items = [];
       state.error = action.payload;

@@ -1,16 +1,16 @@
 import { useRef, useState, useEffect, useMemo, memo, MutableRefObject, SyntheticEvent, FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
-import { TBurger } from '../../services/type';
-import { CustomizedState } from '../../services/interface';
+import { TBurger } from '../../services/types';
+import { CustomizedState } from '../../services/interfaces';
 
 import { showModal } from '../../services/slices';
 import { setCurentIngredient, unSetCurentIngredient } from '../../services/slices';
 import { INGREDIENT_BUN, INGREDIENT_SAUCE, INGREDIENT_MAIN, FLAG_INGRIDIENT_SHOW_MODAL } from '../../services/utils/config';
+import { useAppDispatch, useAppSelector } from '../../hooks/dispatch';
 
 import styles from './burger-ingredients.module.css';
 
@@ -34,14 +34,14 @@ const BurgerIngredientGroups: FC<IBurgerIngredientGroupsProps> = (props) => {
 }
 
 const BurgerIngredients = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const state = useLocation().state as CustomizedState;
-  const data = useSelector((state: any) => state.allIngredients.items) as Array<TBurger>;
-  const burgerConstructorData = useSelector((state: any) => state.selectedIngredients.items) as Array<TBurger>;
-  const flagClear = useSelector((state: any) => state.curentIngredient.flagClear) as boolean;
-  const curentIngredient = useSelector((state: any) => state.curentIngredient.item) as TBurger;
-  const isShowModal = useSelector((state: any) => state.modal.isShowModal) as boolean;
+  const data = useAppSelector(state => state.allIngredients.items) as Array<TBurger>;
+  const burgerConstructorData = useAppSelector(state => state.selectedIngredients.items) as Array<TBurger>;
+  const flagClear = useAppSelector(state => state.curentIngredient.flagClear) as boolean;
+  const curentIngredient = useAppSelector(state => state.curentIngredient.item) as TBurger;
+  const isShowModal = useAppSelector(state => state.modal.isShowModal) as boolean;
 
   const flagIngridientShowModal = localStorage.getItem(FLAG_INGRIDIENT_SHOW_MODAL);
 
@@ -82,7 +82,6 @@ const BurgerIngredients = () => {
         setStartShowModal(false);
         localStorage.removeItem(FLAG_INGRIDIENT_SHOW_MODAL);
         dispatch(unSetCurentIngredient());
-        navigate(-1);
       }
     },
     [curentIngredient, startShowModal, setStartShowModal, isShowModal, navigate, dispatch]
@@ -94,6 +93,7 @@ const BurgerIngredients = () => {
       if (curentIngredient && flagIngridientShowModal) {
         dispatch(showModal({
           title: "Детали ингредиента",
+          isNavigateGoBack: true,
           content: <IngredientDetails />
         }));
         setStartShowModal(true);

@@ -1,6 +1,5 @@
-import { memo, SyntheticEvent, useEffect } from 'react';
+import { FC, memo, SyntheticEvent, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -8,15 +7,16 @@ import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burg
 import { useFormAndValidation } from '../../hooks/use-form-and-validation';
 import { fetchResetPasswordUser } from '../../services/thunks/index';
 import { passwordClearError } from '../../services/slices/password';
+import { useAppDispatch, useAppSelector } from '../../hooks/dispatch';
 
 import styles from './reset-password.module.css';
 
-const ResetPassword = () => {
-  const dispatch = useDispatch();
+const ResetPassword: FC = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const { values, handleChange } = useFormAndValidation();
-  const { loading, allowResetPassword, error } = useSelector((state:any) => state.password);
+  const { loading, allowResetPassword, error } = useAppSelector(state => state.password);
 
   useEffect(() => {
     dispatch(passwordClearError());
@@ -31,7 +31,7 @@ const ResetPassword = () => {
 
   const handlOnsubmin = async (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(fetchResetPasswordUser(values.password, values.code) as any);
+    dispatch(fetchResetPasswordUser(values.password, values.code));
   }
 
   return (
@@ -43,7 +43,7 @@ const ResetPassword = () => {
             name="password"
             value={values.password || ""}
             onChange={handleChange}
-            />
+          />
         </div>
         <div className="mb-6 custom_input">
           <Input

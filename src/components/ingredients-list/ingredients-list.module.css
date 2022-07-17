@@ -1,0 +1,30 @@
+.list {
+    padding: 0;
+    overflow-y: scroll;
+    height: calc(100vh - 600px) !important;
+}
+
+.item {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.img {
+    width: 480px;
+}
+
+.compositions {
+    display: flex;
+    justify-content: center;
+}
+
+.compositions div:last-child {
+    margin-right: 0;
+}
+
+.price {
+    width: 220px;
+    text-align: right;
+}

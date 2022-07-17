@@ -1,24 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { INGREDIENT_BUN } from "../utils/config.ts";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { INGREDIENT_BUN } from "../utils/config";
+import { TBurger, TMoveIngredient, TSelectedIngredientsState } from "../types";
+import { SliceNames } from '../constant'
 
-// Cписок всех ингредиентов в текущем конструкторе бургера:
-const selectedIngredientsInitialState = {
+const selectedIngredientsInitialState: TSelectedIngredientsState = {
   items: []
 };
 
+// Cписок всех ингредиентов в текущем конструкторе бургера:
 const selectedIngredientsSlice = createSlice({
-  name: 'selectedIngredients',
+  name: SliceNames.SELECTED_INGREDIENTS,
   initialState: selectedIngredientsInitialState,
   reducers: {
-    addIngredient: (state, action) => {
+    addIngredient: (state: TSelectedIngredientsState, action: PayloadAction<TBurger>) => {
       state.items = action.payload.type !== INGREDIENT_BUN.key ?
         ([...state.items.filter(x => x.type !== INGREDIENT_BUN.key), action.payload, ...state.items.filter(x => x.type === INGREDIENT_BUN.key)]) :
         ([...state.items.filter(x => x.type !== INGREDIENT_BUN.key), action.payload, action.payload]);
     },
-    removeIngredient: (state, action) => {
+    removeIngredient: (state: TSelectedIngredientsState, action: PayloadAction<number>) => {
       state.items = [...state.items.filter(x => x !== state.items[action.payload])];
     },
-    moveIngredient: (state, action) => {
+    moveIngredient: (state: TSelectedIngredientsState, action: PayloadAction<TMoveIngredient>) => {
       const data = JSON.parse(JSON.stringify(state.items));
       let { dragIndex, hoverIndex } = action.payload;
       if (dragIndex > hoverIndex) {
@@ -29,7 +31,7 @@ const selectedIngredientsSlice = createSlice({
       data.splice(dragIndex, 2, data[hoverIndex], data[dragIndex]);
       state.items = data;
     },
-    clearIngredients: (state) => selectedIngredientsInitialState,
+    clearIngredients: () => selectedIngredientsInitialState,
   }
 })
 

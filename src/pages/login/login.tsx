@@ -1,27 +1,27 @@
-import { memo, SyntheticEvent, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { FC, memo, SyntheticEvent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useFormAndValidation } from '../../hooks/use-form-and-validation';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { fetchLoginUser } from '../../services/thunks/index';
-import { userClearError } from '../../services/slices/user';
+import { userClear } from '../../services/slices/user';
+import { useAppDispatch, useAppSelector } from '../../hooks/dispatch';
 
 import styles from './login.module.css';
-const LoginPage = () => {
-  const dispatch = useDispatch();
-  
+const LoginPage: FC = () => {
+  const dispatch = useAppDispatch();
+
   const { values, handleChange } = useFormAndValidation();
-  const { loading, error } = useSelector((state:any) => state.user);
+  const { loading, error } = useAppSelector(state => state.user);
 
   useEffect(() => {
-    dispatch(userClearError());
+    dispatch(userClear());
   }, [dispatch]);
 
-  const handlOnsubmin = async (e :SyntheticEvent) => {
+  const handlOnsubmin = async (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(fetchLoginUser(values.email, values.password) as any);
+    dispatch(fetchLoginUser(values.email, values.password));
   }
   return (
     <div className={styles.main}>
