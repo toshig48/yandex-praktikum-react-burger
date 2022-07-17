@@ -55,7 +55,7 @@ export function getStatus(value: string): string {
             }
         case Status.PENDING:
             {
-                return "Готовиться"
+                return "Готовится"
             }
         case Status.CREATE:
             {

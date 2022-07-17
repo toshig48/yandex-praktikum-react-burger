@@ -1,12 +1,12 @@
 import { Middleware, PayloadAction } from "@reduxjs/toolkit";
-import { wsAllOrdersInit, wsUserOrdersInit } from "./slices";
-import { getAuthToken } from "./utils/token";
+import { wsAllOrdersInit, wsUserOrdersInit } from "../slices";
+import { TWSAction } from "../types";
+import { getAuthToken } from "../utils/token";
 
-export const socketMiddleware = (wsUrl: string, wsActions: any): Middleware => {
-    return (store) => {
+export const socketMiddleware = (wsUrl: string, wsActions: TWSAction): Middleware => {
+    return ({ dispatch }) => {
         let socket: WebSocket;
         return (next) => (action: PayloadAction<any>) => {
-            const dispatch = store.dispatch;
             const { type } = action;
             const { wsInit, onOpen, onClose, onError, onMessage } = wsActions;
             if (type === wsInit) {
@@ -33,6 +33,7 @@ export const socketMiddleware = (wsUrl: string, wsActions: any): Middleware => {
 
                 socket.onerror = event => {
                     dispatch({ type: onError, payload: event });
+                    console.error(event);
                 };
 
                 socket.onmessage = event => {

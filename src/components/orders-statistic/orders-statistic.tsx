@@ -8,14 +8,17 @@ import { Status } from '../../services/constant';
 
 const OrdersStatistic: FC = () => {
   const orders = useAppSelector(state => state.wsAllOrders.orders);
+
   const ordersDone = useMemo(
     () => orders?.orders.filter(function (a) { return a.status === Status.DONE; }).map(function (x) { return x.number; }),
     [orders]
   );
+
   const ordersPending = useMemo(
     () => orders?.orders.filter(function (a) { return a.status === Status.PENDING; }).map(function (x) { return x.number; }),
     [orders]
   );
+
   return (
     <div className='ml-15'>
       <div className={styles.flex}>

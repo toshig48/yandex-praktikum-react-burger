@@ -1,14 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 import thunkMiddleware from 'redux-thunk';
 import { rootReducer } from './reducers/root-reducer';
-import { socketMiddleware } from './socket-middleware';
+import { socketMiddleware } from './middleware/socket-middleware';
 import { URL_WS } from './utils/config';
 import {
   wsUserOrdersInit, wsUserOrdersConnectionSuccess, wsUserOrdersConnectionError, wsUserOrdersConnectionClosed, onUserOrdersMessage,
   wsAllOrdersInit, wsAllOrdersConnectionSuccess, wsAllOrdersConnectionClosed, wsAllOrdersConnectionError, onAllOrdersMessage
 } from './slices';
+import { TWSAction } from './types';
 
-const wsUserOrdersActions = {
+const wsUserOrdersActions: TWSAction = {
   wsInit: wsUserOrdersInit.type,
   onOpen: wsUserOrdersConnectionSuccess.type,
   onClose: wsUserOrdersConnectionClosed.type,
@@ -16,7 +17,7 @@ const wsUserOrdersActions = {
   onMessage: onUserOrdersMessage.type
 };
 
-const wsAllOrdersActions = {
+const wsAllOrdersActions: TWSAction = {
   wsInit: wsAllOrdersInit.type,
   onOpen: wsAllOrdersConnectionSuccess.type,
   onClose: wsAllOrdersConnectionClosed.type,
