@@ -14,10 +14,7 @@ const webSocketAllOrdersSlice = createSlice({
   name: SliceNames.WS,
   initialState: webSocketInitialState,
   reducers: {
-    wsAllOrdersInit: (state: TWebSocketState) => {
-      state.isConnected = false;
-      state.error = '';
-    },
+    wsAllOrdersInit: () => webSocketInitialState,
 
     wsAllOrdersConnectionSuccess: (state: TWebSocketState) => {
       state.isConnected = true;
@@ -30,11 +27,7 @@ const webSocketAllOrdersSlice = createSlice({
       state.orders = null;
     },
 
-    wsAllOrdersConnectionClosed: (state: TWebSocketState) => {
-      state.isConnected = false;
-      state.error = '';
-      state.orders = null;
-    },
+    wsAllOrdersConnectionClosed: () => webSocketInitialState,
 
     onAllOrdersMessage: (state: TWebSocketState, action: PayloadAction<TWSOrders>) => {
       action.payload.orders.forEach(item => {

@@ -19,11 +19,7 @@ const modalSlice = createSlice({
       state.contentModal = action.payload.content;
       state.isNavigateGoBack = action.payload.isNavigateGoBack;
     },
-    closeModal: (state: TModalState) => {
-      state.isShowModal = false;
-      state.titleModal = '';
-      state.contentModal = null;
-    },
+    closeModal: () => modalInitialState,
   }
 })
 

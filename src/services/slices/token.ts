@@ -16,10 +16,7 @@ const tokenSlice = createSlice({
       state.error = '';
     },
 
-    tokenReceived: (state: TTokenState) => {
-      state.loading = false;
-      state.error = '';
-    },
+    tokenReceived: () => tokenInitialState,
 
     tokenError: (state: TTokenState, action: PayloadAction<string>) => {
       state.loading = false;
