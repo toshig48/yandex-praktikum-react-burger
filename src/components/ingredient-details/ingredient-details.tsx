@@ -31,7 +31,7 @@ const IngredientDetails: FC = () => {
   return (
     <>
       <img className={styles.img} src={data.image} alt={data.name}></img>
-      <p className="text text_type_main-medium mt-4 mb-8">{data.name} </p>
+      <p data-at="ingredient-name" className="text text_type_main-medium mt-4 mb-8">{data.name} </p>
       <div className={styles.compositions}>
         <IngredientComposition title="Калории,ккал" text={`${data.calories}`} />
         <IngredientComposition title="Белки, г" text={`${data.proteins}`} />

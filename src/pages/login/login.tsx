@@ -41,7 +41,7 @@ const LoginPage: FC = () => {
             value={values.password || ""}
             onChange={handleChange} />
         </div>
-        <Button type="primary" size="medium" disabled={(loading) ? true : false}>
+        <Button name="submit-button" type="primary" size="medium" disabled={(loading) ? true : false}>
           {loading ? "Ожидание..." : "Войти"}
         </Button>
       </form>

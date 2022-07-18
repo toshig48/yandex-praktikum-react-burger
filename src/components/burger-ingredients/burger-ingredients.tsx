@@ -153,7 +153,7 @@ const BurgerIngredients = () => {
         <h1 className={styles.message}>Не получены данные от API</h1>
         :
         <>
-          <p className="text text_type_main-large mt-10 mb-5">Соберите бургер</p>
+          <p data-at="main-title" className="text text_type_main-large mt-10 mb-5">Соберите бургер</p>
           <div className={styles.tabs}>
             <Tab active={currentTab === INGREDIENT_BUN.key} value={INGREDIENT_BUN.key} onClick={handleTabClick}>
               {INGREDIENT_BUN.name}
@@ -165,7 +165,7 @@ const BurgerIngredients = () => {
               {INGREDIENT_MAIN.name}
             </Tab>
           </div>
-          <div className={`${styles.group_list} custom_scroll mt-10`} onScroll={handleScroll}>
+          <div data-at="burger-ingredients" className={`${styles.group_list} custom_scroll mt-10`} onScroll={handleScroll}>
             <BurgerIngredientGroups tilteRef={bunRef} text={INGREDIENT_BUN.name} data={buns} burgerConstructorData={burgerConstructorData} />
             <BurgerIngredientGroups tilteRef={sauceRef} text={INGREDIENT_SAUCE.name} data={sauces} burgerConstructorData={burgerConstructorData} />
             <BurgerIngredientGroups tilteRef={mainRef} text={INGREDIENT_MAIN.name} data={mains} burgerConstructorData={burgerConstructorData} />
