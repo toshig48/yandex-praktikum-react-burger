@@ -29,6 +29,7 @@ const userSlice = createSlice({
 
     userLoginByToken: (state: TUserState) => {
       state.loggedIn = true;
+      state.error = '';
     },
 
     userLogoutLoading: (state: TUserState) => {
@@ -36,12 +37,7 @@ const userSlice = createSlice({
       state.error = '';
     },
 
-    userLogoutReceived: (state: TUserState) => {
-      state.loading = false;
-      state.loggedIn = false;
-      state.user = null;
-      state.error = '';
-    },
+    userLogoutReceived: () => userInitialState,
 
     userInfoLoading: (state: TUserState) => {
       state.loading = true;
@@ -61,12 +57,7 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
 
-    userClear: (state: TUserState) => {
-      state.error = '';
-      state.loading = false;
-      state.loggedIn = false;
-      state.user = null;
-    }
+    userClear: () => userInitialState
   }
 })
 export const { userLoginLoading, userLoginReceived, userLogoutLoading, userLogoutReceived, userInfoLoading,

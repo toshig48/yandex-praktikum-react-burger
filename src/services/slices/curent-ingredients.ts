@@ -17,7 +17,7 @@ const curentIngredientSlice = createSlice({
     setFlagClear: (state: TCurentIngredientState) => {
       state.flagClear = true;
     },
-    unSetCurentIngredient: (state: TCurentIngredientState) => curentIngredientInitialState
+    unSetCurentIngredient: () => curentIngredientInitialState
   }
 })
 

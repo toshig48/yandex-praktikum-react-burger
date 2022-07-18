@@ -156,7 +156,7 @@ const BurgerConstructor = () => {
 
   return (
     <>
-      <div ref={dropTarget} className={isHover ? styles.onHover : ''}>
+      <div data-at="burger-constructor" ref={dropTarget} className={isHover ? styles.onHover : ''}>
         <BunElement data={bunIngredient} position="top" />
         <ul className={`${styles.list} ml-4 mt-4 mb-4 custom_scroll`} >
           {
@@ -174,7 +174,7 @@ const BurgerConstructor = () => {
           </span>
           <CurrencyIcon type={"primary"} />
         </span>
-        <Button type="primary" size="medium" onClick={handleCreateOrder} disabled={(burgerConstructorData.length === 0 || loading) ? true : false}>
+        <Button name="create-order" type="primary" size="medium" onClick={handleCreateOrder} disabled={(burgerConstructorData.length === 0 || loading) ? true : false}>
           {loading ? "Ожидание..." : "Оформить заказ"}
         </Button>
       </div>

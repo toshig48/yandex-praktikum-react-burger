@@ -20,7 +20,7 @@ const OrderCreate: FC = () => {
         <img src={image2} className={styles.img_2} alt='image2' />
         <img src={image1} className={styles.img_1} alt='image1' />
       </div>
-      <p className="text text_type_main-default mt-15">Ваш заказ начали готовить</p>
+      <p data-at="modal-create-order-started-cooking" className="text text_type_main-default mt-15">Ваш заказ начали готовить</p>
       <p className="text text_type_main-default secondary mt-2 mb-20">Дождитесь готовности на орбитальной станции</p>
     </>
   );

@@ -31,6 +31,7 @@ const passwordSlice = createSlice({
 
     passwordError: (state: TPasswordState, action: PayloadAction<string>) => {
       state.loading = false;
+      state.allowResetPassword = false;
       state.error = action.payload;
     },
 

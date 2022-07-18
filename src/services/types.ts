@@ -69,6 +69,14 @@ export type TCreateOrder = {
   order: TOrder;
 }
 
+export type TWSAction = {
+  wsInit: string;
+  onOpen: string;
+  onClose: string;
+  onError: string;
+  onMessage: string;
+};
+
 export type TWSOrder = Omit<TOrder, "ingredients" | "owner" | "price"> &
 {
   ingredients: Array<string>;
