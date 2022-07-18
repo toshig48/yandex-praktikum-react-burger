@@ -31,6 +31,7 @@ describe('constructor', () => {
     cy.get('[data-at="ingredient-name"]').contains('Говяжий метеорит').should('exist');
     cy.wait(2000);
     cy.get('[data-at="modal-title"]').find('svg').first().click();
+    cy.get('[data-at="ingredient-name"]').should('not.exist');
     cy.wait(2000);
   })
 
@@ -56,5 +57,6 @@ describe('constructor', () => {
     cy.get('[data-at="modal-create-order-started-cooking"]').contains('Ваш заказ начали готовить').should('exist');
     cy.wait(5000);
     cy.get('[data-at="modal-title"]').find('svg').first().click();
+    cy.get('[data-at="modal-create-order-started-cooking"]').should('not.exist');
   })
 })
